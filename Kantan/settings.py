@@ -124,3 +124,9 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Servidores Permitidos. Solo activar para desarrollo
+# Activar con python manage.py runserver 0.0.0.0:8000
+# 0.0.0.0:8000 hace que se pueda conectar sin import la direccion
+# APAGAR VPNNNNNNNNN
+ALLOWED_HOSTS = ["*"]
