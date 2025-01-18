@@ -75,6 +75,9 @@ class Sensei(models.Model):
 class Representante(models.Model):
     personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="representante")
 
+    def __str__(self):
+        return self.personal_data.__str__()
+
 
 class Estudiante(models.Model):
 
@@ -85,4 +88,57 @@ class Estudiante(models.Model):
     personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="estudiante")
     representante = models.ForeignKey(Representante, null=True, on_delete=models.SET_NULL, default=None)
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVE)
+
+    def __str__(self):
+        return self.personal_data.__str__()
+
+
+class Curso(models.Model):
+    modulo = models.CharField("Módulo", max_length=50)
+
+
+class Sede(models.Model):
+    nombre = models.CharField(max_length=50)
+    ubicacion = models.TextField("Ubicación")
+    contacto = models.TextField("Formas de Contacto")
+
+    # Usar el link (src) que viene en el iframe de insertar un mapa
+    maps = models.URLField("Google Maps", max_length=500, blank=True)
+
+
+class Clase(models.Model):
+
+    class Status(models.TextChoices):
+        ACTIVE    = "Activa"
+        PAUSED    = "En Pausa"
+        SUSPENDED = "Suspendida"
+        COMPLETED = "Terminanda"
+
+    curso = models.ForeignKey(Curso, on_delete=models.PROTECT, related_name="clases")
+    sensei = models.ForeignKey(Sensei, on_delete=models.SET_NULL, null=True, related_name="clases")
+    sede = models.ForeignKey(Sede, on_delete=models.CASCADE, related_name="clases")
+
+    f_inicio = models.DateField("Fecha de Inicio")
+    horas_semanales = models.PositiveSmallIntegerField("Horas (min) Semanales")
+    precio = models.PositiveSmallIntegerField()
+
+    status = models.CharField(max_length=10, choices=Status, default=Status.ACTIVE)
+
+
+class Horario(models.Model):
+
+    class Weekdays(models.TextChoices):
+        LU = "Lunes"
+        MA = "Martes"
+        MI = "Miercoles"
+        JU = "Jueves"
+        VI = "Viernes"
+        SA = "Sábado"
+        DO = "Domingo"
+
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="horario")
+
+    dia_semana = models.CharField("Dia de la Semana", max_length=10, choices=Weekdays)
+    hora_entrada = models.TimeField()
+    hora_salida  = models.TimeField()
 
