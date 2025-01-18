@@ -186,7 +186,7 @@ class Pagos(models.Model):
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="pagos")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="pagos")
     metodo = models.ForeignKey(MetodosPagos, on_delete=models.CASCADE, related_name="pagos")
-    monto = models.PositiveSmallIntegerField()
+    monto_pagado = models.PositiveSmallIntegerField()
     referencia = models.CharField(max_length=255)
     obs = models.TextField("Observaciones")
 
@@ -198,30 +198,22 @@ class Solvencias(models.Model):
         ABONADO   = "Abonado"
         SIN_PAGAR = "Sin Pagar"
 
-    class Meses(models.TextChoices):
-        ENERO      = "Enero"
-        FEBRERO    = "Febrero"
-        MARZO      = "Marzo"
-        ABRIL      = "Abril"
-        MAYO       = "Mayo"
-        JUNIO      = "Junio"
-        JULIO      = "Julio"
-        AGOSTO     = "Agosto"
-        SEPTIEMBRE = "Septiembre"
-        OCTUBRE    = "Octubre"
-        NOVIEMBRE  = "Noviembre"
-        DICIEMBRE  = "Diciembre"
-
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="solvencias")
-    comprobante = models.ForeignKey(Pagos, null=True, on_delete=models.SET_NULL, related_name="solvencias")
-    
-    ano = models.PositiveSmallIntegerField("Año")
-    mes = models.CharField(max_length=10, choices=Meses)
-    pagado = models.CharField(max_length=10, choices=Pagado, default=Pagado.SIN_PAGAR)
-    abonado = models.PositiveSmallIntegerField()
 
-    # Con Obs, cuando se termine de pagar un mes abonado, agregar al final de la observacion los datos del pago del primer abono
+    # En el mes se guardaran principalmente el Año y el Mes, el Dia siempre sera 1.
+    mes = models.DateField()
+    
+    pagado = models.CharField(max_length=10, choices=Pagado, default=Pagado.SIN_PAGAR)
+    monto_a_pagar = models.PositiveSmallIntegerField()
+    monto_abonado = models.PositiveSmallIntegerField(default=0)
     obs = models.TextField("Observaciones")
+
+
+class Comprobantes(models.Model):
+    pagos = models.ForeignKey(Pagos, on_delete=models.CASCADE, related_name="comprobantes")
+    solvencias = models.ForeignKey(Solvencias, on_delete=models.CASCADE, related_name="comprobantes")
+
+    monto_aplicado = models.PositiveSmallIntegerField()
 
 
 
