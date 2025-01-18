@@ -2,7 +2,7 @@ from django.db import models
 
 from django.core.validators import RegexValidator
 
-# Create your models here.
+# PERSONAS
 class Person(models.Model):
 
     cedula = models.CharField(
@@ -57,8 +57,8 @@ class Sensei(models.Model):
         N1 = "N1"
 
     class Status(models.TextChoices):
-        ACTIVE  = "Activo"
-        RETIRED = "Retirado"
+        ACTIVO  = "Activo"
+        RETIRADO = "Retirado"
 
     personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="sensei")
 
@@ -66,7 +66,7 @@ class Sensei(models.Model):
     EN_level = models.CharField("Nivel de Inglés", max_length=2, choices=EN_Levels, default=EN_Levels.B1)
     JP_level = models.CharField("Nivel de Japonés", max_length=2, choices=JP_Levels, default=JP_Levels.N4)
 
-    status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVE)
+    status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -82,17 +82,19 @@ class Representante(models.Model):
 class Estudiante(models.Model):
 
     class Status(models.TextChoices):
-        ACTIVE  = "Activo"
-        RETIRED = "Retirado"
+        ACTIVO  = "Activo"
+        RETIRADO = "Retirado"
 
     personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="estudiante")
     representante = models.ForeignKey(Representante, null=True, on_delete=models.SET_NULL, default=None)
-    status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVE)
+    status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
     def __str__(self):
         return self.personal_data.__str__()
 
 
+
+# CLASES
 class Curso(models.Model):
     modulo = models.CharField("Módulo", max_length=50)
 
@@ -109,10 +111,10 @@ class Sede(models.Model):
 class Clase(models.Model):
 
     class Status(models.TextChoices):
-        ACTIVE    = "Activa"
-        PAUSED    = "En Pausa"
-        SUSPENDED = "Suspendida"
-        COMPLETED = "Terminanda"
+        ACTIVO     = "Activa"
+        PAUSADO    = "En Pausa"
+        SUSPENDIDO = "Suspendida"
+        COMPLETADO = "Terminanda"
 
     curso = models.ForeignKey(Curso, on_delete=models.PROTECT, related_name="clases")
     sensei = models.ForeignKey(Sensei, on_delete=models.SET_NULL, null=True, related_name="clases")
@@ -122,7 +124,7 @@ class Clase(models.Model):
     horas_semanales = models.PositiveSmallIntegerField("Horas (min) Semanales")
     precio = models.PositiveSmallIntegerField()
 
-    status = models.CharField(max_length=10, choices=Status, default=Status.ACTIVE)
+    status = models.CharField(max_length=10, choices=Status, default=Status.ACTIVO)
 
 
 class Horario(models.Model):
@@ -142,3 +144,39 @@ class Horario(models.Model):
     hora_entrada = models.TimeField()
     hora_salida  = models.TimeField()
 
+
+
+# BECAS
+class Becas(models.Model):
+    class TipoDescuento(models.TextChoices):
+        PORCENTUAL = "Porcentual"
+        CARDINAL   = "Cardinal"
+
+    class Status(models.TextChoices):
+        ACTIVO = "Activo"
+        DESABILITADO = "Deshabilitado"
+
+    nombre = models.CharField(max_length=200)
+    descuento = models.PositiveSmallIntegerField()
+    tipo_descuento = models.CharField("Tipo de Descuento", max_length=10, choices=TipoDescuento, default=TipoDescuento.PORCENTUAL)
+    status = models.CharField(max_length=15, choices=Status, default=Status.ACTIVO)
+
+
+class Becados(models.Model):
+    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="beca")
+    beca = models.ForeignKey(Becas, on_delete=models.CASCADE, related_name="becados")
+    obs = models.TextField("Observaciones", blank=True)
+
+
+class DescuentoEspecial(models.Model):
+    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="descuento")
+    descuento = models.PositiveSmallIntegerField()
+    obs = models.TextField("Observaciones", blank=True)
+
+
+
+# PAGOS
+
+
+
+# ASISTENCIAS
