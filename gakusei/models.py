@@ -180,3 +180,20 @@ class DescuentoEspecial(models.Model):
 
 
 # ASISTENCIAS
+class DiaDeClase(models.Model):
+    class Status(models.TextChoices):
+        IMPARTIDA  = "Impartida"
+        SUSPENDIDA = "Suspendida"
+        CANCELADA  = "Cancelada"
+
+    horario = models.ForeignKey(Horario, on_delete=models.CASCADE, related_name="dias_de_clase")
+    numero = models.PositiveSmallIntegerField("Número de Clase")
+    fecha = models.DateField()
+    status = models.CharField(max_length=10, choices=Status, default=Status.IMPARTIDA)
+    obs = models.TextField("Observaciones", blank=True)
+
+
+class Asistencias(models.Model):
+    dia_clase = models.ForeignKey(DiaDeClase, on_delete=models.CASCADE, related_name="asistencias")
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="asistencias")
+    presente = models.BooleanField(default=False)
