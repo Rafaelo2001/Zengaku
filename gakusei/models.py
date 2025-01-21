@@ -3,7 +3,7 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 # PERSONAS
-class Person(models.Model):
+class Persona(models.Model):
 
     cedula = models.CharField(
         "Cédula",
@@ -23,6 +23,20 @@ class Person(models.Model):
         max_length = 12,
         validators = [RegexValidator("^(0414|0424|0412|0416|0426)[-][0-9]{7}$", "El teléfono debe tener el formato 04XX-1234567")]
     )
+
+    def full_name(self):
+        name = (self.first_name + " ")
+
+        if self.middle_name:
+            name += (self.middle_name[0] + " ")
+
+        name += self.last_name_1
+
+        if self.last_name_2:
+            name += (" " + self.last_name_2[0])
+
+        return name
+
 
     def __str__(self):
 
@@ -60,7 +74,7 @@ class Sensei(models.Model):
         ACTIVO  = "Activo"
         RETIRADO = "Retirado"
 
-    personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="sensei")
+    personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="sensei")
 
     institucional_email = models.EmailField("Correo Institucional", max_length=254)
     EN_level = models.CharField("Nivel de Inglés", max_length=2, choices=EN_Levels, default=EN_Levels.B1)
@@ -73,7 +87,7 @@ class Sensei(models.Model):
 
 
 class Representante(models.Model):
-    personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="representante")
+    personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="representante")
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -85,8 +99,8 @@ class Estudiante(models.Model):
         ACTIVO  = "Activo"
         RETIRADO = "Retirado"
 
-    personal_data = models.OneToOneField(Person, on_delete=models.CASCADE, related_name="estudiante")
-    representante = models.ForeignKey(Representante, null=True, on_delete=models.SET_NULL, default=None)
+    personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="estudiante")
+    representante = models.ForeignKey(Representante, blank=True, null=True, on_delete=models.SET_NULL, default=None)
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
     def __str__(self):
@@ -96,7 +110,10 @@ class Estudiante(models.Model):
 
 # CLASES
 class Curso(models.Model):
-    modulo = models.CharField("Módulo", max_length=50)
+    modulo = models.CharField("Módulo", max_length=50, unique=True)
+
+    def __str__(self):
+        return self.modulo
 
 
 class Sede(models.Model):
@@ -106,6 +123,9 @@ class Sede(models.Model):
 
     # Usar el link (src) que viene en el iframe de insertar un mapa
     maps = models.URLField("Google Maps", max_length=500, blank=True)
+
+    def __str__(self):
+        return self.nombre
 
 
 class Clase(models.Model):
@@ -126,23 +146,43 @@ class Clase(models.Model):
 
     status = models.CharField(max_length=10, choices=Status, default=Status.ACTIVO)
 
+    def __str__(self):
+        sensei = self.sensei.personal_data.full_name()
+
+        modulo = self.curso
+
+        sede = self.sede
+
+
+        return f"{modulo} {sede} - {sensei}"
+
 
 class Horario(models.Model):
 
     class Weekdays(models.TextChoices):
-        LU = "Lunes"
-        MA = "Martes"
-        MI = "Miercoles"
-        JU = "Jueves"
-        VI = "Viernes"
-        SA = "Sábado"
-        DO = "Domingo"
+        LUNES     = "Lunes"
+        MARTES    = "Martes"
+        MIERCOLES = "Miercoles"
+        JUEVES    = "Jueves"
+        VIERNES   = "Viernes"
+        SABADO    = "Sábado"
+        DOMINGO   = "Domingo"
 
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="horario")
 
     dia_semana = models.CharField("Dia de la Semana", max_length=10, choices=Weekdays)
     hora_entrada = models.TimeField()
     hora_salida  = models.TimeField()
+
+
+    def __str__(self):
+        clase = self.clase
+
+        dia = self.dia_semana
+        entrada = self.hora_entrada
+        salida = self.hora_salida
+
+        return f"{clase} - {dia} de {entrada} a {salida}"
 
 
 
@@ -199,6 +239,7 @@ class Solvencias(models.Model):
         SIN_PAGAR = "Sin Pagar"
 
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="solvencias")
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="solvencias")
 
     # En el mes se guardaran principalmente el Año y el Mes, el Dia siempre sera 1.
     mes = models.DateField()
