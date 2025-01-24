@@ -6,6 +6,9 @@ from django.core.validators import RegexValidator
 from django.utils.formats import date_format, time_format
 from django.utils.safestring import mark_safe
 
+import datetime
+from dateutil.relativedelta import relativedelta
+
 
 # PERSONAS
 class Persona(models.Model):
@@ -198,7 +201,15 @@ class Horario(models.Model):
 
 class Inscripciones(models.Model):
     class Meta:
+        verbose_name = "Inscripción"
         verbose_name_plural = "Inscripciones"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["clase", "estudiante"],
+                name="unique_inscripcion_clase_estudiante",
+            )
+        ]
 
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="inscripciones")
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="inscripciones")
@@ -303,7 +314,87 @@ class Pagos(models.Model):
     def clean(self):
         if not self.clase.inscripciones.filter(estudiante=self.estudiante).exists():
             raise ValidationError("El estudiante no está inscrito en esta clase.")
+        
+    def save(self, **kwargs):
 
+        if not self.pk:
+            super().save(**kwargs)
+        
+            monto_pagado = self.monto_pagado
+            mensualidad = self.estudiante.inscripciones.get(clase=self.clase).precio_a_pagar
+
+            mes_abonado = Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase, pagado=Solvencias.Pagado.ABONADO).last()
+            abonado_anterior = mes_abonado.monto_abonado if mes_abonado else 0
+
+            monto_a_repartir = monto_pagado + abonado_anterior
+
+
+            if mes_abonado:
+                monto_faltante = mes_abonado.monto_a_pagar - mes_abonado.monto_abonado
+
+                monto_a_repartir -= monto_faltante
+                mes_abonado.monto_abonado += monto_faltante
+                mes_abonado.pagado = Solvencias.Pagado.PAGADO
+
+                mes_abonado.save()
+
+                Comprobantes.objects.create(
+                    pagos=self,
+                    solvencias=mes_abonado,
+                    monto_aplicado=monto_faltante,
+                )
+
+            meses_pagados, monto_abonado = divmod(monto_a_repartir, mensualidad)
+
+            for mes in range(meses_pagados):
+                if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).last():
+                    fecha_vieja = mes_anterior.mes
+                    fecha_mes = fecha_vieja + relativedelta(months=+1, day=1)
+
+                else:
+                    fecha_mes = self.clase.f_inicio + relativedelta(day=1)
+
+                solvencia_full = Solvencias.objects.create(
+                    estudiante=self.estudiante,
+                    clase=self.clase,
+                    mes=fecha_mes,
+                    pagado=Solvencias.Pagado.PAGADO,
+                    monto_a_pagar=mensualidad,
+                    monto_abonado=mensualidad,
+                )
+
+                Comprobantes.objects.create(
+                    pagos=self,
+                    solvencias=solvencia_full,
+                    monto_aplicado=mensualidad,
+                )
+
+            if monto_abonado:
+                if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).last():
+                    fecha_vieja = mes_anterior.mes
+                    fecha_mes = fecha_vieja + relativedelta(months=+1, day=1)
+
+                else:
+                    fecha_mes = self.clase.f_inicio + relativedelta(day=1)
+
+                solvencia_abonado = Solvencias.objects.create(
+                    estudiante=self.estudiante,
+                    clase=self.clase,
+                    mes=fecha_mes,
+                    pagado=Solvencias.Pagado.ABONADO,
+                    monto_a_pagar=mensualidad,
+                    monto_abonado=monto_abonado,
+                )
+
+                Comprobantes.objects.create(
+                    pagos=self,
+                    solvencias=solvencia_abonado,
+                    monto_aplicado=monto_abonado,
+                )
+
+        else:
+            super().save(**kwargs)
+            
 
 class Solvencias(models.Model):
     class Meta:
@@ -345,6 +436,9 @@ class Comprobantes(models.Model):
     solvencias = models.ForeignKey(Solvencias, on_delete=models.CASCADE, related_name="comprobantes")
 
     monto_aplicado = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.pagos} - {self.monto_aplicado} - {self.solvencias}"
 
 
 
