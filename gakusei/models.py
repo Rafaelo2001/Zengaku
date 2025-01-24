@@ -1,6 +1,11 @@
 from django.db import models
 
+from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+
+from django.utils.formats import date_format, time_format
+from django.utils.safestring import mark_safe
+
 
 # PERSONAS
 class Persona(models.Model):
@@ -24,31 +29,36 @@ class Persona(models.Model):
         validators = [RegexValidator("^(0414|0424|0412|0416|0426)[-][0-9]{7}$", "El teléfono debe tener el formato 04XX-1234567")]
     )
 
-    def full_name(self):
-        name = (self.first_name + " ")
+    def full_name(self, apellido_primero=False):
 
-        if self.middle_name:
-            name += (self.middle_name[0] + " ")
+        if apellido_primero:
+            name = (self.last_name_1 + " ")
 
-        name += self.last_name_1
+            if self.last_name_2:
+                name += (self.last_name_2[0] + ". ")
 
-        if self.last_name_2:
-            name += (" " + self.last_name_2[0])
+            name += self.first_name
+
+            if self.middle_name:
+                name += (" " + self.middle_name[0]+".")
+        
+        else:
+            name = (self.first_name + " ")
+
+            if self.middle_name:
+                name += (self.middle_name[0] + ". ")
+
+            name += self.last_name_1
+
+            if self.last_name_2:
+                name += (" " + self.last_name_2[0]+".")
 
         return name
 
 
     def __str__(self):
 
-        name = (self.first_name + " ")
-
-        if self.middle_name:
-            name += (self.middle_name[0] + " ")
-
-        name += self.last_name_1
-
-        if self.last_name_2:
-            name += (" " + self.last_name_2[0])
+        name = self.full_name(apellido_primero=False)
 
         return f"{self.cedula} - {name}"
 
@@ -182,12 +192,29 @@ class Horario(models.Model):
         entrada = self.hora_entrada
         salida = self.hora_salida
 
-        return f"{clase} - {dia} de {entrada} a {salida}"
+        return f"{clase} - {dia} de {time_format(entrada, "f a")} a {time_format(salida, "f a")}"
 
+
+
+class Inscripciones(models.Model):
+    class Meta:
+        verbose_name_plural = "Inscripciones"
+
+    clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="inscripciones")
+    estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="inscripciones")
+    precio_a_pagar = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        name = self.estudiante.personal_data.full_name()
+        
+        return f"{name} en clase {self.clase}"
 
 
 # BECAS
 class Becas(models.Model):
+    class Meta:
+        verbose_name_plural = "Becas"
+
     class TipoDescuento(models.TextChoices):
         PORCENTUAL = "Porcentual"
         CARDINAL   = "Cardinal"
@@ -198,40 +225,90 @@ class Becas(models.Model):
 
     nombre = models.CharField(max_length=200)
     descuento = models.PositiveSmallIntegerField()
-    tipo_descuento = models.CharField("Tipo de Descuento", max_length=10, choices=TipoDescuento, default=TipoDescuento.PORCENTUAL)
+    tipo_descuento = models.CharField(
+        "Tipo de Descuento",
+        max_length=10,
+        choices=TipoDescuento,
+        default=TipoDescuento.PORCENTUAL,
+        help_text= mark_safe("<ul><li>PORCENTUAL: Descuento aplicado por porcentuaje. Ej.: 30%</li><li>CARDINAL: Descuento aplicado por una cantidad fija. Ej.: 20$</li></ul>")
+    )
     status = models.CharField(max_length=15, choices=Status, default=Status.ACTIVO)
+
+    def __str__(self):
+        tipo = "%" if self.tipo_descuento==self.TipoDescuento.PORCENTUAL else "$"
+        return f"{self.nombre} ({self.descuento}{tipo})"
 
 
 class Becados(models.Model):
+
+    class Meta:
+        verbose_name_plural = "Becados"
+
     estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="beca")
     beca = models.ForeignKey(Becas, on_delete=models.CASCADE, related_name="becados")
     obs = models.TextField("Observaciones", blank=True)
 
+    def __str__(self):
+        estudiante = self.estudiante.personal_data.full_name()
+
+        return f"{estudiante} becado con {self.beca.nombre}"
+
 
 class DescuentoEspecial(models.Model):
+    class Meta:
+        verbose_name_plural = "Descuentos Especiales"
+
     estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="descuento")
+    # Este descuento siempre es Cardinal, no porcentual
     descuento = models.PositiveSmallIntegerField()
     obs = models.TextField("Observaciones", blank=True)
+
+    def __str__(self):
+        estudiante = self.estudiante.personal_data.full_name()
+
+        return f"{estudiante} tiene un Descuento Especial de {self.descuento}$"
 
 
 
 # PAGOS
 class MetodosPagos(models.Model):
+    class Meta:
+        verbose_name = "Método de Pago"
+        verbose_name_plural = "Métodos de Pagos"
+
     metodo = models.CharField("Método", max_length=255)
     datos = models.TextField("Datos de Pago")
-    obs = models.TextField("Observaciones")
+    obs = models.TextField("Observaciones", blank=True)
+
+    def __str__(self):
+        return self.metodo
 
 
 class Pagos(models.Model):
+    class Meta:
+        verbose_name = "Pago"
+        verbose_name_plural = "Pagos"
+
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="pagos")
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="pagos")
     metodo = models.ForeignKey(MetodosPagos, on_delete=models.CASCADE, related_name="pagos")
     monto_pagado = models.PositiveSmallIntegerField()
     referencia = models.CharField(max_length=255)
-    obs = models.TextField("Observaciones")
+    fecha = models.DateTimeField("Fecha de Pago", auto_now_add=True)
+    obs = models.TextField("Observaciones", blank=True)
+
+    def __str__(self):
+        return f"{self.estudiante.personal_data.full_name()} pagó {self.monto_pagado}$ ({self.metodo.metodo}) para la clase {self.clase}"
+
+    def clean(self):
+        if not self.clase.inscripciones.filter(estudiante=self.estudiante).exists():
+            raise ValidationError("El estudiante no está inscrito en esta clase.")
 
 
 class Solvencias(models.Model):
+    class Meta:
+        verbose_name = "Solvencia"
+        verbose_name_plural = "Solvencias"
 
     class Pagado(models.TextChoices):
         PAGADO    = "Pagado"
@@ -245,12 +322,25 @@ class Solvencias(models.Model):
     mes = models.DateField()
     
     pagado = models.CharField(max_length=10, choices=Pagado, default=Pagado.SIN_PAGAR)
+
+    # Monto a pagar se obtiene de Inscripciones
     monto_a_pagar = models.PositiveSmallIntegerField()
     monto_abonado = models.PositiveSmallIntegerField(default=0)
-    obs = models.TextField("Observaciones")
+    obs = models.TextField("Observaciones", blank=True)
+
+    def clean(self):
+        if not self.clase.inscripciones.filter(estudiante=self.estudiante).exists():
+            raise ValidationError("El estudiante no está inscrito en esta clase.")
+        
+    def __str__(self):
+        return f"{self.estudiante.personal_data.full_name()} a {self.pagado} el mes {self.mes.month} de la clase {self.clase}"
 
 
 class Comprobantes(models.Model):
+    class Meta:
+        verbose_name = "Comprobante"
+        verbose_name_plural = "Comprobantes"
+
     pagos = models.ForeignKey(Pagos, on_delete=models.CASCADE, related_name="comprobantes")
     solvencias = models.ForeignKey(Solvencias, on_delete=models.CASCADE, related_name="comprobantes")
 
@@ -272,7 +362,43 @@ class DiaDeClase(models.Model):
     obs = models.TextField("Observaciones", blank=True)
 
 
+    def __str__(self):
+        # Clase N. {} - ZGN5 Altamira - Mika Ruft 
+
+        return f"Clase N° {self.numero} {self.horario.clase} ({self.status}) - {date_format(self.fecha, 'D d M, Y')}"
+
+
+
 class Asistencias(models.Model):
+    
     dia_clase = models.ForeignKey(DiaDeClase, on_delete=models.CASCADE, related_name="asistencias")
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="asistencias")
     presente = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name_plural = "Asistencias"
+
+        constraints = [
+            models.UniqueConstraint(
+                fields=["dia_clase", "estudiante"],
+                name="unique_asistencia_estudiante",
+            )
+        ]
+    
+    def clean(self):
+        # Estudiante no Inscripto en la Clase
+        if not self.dia_clase.horario.clase.inscripciones.filter(estudiante=self.estudiante).exists():
+            raise ValidationError("El estudiante no está inscrito en esta clase.")
+        
+        # Estudiante ya Asistió al Dia de Clase
+        if Asistencias.objects.filter(dia_clase=self.dia_clase, estudiante=self.estudiante).exclude(pk=self.pk).exists():
+            raise ValidationError(f"El estudiante {self.estudiante.personal_data.full_name()} ya asistió a este Dia de Clase: {self.dia_clase}")
+        
+
+        
+    def __str__(self):
+        name = self.estudiante.personal_data.full_name()
+
+        presente = "presente".upper() if self.presente else "no presente".upper()
+
+        return f"{self.dia_clase} - {name} ({presente})"

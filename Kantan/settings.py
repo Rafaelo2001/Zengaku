@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-$*lr##vlvdhve#4eb8bsqbm%%1iu_wpaej!1nn0q7j#fw6kbaq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# runserver 0.0.0.0:8000
+# https://es.stackoverflow.com/questions/522566/servidor-web-django-acceso-red-local
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
