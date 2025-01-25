@@ -324,17 +324,22 @@ class Pagos(models.Model):
             mensualidad = self.estudiante.inscripciones.get(clase=self.clase).precio_a_pagar
 
             mes_abonado = Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase, pagado=Solvencias.Pagado.ABONADO).last()
-            abonado_anterior = mes_abonado.monto_abonado if mes_abonado else 0
 
-            monto_a_repartir = monto_pagado + abonado_anterior
+            monto_a_repartir = monto_pagado
 
 
             if mes_abonado:
                 monto_faltante = mes_abonado.monto_a_pagar - mes_abonado.monto_abonado
 
-                monto_a_repartir -= monto_faltante
-                mes_abonado.monto_abonado += monto_faltante
-                mes_abonado.pagado = Solvencias.Pagado.PAGADO
+                if monto_a_repartir >= monto_faltante:
+                    monto_a_repartir -= monto_faltante
+                    mes_abonado.monto_abonado += monto_faltante
+                    mes_abonado.pagado = Solvencias.Pagado.PAGADO
+                else:
+                    monto_faltante -= monto_a_repartir
+                    mes_abonado.monto_abonado += monto_a_repartir
+                    monto_a_repartir = 0
+                    mes_abonado.pagado = Solvencias.Pagado.ABONADO
 
                 mes_abonado.save()
 
