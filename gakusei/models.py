@@ -1,7 +1,7 @@
 from django.db import models
 
 from django.core.exceptions import ValidationError
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
 from django.utils.formats import date_format, time_format
 from django.utils.safestring import mark_safe
@@ -13,11 +13,16 @@ from dateutil.relativedelta import relativedelta
 # PERSONAS
 class Persona(models.Model):
 
-    cedula = models.CharField(
+    class NACIONALITIES(models.TextChoices):
+        VEN = ('V', 'Venezolano/a')
+        EXT = ('E', 'Extranjero/a')
+
+    nacionalidad = models.CharField(max_length=1, choices=NACIONALITIES, default=NACIONALITIES.VEN, db_default=NACIONALITIES.VEN)
+
+    cedula = models.PositiveIntegerField(
         "Cédula",
-        max_length = 10,
         unique     = True,
-        validators = [RegexValidator('^[V|E|J|P][0-9]{5,9}$', 'La cédula debe tener el formato V123456789.')]
+        validators = [MinValueValidator(10000), MaxValueValidator(999999999)]
     )
     
     first_name  = models.CharField("Primer Nombre", max_length=255)
@@ -95,12 +100,18 @@ class Sensei(models.Model):
 
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
+    def full_name(self, apellido_primero=False):
+        return self.full_name(apellido_primero)
+
     def __str__(self):
         return self.personal_data.__str__()
 
 
 class Representante(models.Model):
     personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="representante")
+
+    def full_name(self, apellido_primero=False):
+        return self.full_name(apellido_primero)
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -115,6 +126,9 @@ class Estudiante(models.Model):
     personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="estudiante")
     representante = models.ForeignKey(Representante, blank=True, null=True, on_delete=models.SET_NULL, default=None)
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
+
+    def full_name(self, apellido_primero=False):
+        return self.full_name(apellido_primero)
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -154,6 +168,7 @@ class Clase(models.Model):
     sede = models.ForeignKey(Sede, on_delete=models.CASCADE, related_name="clases")
 
     f_inicio = models.DateField("Fecha de Inicio")
+    f_cierre = models.DateField("Fecha de Cierre", blank=True, null=True)
     horas_semanales = models.PositiveSmallIntegerField("Horas (min) Semanales")
     precio = models.PositiveSmallIntegerField()
 

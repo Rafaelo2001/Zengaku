@@ -41,7 +41,8 @@ def default_sensei(sender, **kwargs):
         try:
             with transaction.atomic():
                 personal_data = Persona.objects.create(
-                    cedula="V1234567",
+                    nacionalidad=Persona.NACIONALITIES.VEN,
+                    cedula="1234567",
                     first_name="Alfonso",
                     last_name_1="Martinez",
                     personal_email="personal@email.com",
