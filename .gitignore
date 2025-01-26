@@ -1,3 +1,4 @@
 __pycache__/
 migrations/
+todo.todo
 db.sqlite3

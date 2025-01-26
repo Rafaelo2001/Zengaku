@@ -101,7 +101,10 @@ class Sensei(models.Model):
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
     def full_name(self, apellido_primero=False):
-        return self.full_name(apellido_primero)
+        return self.personal_data.full_name(apellido_primero)
+    
+    def cedula(self):
+        return f"{self.personal_data.nacionalidad}{self.personal_data.cedula}"
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -111,7 +114,7 @@ class Representante(models.Model):
     personal_data = models.OneToOneField(Persona, on_delete=models.CASCADE, related_name="representante")
 
     def full_name(self, apellido_primero=False):
-        return self.full_name(apellido_primero)
+        return self.personal_data.full_name(apellido_primero)
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -128,7 +131,7 @@ class Estudiante(models.Model):
     status = models.CharField("Status", max_length=10, choices=Status, default=Status.ACTIVO)
 
     def full_name(self, apellido_primero=False):
-        return self.full_name(apellido_primero)
+        return self.personal_data.full_name(apellido_primero)
 
     def __str__(self):
         return self.personal_data.__str__()

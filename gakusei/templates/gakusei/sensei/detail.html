@@ -1,0 +1,23 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Sensei {{object.full_name}}</h1>
+
+    <a href="{% url 'sensei' %}">Regresar a la lista</a>
+
+    <ul>
+        <li>Cédula: {{ object.personal_data.nacionalidad }}{{ object.personal_data.cedula }}  </li>
+        <li>Primer Nombre: {{ object.personal_data.first_name }}      </li>
+        <li>Segundo Nombre: {% if object.personal_data.middle_name %}{{ object.personal_data.middle_name }}{% else %} <i>No data</i> {% endif %}     </li>
+        <li>Primer Apellido: {{ object.personal_data.last_name_1 }}     </li>
+        <li>Segundo Apellido: {% if object.personal_data.last_name_2 %}{{ object.personal_data.last_name_2 }}{% else %} <i>No data</i> {% endif %}    </li>
+        <li>Correo Personal: {{ object.personal_data.personal_email }}  </li>
+        <li>Telefono Movil: {{ object.personal_data.telefono }}         </li>
+
+        <li>Correo Institucional: {{ object.institucional_email }}</li>
+        <li>Nivel de Inglés: {{ object.EN_level }}</li>
+        <li>Nivel de Japonés: {{ object.JP_level }}</li>
+        <li>Status: {{ object.status }}</li>
+    </ul>
+    
+{% endblock %}
