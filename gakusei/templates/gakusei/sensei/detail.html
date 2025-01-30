@@ -6,7 +6,8 @@
     <a href="{% url 'sensei' %}">Regresar a la lista</a>
 
     <ul>
-        <li>Cédula: {{ object.personal_data.nacionalidad }}{{ object.personal_data.cedula }}  </li>
+        <li>Status: {{ object.status }}  </li>
+        <li>Cédula: {{ object.cedula }}  </li>
         <li>Primer Nombre: {{ object.personal_data.first_name }}      </li>
         <li>Segundo Nombre: {% if object.personal_data.middle_name %}{{ object.personal_data.middle_name }}{% else %} <i>No data</i> {% endif %}     </li>
         <li>Primer Apellido: {{ object.personal_data.last_name_1 }}     </li>

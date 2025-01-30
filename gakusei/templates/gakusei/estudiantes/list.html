@@ -1,0 +1,34 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Estudiantes</h1>
+
+
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+    <a href="{% url 'estudiante-create' %}">Registrar Estudiante</a>
+
+
+    <table>
+        <thead>
+            <th>Cédula</th>
+            <th>Nombre Completo</th>
+            <th>Email</th>
+            <th>Telefono</th>
+            <th>Status</th>
+        </thead>
+        <tbody>
+            {% for estudiante in object_list %}
+            <tr>
+                <td>{{estudiante.cedula}}</td>
+                <td>{{estudiante.full_name}}</td>
+                <td>{{estudiante.personal_data.personal_email}}</td>
+                <td>{{estudiante.personal_data.telefono}}</td>
+                <td>{{estudiante.status}}</td>
+                <td><a href="{% url 'estudiante-detail' estudiante.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

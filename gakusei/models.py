@@ -63,12 +63,15 @@ class Persona(models.Model):
 
         return name
 
+    def get_cedula(self):
+        return f"{self.nacionalidad}{self.cedula}"
 
     def __str__(self):
 
-        name = self.full_name(apellido_primero=False)
+        cedula = self.get_cedula()
+        name   = self.full_name(apellido_primero=False)
 
-        return f"{self.cedula} - {name}"
+        return f"{cedula} - {name}"
 
 
 class Sensei(models.Model):
@@ -104,7 +107,7 @@ class Sensei(models.Model):
         return self.personal_data.full_name(apellido_primero)
     
     def cedula(self):
-        return f"{self.personal_data.nacionalidad}{self.personal_data.cedula}"
+        return self.personal_data.get_cedula()
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -115,6 +118,9 @@ class Representante(models.Model):
 
     def full_name(self, apellido_primero=False):
         return self.personal_data.full_name(apellido_primero)
+    
+    def cedula(self):
+        return self.personal_data.get_cedula()
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -132,6 +138,9 @@ class Estudiante(models.Model):
 
     def full_name(self, apellido_primero=False):
         return self.personal_data.full_name(apellido_primero)
+    
+    def cedula(self):
+        return self.personal_data.get_cedula()
 
     def __str__(self):
         return self.personal_data.__str__()

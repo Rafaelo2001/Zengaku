@@ -2,7 +2,7 @@ from django import forms
 
 from django.db import transaction, IntegrityError
 
-from .models import Persona, Sensei
+from .models import Persona, Sensei, Estudiante, Representante
 
 class BasePersona(forms.Form):
     nacionalidad = forms.ChoiceField(
@@ -49,6 +49,7 @@ class SenseiForm(BasePersona):
     status = forms.ChoiceField(
         choices=Sensei.Status,
         widget=forms.RadioSelect(),
+        initial=Sensei.Status.ACTIVO,
         required=True,
     )
 
@@ -96,5 +97,107 @@ class SenseiForm(BasePersona):
         return sensei
 
 
+class EstudianteForm(BasePersona):
+
+    representante = forms.ModelChoiceField(Representante.objects.all())
+
+    status = forms.ChoiceField(
+        choices=Estudiante.Status,
+        widget=forms.RadioSelect(),
+        initial=Estudiante.Status.ACTIVO,
+        required=True,
+    )
+
+    def save(self, commit=True):
+
+        try:
+            with transaction.atomic():
+                
+                personal_data = Persona.objects.create(
+                    nacionalidad    = self.cleaned_data.get("nacionalidad"  ),
+                    cedula          = self.cleaned_data.get("cedula"        ),
+                    first_name      = self.cleaned_data.get("first_name"    ),
+                    middle_name     = self.cleaned_data.get("middle_name"   ),
+                    last_name_1     = self.cleaned_data.get("last_name_1"   ),
+                    last_name_2     = self.cleaned_data.get("last_name_2"   ),
+                    personal_email  = self.cleaned_data.get("personal_email"),
+                    telefono        = self.cleaned_data.get("telefono"      ),
+                )
+
+                estudiante = Estudiante.objects.create(
+                    personal_data = personal_data,
+                    representante = self.cleaned_data.get("representante"),
+                    status        = self.cleaned_data.get("status"),
+                )
+
+        except Exception as e:
+            self.add_error(None, f"Error al insertar datos en BDD: {e}")
+
+        return estudiante
+
+
+
+# class RepresentanteForm(BasePersona):
+
+#     def unpack(self, repre_obj:Representante):
+
+#         self.initial["nacionalidad"]  = repre_obj.personal_data.nacionalidad
+#         self.initial["cedula"]        = repre_obj.personal_data.cedula
+
+#         self.initial["first_name"]  = repre_obj.personal_data.first_name
+#         self.initial["middle_name"] = repre_obj.personal_data.middle_name
+#         self.initial["last_name_1"] = repre_obj.personal_data.last_name_1
+#         self.initial["last_name_2"] = repre_obj.personal_data.last_name_2
+        
+#         self.initial["telefono"]       = repre_obj.personal_data.telefono
+#         self.initial["personal_email"] = repre_obj.personal_data.personal_email
+
     
+#     def save(self, commit=True):
+
+#         try:
+#             with transaction.atomic():
+                
+#                 personal_data = Persona.objects.create(
+#                     nacionalidad    = self.cleaned_data.get("nacionalidad"),
+#                     cedula          = self.cleaned_data.get("cedula"),
+#                     first_name      = self.cleaned_data.get("first_name"),
+#                     middle_name     = self.cleaned_data.get("middle_name"),
+#                     last_name_1     = self.cleaned_data.get("last_name_1"),
+#                     last_name_2     = self.cleaned_data.get("last_name_2"),
+#                     personal_email  = self.cleaned_data.get("personal_email"),
+#                     telefono        = self.cleaned_data.get("telefono"),
+#                 )
+
+#                 representante = Representante.objects.create(
+#                     personal_data = personal_data,
+#                 )
+
+#         except Exception as e:
+#             self.add_error(None, f"Error al insertar datos en BDD: {e}")
+
+#         return representante
+
+
+#     def update(self, id):
+#         try:
+#             with transaction.atomic():
+
+#                 representante = Representante.objects.get(pk=id)
+
+#                 Persona.objects.filter(pk=representante.personal_data.id).update(
+#                     nacionalidad    = self.cleaned_data.get("nacionalidad"),
+#                     cedula          = self.cleaned_data.get("cedula"),
+#                     first_name      = self.cleaned_data.get("first_name"),
+#                     middle_name     = self.cleaned_data.get("middle_name"),
+#                     last_name_1     = self.cleaned_data.get("last_name_1"),
+#                     last_name_2     = self.cleaned_data.get("last_name_2"),
+#                     personal_email  = self.cleaned_data.get("personal_email"),
+#                     telefono        = self.cleaned_data.get("telefono"),
+#                 )
+
+#         except Exception as e:
+#             self.add_error(None, f"Error al actualizar datos en BDD: {e}")
+
+#         return representante
 

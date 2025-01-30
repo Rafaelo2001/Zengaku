@@ -1,0 +1,30 @@
+{% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script src="{% static 'gakusei/js/estudiante/representante_form.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Registro de Estudiante</h1>
+
+    <a href="{% url 'estudiante' %}">Regresar a la lista</a>
+
+    <form action="{% url 'estudiante-create' %}" method="post"> {%csrf_token%}
+        <div id="estudiante-form-fields">
+            {{ form }}
+        </div>
+        <input type="submit">
+    </form>
+
+    <a href="">Registrar Representante</a>
+    
+    
+{% endblock %}
