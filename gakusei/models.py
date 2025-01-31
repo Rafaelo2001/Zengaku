@@ -65,6 +65,10 @@ class Persona(models.Model):
 
     def get_cedula(self):
         return f"{self.nacionalidad}{self.cedula}"
+    
+    def save(self, *args, **kwargs):
+        self.personal_email = self.personal_email.lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
 
@@ -108,6 +112,10 @@ class Sensei(models.Model):
     
     def cedula(self):
         return self.personal_data.get_cedula()
+    
+    def save(self, *args, **kwargs):
+        self.institucional_email = self.institucional_email.lower()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.personal_data.__str__()
