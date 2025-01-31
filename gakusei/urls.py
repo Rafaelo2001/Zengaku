@@ -12,7 +12,12 @@ urlpatterns = [
     path("estudiante/", views.EstudianteListView.as_view(), name="estudiante"),
     path("estudiante/<int:pk>", views.EstudianteDetailView.as_view(), name="estudiante-detail"),
     path("estudiante/registrar", views.EstudianteCreateView.as_view(), name="estudiante-create"),
+    path("estudiante/registrar/representante", views.RepresentanteCreatePopup.as_view(), name="estudiante-create-representante"),
 
-    # path("api/representante/create", views.Api_RespresentanteRegistro, name="api-representante-create"),
+
+    path("representante/registrar", views.RepresentanteCreateView.as_view(), name="representante-create"),
+
+    path("api/representante/", views.Api_RepresentanteGet, name="api-representante-get"),
+
     # path("api/representante/edit",   views.Api_RepresentanteEdit, name="api-representante-edit"),
 ]

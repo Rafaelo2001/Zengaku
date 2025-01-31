@@ -1,0 +1,18 @@
+{% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/estudiante/representante_popup.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Registro de Representante</h1>
+
+    <form id="representante-form" action="{% url 'estudiante-create-representante' %}" method="post"> {%csrf_token%}
+        <div id="representante-form-fields">
+            {{ form }}
+        </div>
+        <input type="submit">
+    </form>    
+    
+{% endblock %}

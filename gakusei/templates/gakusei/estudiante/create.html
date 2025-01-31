@@ -24,7 +24,8 @@
         <input type="submit">
     </form>
 
-    <a href="">Registrar Representante</a>
-    
-    
+    <button id="registro-repesentante"
+        data-representante_url="{% url 'estudiante-create-representante'%}"
+        data-representante_get="{% url 'api-representante-get' %}"
+    >Registrar Representante</button>
 {% endblock %}
