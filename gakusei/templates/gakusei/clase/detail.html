@@ -18,12 +18,33 @@
 
     <h3>Estudiantes</h3>
 
+    <a href="">Asignar estudiante</a>
     <ul>
         {% for estudiante in clase.inscripciones.all %}
         <li>{{ estudiante.estudiante }}</li>
         {% endfor %}
     </ul>
 
+    <h3>Horario</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>Hora de Entrada</th>
+                <th>Hora de Salida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for horario in clase.horarios %}
+            <tr>
+                <td>{{ horario.dia_semana }}</td>
+                <td>{{ horario.hora_entrada }}</td>
+                <td>{{ horario.hora_salida }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
 
     
 {% endblock %}

@@ -15,6 +15,7 @@
             <th>Curso</th>
             <th>Sede</th>
             <th>Horas Semanales</th>
+            <th>Clase Individual</th>
             <th>Precio</th>
         </thead>
         <tbody>
@@ -24,6 +25,9 @@
                 <td>{{clase.curso}}</td>
                 <td>{{clase.sede}}</td>
                 <td>{{clase.horas_semanales}}</td>
+                <td>
+                    {{ clase.individual|yesno:"Si,No" }}
+                </td>
                 <td>{{clase.precio}}</td>
                 <td><a href="{% url 'clase-detail' clase.id %}">View</a></td>
             </tr>

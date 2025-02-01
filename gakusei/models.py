@@ -192,7 +192,12 @@ class Clase(models.Model):
     horas_semanales = models.PositiveSmallIntegerField("Horas (min) Semanales")
     precio = models.PositiveSmallIntegerField()
 
+    individual = models.BooleanField("Clase Individual", default=False)
+
     status = models.CharField(max_length=10, choices=Status, default=Status.ACTIVO)
+
+    def horarios(self):
+        return self.horario.all().order_by("dia_semana")
 
     def __str__(self):
         sensei = self.sensei.personal_data.full_name()
