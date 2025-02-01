@@ -1,0 +1,29 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Clase {{object}}</h1>
+
+    <a href="{% url 'clase' %}">Regresar a la lista</a>
+
+    <ul>
+        <li><a href="{% url 'sensei-detail' clase.sensei.id %}">
+            Sensei:          {{clase.sensei}}            </a>
+        </li>
+        <li>Curso:           {{clase.curso}}            </li>
+        <li>Sede:            {{clase.sede}}             </li>
+        <li>Horas Semanales: {{clase.horas_semanales}}  </li>
+        <li>Precio:          {{clase.precio}}$          </li>
+    </ul>
+
+
+    <h3>Estudiantes</h3>
+
+    <ul>
+        {% for estudiante in clase.inscripciones.all %}
+        <li>{{ estudiante.estudiante }}</li>
+        {% endfor %}
+    </ul>
+
+
+    
+{% endblock %}

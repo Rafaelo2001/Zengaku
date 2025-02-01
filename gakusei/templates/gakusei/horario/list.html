@@ -1,0 +1,29 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Horarios</h1>
+
+    
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+    <a href="{% url 'horario-create' %}">Registrar Horario</a>
+
+
+    <table>
+        <thead>
+            <th>Horario</th>
+        </thead>
+        <tbody>
+            <tr>
+                Clase - 5 dias de clase
+            </tr>
+            {% for horario in object_list %}
+            <tr>
+                <td>{{horario}}</td>
+                <td><a href="{% url 'horario-detail' horario.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

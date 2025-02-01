@@ -3,16 +3,18 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
 from json import loads
 
-from .models import Sensei, Estudiante, Representante
+from django import forms
+from .models import Sensei, Estudiante, Representante, Clase, Horario
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm
 
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, FormView, CreateView
 
 # Create your views here.
 def index(request):
     return render(request, "gakusei/index.html")
 
 
+# Sensei
 sensei_templates = "gakusei/sensei/"
 class SenseiListView(ListView):
     model = Sensei
@@ -35,6 +37,7 @@ class SenseiCreateView(FormView):
         return HttpResponseRedirect(reverse("sensei-detail", kwargs={"pk":sensei.pk}))
     
 
+# Estudiante
 estudiante_templates = "gakusei/estudiante/"
 class EstudianteListView(ListView):
     model = Estudiante
@@ -52,21 +55,13 @@ class EstudianteCreateView(FormView):
 
     success_url = reverse_lazy("estudiante")
 
-    
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-        # context["form"] = "hola"
-
-        return context
-
     def form_valid(self, form):
         estudiante = form.save()
 
         return HttpResponseRedirect(reverse("estudiante-detail", kwargs={"pk":estudiante.pk}))
     
     
-
+# Representante
 representante_templates = "gakusei/representante/"
 class RepresentanteCreateView(FormView):
     form_class = RepresentanteForm
@@ -74,21 +69,11 @@ class RepresentanteCreateView(FormView):
 
     success_url = reverse_lazy("index")
 
-    
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-        # context["form"] = "hola"
-
-        return context
-
     def form_valid(self, form):
         estudiante = form.save()
 
         return HttpResponseRedirect(reverse("estudiante-detail", kwargs={"pk":estudiante.pk}))
     
-# def RepresentanteCreatePopup(request):
-#     return HttpResponseRedirect
 
 class RepresentanteCreatePopup(FormView):
     form_class = RepresentanteForm
@@ -96,27 +81,78 @@ class RepresentanteCreatePopup(FormView):
 
     success_url = None
 
-    
-    def get_context_data(self, **kwargs):
-
-        context = super().get_context_data(**kwargs)
-        # context["form"] = "hola"
-
-        return context
-
     def form_valid(self, form):
         representante = form.save()
 
         return JsonResponse({"id":  representante.pk,}, status=201)
     
     def form_invalid(self, form):
-
         return JsonResponse({"error_form": form.as_div()}, status=422)
 
-    
-    
 
-    
+# Clase
+clase_templates = "gakusei/clase/"
+class ClaseListView(ListView):
+    model = Clase
+    template_name = clase_templates + "list.html"
+
+
+class ClaseDetailView(DetailView):
+    model = Clase
+    template_name = clase_templates + "detail.html"
+
+
+class ClaseCreateView(CreateView):
+    model = Clase
+    fields = "__all__"
+    template_name = clase_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("clase-detail", kwargs={"pk": self.object.pk})
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+
+        form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"})
+        form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"})
+
+        return form
+
+
+
+# Horario
+horario_templates = "gakusei/horario/"
+class HorarioListView(ListView):
+    model = Horario
+    template_name = horario_templates + "list.html"
+
+
+class HorarioDetailView(DetailView):
+    model = Horario
+    template_name = horario_templates + "detail.html"
+
+
+class HorarioCreateView(CreateView):
+    model = Horario
+    fields = "__all__"
+    template_name = horario_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("horario-detail", kwargs={"pk": self.object.pk})
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+
+        form.fields["hora_entrada"].widget = forms.TimeInput(attrs={"type":"time"})
+        form.fields["hora_salida"].widget  = forms.TimeInput(attrs={"type":"time"})
+
+        return form
+
+
+
+# API
 def Api_RepresentanteGet(request):
     raw_list = Representante.objects.all()
 
@@ -132,55 +168,3 @@ def Api_RepresentanteGet(request):
     }
 
     return JsonResponse(response, status=201)
-
-
-
-# def Api_RespresentanteRegistro(request):
-
-#     if request.method == "POST":
-#         representante = RepresentanteForm(loads(request.body))
-
-#         print(representante.is_valid())
-        
-#         if representante.is_valid():
-#             r = representante.save()
-
-#             response = {
-#                 "id": r.pk,
-#                 "str": r.__str__(),
-#             }
-
-#             return JsonResponse(response, status=201)
-        
-#         return JsonResponse({"error_form": representante.as_div()}, status=422)
-
-#     return JsonResponse({"a":"o"})
-
-# def Api_RepresentanteEdit(request):
-#     if request.method == "POST":
-#         response = loads(request.body)
-        
-#         representante = Representante.objects.get(pk=response.get('id'))
-
-#         edit_form = RepresentanteForm()
-#         edit_form.unpack(repre_obj=representante)
-
-#         return JsonResponse({"edit_form": edit_form.as_div()})
-    
-#     elif request.method == "PUT":
-#         data = loads(request.body)
-
-#         edited = RepresentanteForm(data)
-
-#         if edited.is_valid():
-#             response = edited.update(id=data.get('id'))
-
-#             response = {
-#                 "id": r.pk,
-#                 "str": r.__str__(),
-#             }
-
-#             return JsonResponse(response, status=201)
-        
-#         return JsonResponse({"error_form": edited.as_div()}, status=422)
-

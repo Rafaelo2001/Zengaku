@@ -1,0 +1,34 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Clases</h1>
+
+    
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+    <a href="{% url 'clase-create' %}">Registrar Clase</a>
+
+
+    <table>
+        <thead>
+            <th>Sensei</th>
+            <th>Curso</th>
+            <th>Sede</th>
+            <th>Horas Semanales</th>
+            <th>Precio</th>
+        </thead>
+        <tbody>
+            {% for clase in object_list %}
+            <tr>
+                <td>{{clase.sensei}}</td>
+                <td>{{clase.curso}}</td>
+                <td>{{clase.sede}}</td>
+                <td>{{clase.horas_semanales}}</td>
+                <td>{{clase.precio}}</td>
+                <td><a href="{% url 'clase-detail' clase.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

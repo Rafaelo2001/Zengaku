@@ -99,7 +99,7 @@ class SenseiForm(BasePersona):
 
 class EstudianteForm(BasePersona):
 
-    representante = forms.ModelChoiceField(Representante.objects.all())
+    representante = forms.ModelChoiceField(Representante.objects.all(), required=False)
 
     status = forms.ChoiceField(
         choices=Estudiante.Status,

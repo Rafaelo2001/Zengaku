@@ -1,0 +1,13 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Registro de Clase</h1>
+
+    <a href="{% url 'clase' %}">Regresar a la lista</a>
+
+    <form action="{% url 'clase-create' %}" method="post"> {%csrf_token%}
+        {{ form }}
+        <input type="submit" value="Registrar">
+    </form>
+    
+{% endblock %}
