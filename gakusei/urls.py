@@ -24,7 +24,13 @@ urlpatterns = [
     path("horario/<int:pk>", views.HorarioDetailView.as_view(), name="horario-detail"),
     path("horario/registrar", views.HorarioCreateView.as_view(), name="horario-create"),
 
-    path("api/representante/", views.Api_RepresentanteGet, name="api-representante-get"),
 
+    path("inscripciones/", views.InscripcionesListView.as_view(), name="inscripciones"),
+    path("inscripciones/<int:pk>", views.InscripcionesDetailView.as_view(), name="inscripciones-detail"),
+    path("inscripciones/registrar", views.InscripcionesCreateView.as_view(), name="inscripciones-create"),
+
+    path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
+    path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),
+    path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),
     # path("api/representante/edit",   views.Api_RepresentanteEdit, name="api-representante-edit"),
 ]

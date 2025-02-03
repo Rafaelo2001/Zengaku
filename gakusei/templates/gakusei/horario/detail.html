@@ -7,11 +7,16 @@
 
     <ul>
         <li><a href="{% url 'clase-detail' horario.clase.id %}">
-            Clase:          {{horario.clase}}            </a>
+            Clase:            {{horario.clase}}        </a>
         </li>
-        <li>Dia:           {{horario.dia_semana}}            </li>
-        <li>Hora de Entrada:            {{horario.hora_entrada}}             </li>
-        <li>Hora de Salida: {{horario.hora_salida}}  </li>
+        <li>Dia:              {{horario.dia_semana}}   </li>
+        <li>Hora de Entrada:  {{horario.entrada}} </li>
+        <li>Hora de Salida:   {{horario.salida}}  </li>
     </ul>
+
+    Dias de clases en este horario
+    -
+    -
+    -
     
 {% endblock %}

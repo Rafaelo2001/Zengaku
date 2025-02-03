@@ -1,0 +1,32 @@
+{% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script src="{% static 'gakusei/js/inscripciones/create.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Nueva Inscripción</h1>
+
+    <a href="{% url 'inscripciones' %}">Regresar a la lista</a>
+
+    <form id="inscripciones-form" action="{% url 'inscripciones-create' %}" autocomplete="off" data-clase_url="{% url 'api-clase-get' %}" data-estudiante_url="{% url 'api-estudiante-get' %}" method="post"> {%csrf_token%}
+        {{ form }}
+        <input type="submit" value="Registrar">
+    </form>
+
+    <p id="clase-data"></p>
+    <p id="estudiante-descuento"></p>
+    <p id="estudiante-beca"></p>
+
+    <p id="precio-final"></p>
+
+    
+{% endblock %}

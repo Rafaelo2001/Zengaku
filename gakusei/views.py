@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from json import loads
 
 from django import forms
-from .models import Sensei, Estudiante, Representante, Clase, Horario
+from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
@@ -125,6 +125,7 @@ class ClaseCreateView(CreateView):
 horario_templates = "gakusei/horario/"
 class HorarioListView(ListView):
     model = Horario
+    ordering = "clase"
     template_name = horario_templates + "list.html"
 
 
@@ -151,9 +152,41 @@ class HorarioCreateView(CreateView):
         return form
 
 
+# Inscripciones
+inscripciones_templates = "gakusei/inscripciones/"
+
+class InscripcionesListView(ListView):
+    model = Inscripciones
+    ordering = "clase"
+
+    template_name = inscripciones_templates + "list.html"
+
+class InscripcionesDetailView(DetailView):
+    model = Inscripciones
+    template_name = inscripciones_templates + "detail.html"
+
+class InscripcionesCreateView(CreateView):
+    model = Inscripciones
+    fields = "__all__"
+
+    template_name = inscripciones_templates + "create.html"
+
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+        form.fields["clase"].queryset = Clase.objects.filter(status__in=[Clase.Status.ACTIVO, Clase.Status.PAUSADO])
+        form.fields["estudiante"].queryset = Estudiante.objects.filter(status=Estudiante.Status.ACTIVO)
+
+        return form
+
+    def get_success_url(self):
+        return reverse("inscripciones-detail", kwargs={"pk":self.object.pk})
+
+
 
 # API
-def Api_RepresentanteGet(request):
+def Api_RepresentantesGet(request):
     raw_list = Representante.objects.all()
 
     refined_list = []
@@ -168,3 +201,75 @@ def Api_RepresentanteGet(request):
     }
 
     return JsonResponse(response, status=201)
+
+
+def Api_ClaseGet(request):
+
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    pk = body.get("pk", False)
+
+
+    if not pk:
+        return JsonResponse({"error":"Id no enviado"}, status=400)
+
+
+    from django.forms.models import model_to_dict
+
+    clase = Clase.objects.filter(pk=pk).first()
+
+    if clase:
+        return JsonResponse(model_to_dict(clase), status=201)
+    
+    return JsonResponse({"error": "Clase no encontrada"}, status=404)
+
+
+
+def Api_EstudianteGet(request):
+
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    pk = body.get("pk", False)
+
+
+    if not pk:
+        return JsonResponse({"error":"Id no enviado"}, status=400)
+
+
+    from django.forms.models import model_to_dict
+
+
+    try:
+        estudiante = Estudiante.objects.filter(pk=pk).first()
+    except Estudiante.DoesNotExist:
+        return JsonResponse({"error": "Estudiante no encontrado"}, status=404)
+
+
+    if _ := estudiante.beca():
+        beca = model_to_dict(_)
+    else:
+        beca = False
+
+    if _ := estudiante.descuento():
+        descuento = model_to_dict(_)
+    else:
+        descuento = False
+
+
+    submit = {
+        "estudiante": model_to_dict(estudiante),
+        "beca": beca,
+        "descuento": descuento,
+    }
+
+    
+    return JsonResponse(submit, status=201)
+    
+    
+

@@ -64,7 +64,7 @@ class Persona(models.Model):
         return name
 
     def get_cedula(self):
-        return f"{self.nacionalidad}{self.cedula}"
+        return f"{self.nacionalidad}{self.cedula:08}"
     
     def save(self, *args, **kwargs):
         self.personal_email = self.personal_email.lower()
@@ -112,7 +112,18 @@ class Sensei(models.Model):
     
     def cedula(self):
         return self.personal_data.get_cedula()
+
+
+    def clases_activas(self):
+        return self.clases.filter(status=Clase.Status.ACTIVO)
     
+    def clases_completadas(self):
+        return self.clases.filter(status=Clase.Status.COMPLETADO)
+    
+    def clases_suspendidas_pausa(self):
+        return self.clases.filter(status__in=[Clase.Status.SUSPENDIDO, Clase.Status.PAUSADO])
+
+
     def save(self, *args, **kwargs):
         self.institucional_email = self.institucional_email.lower()
         super().save(*args, **kwargs)
@@ -149,6 +160,22 @@ class Estudiante(models.Model):
     
     def cedula(self):
         return self.personal_data.get_cedula()
+    
+    def beca(self):
+        try:
+            return self._beca.beca
+        except Estudiante._beca.RelatedObjectDoesNotExist:
+            return False
+        
+    def descuento(self):
+        try:
+            return self._descuento
+        except Estudiante._descuento.RelatedObjectDoesNotExist:
+            return False
+
+
+
+        
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -201,11 +228,8 @@ class Clase(models.Model):
 
     def __str__(self):
         sensei = self.sensei.personal_data.full_name()
-
         modulo = self.curso
-
         sede = self.sede
-
 
         return f"{modulo} {sede} - {sensei}"
 
@@ -226,6 +250,12 @@ class Horario(models.Model):
     dia_semana = models.CharField("Dia de la Semana", max_length=10, choices=Weekdays)
     hora_entrada = models.TimeField()
     hora_salida  = models.TimeField()
+
+    def entrada(self):
+        return time_format(self.hora_entrada, "f a")
+    
+    def salida(self):
+        return time_format(self.hora_salida, "f a")
 
 
     def __str__(self):
@@ -253,7 +283,7 @@ class Inscripciones(models.Model):
 
     clase = models.ForeignKey(Clase, on_delete=models.CASCADE, related_name="inscripciones")
     estudiante = models.ForeignKey(Estudiante, on_delete=models.CASCADE, related_name="inscripciones")
-    precio_a_pagar = models.PositiveSmallIntegerField()
+    precio_a_pagar = models.PositiveSmallIntegerField("Precio a pagar (en $)")
 
     def __str__(self):
         name = self.estudiante.personal_data.full_name()
@@ -295,7 +325,7 @@ class Becados(models.Model):
     class Meta:
         verbose_name_plural = "Becados"
 
-    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="beca")
+    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="_beca")
     beca = models.ForeignKey(Becas, on_delete=models.CASCADE, related_name="becados")
     obs = models.TextField("Observaciones", blank=True)
 
@@ -309,7 +339,7 @@ class DescuentoEspecial(models.Model):
     class Meta:
         verbose_name_plural = "Descuentos Especiales"
 
-    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="descuento")
+    estudiante = models.OneToOneField(Estudiante, on_delete=models.CASCADE, related_name="_descuento")
     # Este descuento siempre es Cardinal, no porcentual
     descuento = models.PositiveSmallIntegerField()
     obs = models.TextField("Observaciones", blank=True)

@@ -1,0 +1,30 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Inscripciones</h1>
+
+    
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+    <a href="{% url 'inscripciones-create' %}">Crear Inscripción</a>
+
+
+    <table>
+        <thead>
+            <th>Clase</th>
+            <th>Estudiante</th>
+            <th>Precio a pagar</th>
+        </thead>
+        <tbody>
+            {% for inscripcion in object_list %}
+            <tr>
+                <td>{{inscripcion.clase}}</td>
+                <td>{{inscripcion.estudiante}}</td>
+                <td>{{inscripcion.precio_a_pagar}}</td>
+                <td><a href="{% url 'inscripciones-detail' inscripcion.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}
