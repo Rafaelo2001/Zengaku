@@ -2,7 +2,7 @@ from django import forms
 
 from django.db import transaction, IntegrityError
 
-from .models import Persona, Sensei, Estudiante, Representante
+from .models import Persona, Sensei, Estudiante, Representante, DiaDeClase, Asistencias, Clase
 
 class BasePersona(forms.Form):
     nacionalidad = forms.ChoiceField(
@@ -164,3 +164,27 @@ class RepresentanteForm(BasePersona):
 
         return representante
 
+
+
+class SeleccionAsistenciaForm(forms.Form):
+
+    clase = forms.ModelChoiceField(Clase.objects.all())
+
+
+class AsistenciaForm(forms.ModelForm):
+
+    nombre_estudiante = forms.CharField(label="", required=False, widget=forms.TextInput(attrs={"readonly":True}))
+
+    class Meta:
+        model = Asistencias
+        fields = ["nombre_estudiante", "presente", "estudiante","dia_clase"]
+        widgets = {
+            "nombre_estudiante": forms.TextInput(attrs={"readonly":True}),
+            "estudiante": forms.HiddenInput(attrs={"readonly":True}),
+            "dia_clase": forms.HiddenInput(attrs={"readonly":True}),
+        }
+        labels = {
+            "nombre_estudiante": "",
+            "presente": "",
+        }
+        

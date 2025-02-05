@@ -29,8 +29,24 @@ urlpatterns = [
     path("inscripciones/<int:pk>", views.InscripcionesDetailView.as_view(), name="inscripciones-detail"),
     path("inscripciones/registrar", views.InscripcionesCreateView.as_view(), name="inscripciones-create"),
 
+    path("diadeclase/", views.DiaDeClaseListView.as_view(), name="dia-de-clase"),
+    path("diadeclase/<int:pk>", views.DiaDeClaseDetailView.as_view(), name="dia-de-clase-detail"),
+    path("diadeclase/registrar", views.DiaDeClaseCreateView.as_view(), name="dia-de-clase-create"),
+
+    path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),
+    path("asistencia/<int:pk>", views.AsistenciaDetailView.as_view(), name="asistencia-detail"),
+    path("asistencia/registrar", views.AsistenciaCreate, name="asistencia-create"),
+    path("asistencia/registrar-clasic", views.AsistenciaCreateView.as_view(), name="asistencia-create-clasic"),
+
+
     path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
     path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),
     path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),
+
+    path("api/clase/diadeclase/", views.Api_DiaDeClaseGet, name="api-clase-diadeclase-get"),
+    path("api/diadeclase/estudiantes", views.Api_EstudiantesInscriptosGet, name="api-inscripciones-estudiantes-get"),
+    
+
+    path("api/diadeclase/estudiantes_clasic", views.Api_EstudiantesInscriptosGetClasic, name="api-inscripciones-estudiantes-get-clasic"),
     # path("api/representante/edit",   views.Api_RepresentanteEdit, name="api-representante-edit"),
 ]
