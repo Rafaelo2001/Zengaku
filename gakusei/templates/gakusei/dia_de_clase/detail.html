@@ -1,20 +1,29 @@
 {% extends 'gakusei/layout.html' %}
 
 {% block body %}
-    <h1>Horario {{object}}</h1>
+    <h1>{{object}}</h1>
 
     <a href="{% url 'dia-de-clase' %}">Regresar a la lista</a>
 
     <ul>
         <li>Numero de Clase: {{object.numero}}</li>
         <li>Fecha de la Clase: {{object.fecha}}</li>
-        <li>Horario: {{object.horario}}</li>
+        <li>Horario: {{object.horario.simplificado}}</li>
         <li>Status: {{object.status}}</li>
     </ul>
 
-    Asistensias
-    -
-    -
-    -
+    <h3>Asistensias</h3>
+    <table>
+        {% for estudiante in object.asistencias.all %}
+        <tr>
+            <td>{{estudiante.estudiante.full_name}}</td>
+            <td>{{estudiante.presente|yesno:"Presente, No Presente" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td><i>Sin asistencias registradas.</i></td>
+        </tr>
+        {% endfor %}
+    </table>
     
 {% endblock %}

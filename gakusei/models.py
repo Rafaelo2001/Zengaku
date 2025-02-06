@@ -256,7 +256,13 @@ class Horario(models.Model):
     
     def salida(self):
         return time_format(self.hora_salida, "f a")
+    
+    def simplificado(self):
+        dia = self.dia_semana
+        entrada = self.hora_entrada
+        salida = self.hora_salida
 
+        return f"{dia} de {time_format(entrada, "f a")} a {time_format(salida, "f a")}"
 
     def __str__(self):
         clase = self.clase

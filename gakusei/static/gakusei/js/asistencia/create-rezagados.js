@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#id_clase").select2(opciones);
 
 
-    // Buscamos Estudiantes y formulario para dia de clase
-    $("#id_clase").on("select2:select", () => get_forms( $("#id_clase").val() ));
+    // Buscamos formulario de Asistencia de Rezagados
+    $("#id_clase").on("select2:select", () => get_asistencia_form( $("#id_clase").val() ));
 
 
     // Reactivacion con valores anteriores
@@ -21,19 +21,19 @@ document.addEventListener("DOMContentLoaded", function(){
         $("#id_clase").val(null).trigger("change");
         $("#id_clase").val(val).trigger("change");
 
-        get_forms(val);   
+        get_asistencia_form(val);   
     }
 
 
     // Al limpiar el campo, se resetea el resto.
     $("#id_clase").on("select2:clear", () => {
-        document.querySelector("#dias-form").innerHTML = "";
-        document.querySelector("#estudiantes-formset").innerHTML = "";
+        document.querySelector("#rezagados-form").innerHTML = "";
+        document.querySelector("#rezagados-form").innerHTML = "<p>Seleccione una clase primero.</p>";
 
-        document.querySelector("#dias-form").innerHTML = "<p>Seleccione una clase primero.</p>";
 
         document.querySelector("#submit-button").disabled = true;
     });
+
 
 
     // Intersepcion de los datos enviados por el formulario
@@ -61,12 +61,12 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         })
         .finally(() => {
-            if(status){                
+            if(status){
                 window.location.href = url_redirect;
             }
             else {
-                document.querySelector("#estudiante-presentes").innerHTML = "";
-                document.querySelector("#estudiante-presentes").innerHTML = error_form;
+                document.querySelector("#rezagados-form").innerHTML = "";
+                document.querySelector("#rezagados-form").innerHTML = error_form;
             }
         });
         
@@ -75,9 +75,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
-async function get_forms(clase_id) {
+async function get_asistencia_form(clase_id) {
 
-    let url = document.querySelector("#asistencia-form").dataset.form;
+    let url = document.querySelector("#asistencia-form").dataset.asistencia;
     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
     let request = {
@@ -88,24 +88,22 @@ async function get_forms(clase_id) {
     }
     
     let response = await fetch(url, request);
-    let obj      = await response.json();
+    let obj      = await response.json()
 
-    render_forms(obj);
+    let status = response.ok;
+    
+    if (status) {
+        document.querySelector("#rezagados-form").innerHTML = "";
+        document.querySelector("#rezagados-form").innerHTML = obj.form;
+
+        document.querySelector("#submit-button").disabled = false;
+    }
+    else {
+        document.querySelector("#rezagados-form").innerHTML = "";
+        document.querySelector("#rezagados-form").innerHTML = `<p>${obj.error}</p>`;
+
+        document.querySelector("#submit-button").disabled = true;
+    }
     
     return obj;
-}
-
-function render_forms(forms) {
-
-    let dias_form = forms.dias_form;
-    let estudiantes_formset = forms.formset;
-
-    document.querySelector("#dias-form").innerHTML = "";
-    document.querySelector("#dias-form").innerHTML = dias_form;
-
-    document.querySelector("#estudiantes-formset").innerHTML = "";
-    document.querySelector("#estudiantes-formset").innerHTML = `<h3>Estudiantes</h3>${estudiantes_formset}`;
-
-    document.querySelector("#submit-button").disabled = false;
-
 }

@@ -198,3 +198,12 @@ class AsistenciaForm(forms.ModelForm):
             "presente": "",
         }
         
+
+class AsistenciaRezagadosForm(forms.ModelForm):
+
+    class Meta:
+        model = Asistencias
+        exclude = []
+        help_texts = {
+            "presente": "Seleccionado: Presente, Sin seleccionar: No Presente",
+        }

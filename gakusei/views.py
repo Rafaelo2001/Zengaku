@@ -5,11 +5,11 @@ from django.db import transaction, IntegrityError
 from json import loads
 
 from django import forms
+from django.forms import modelformset_factory
 from django.forms.models import model_to_dict
 
-
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias
-from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm
+from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
 
@@ -96,6 +96,7 @@ class RepresentanteCreatePopup(FormView):
 
 # Clase
 clase_templates = "gakusei/clase/"
+
 class ClaseListView(ListView):
     model = Clase
     template_name = clase_templates + "list.html"
@@ -127,6 +128,7 @@ class ClaseCreateView(CreateView):
 
 # Horario
 horario_templates = "gakusei/horario/"
+
 class HorarioListView(ListView):
     model = Horario
     ordering = "clase"
@@ -193,7 +195,7 @@ dia_de_clase_templates = "gakusei/dia_de_clase/"
 
 class DiaDeClaseListView(ListView):
     model = DiaDeClase
-    ordering = "horario"
+    ordering = "-fecha"
 
     template_name = dia_de_clase_templates + "list.html"
 
@@ -301,38 +303,38 @@ class AsistenciaCreateViewClasic(CreateView):
 
 
 
-from django.forms import modelformset_factory
-def AsistenciaCreateAllAtOnce(request):
-    
-    clase_form = SeleccionAsistenciaForm()
-
-    # Creamos el FormSet
+def AsistenciaCreateRezagados(request):
 
     if request.method == "POST":
         # SOLO API
-
         clase = Clase.objects.get(pk=request.POST.get("clase"))
-        estudiantes_numero = clase.inscripciones.count()    
-        
-        AsistenciaFormSet = modelformset_factory(Asistencias, form=AsistenciaForm, extra=estudiantes_numero, can_delete=False)
-        formset = AsistenciaFormSet(request.POST)
 
-        if formset.is_valid():
-            print("yes")
-            f = formset.save()
-            print(f)
-            return JsonResponse({"clase_id":request.POST.get("clase")}, status=200)
+        form = AsistenciaRezagadosForm(request.POST)
 
-        return JsonResponse({"error_form":formset.as_div()}, status=400)
+        if form.is_valid():
+            
+            f = form.save()
+            dia = f.dia_clase
+
+            return JsonResponse({"url_redirect":reverse("dia-de-clase-detail", kwargs={"pk":dia.pk})}, status=200)
         
+        else:
+            form.fields["dia_clase"].queryset = DiaDeClase.objects.filter(horario__clase=clase)
+
+        return JsonResponse({"error_form":form.as_div()}, status=400)
+
+    # if "clase" in request.GET:
+    #     # Acomodar esto despues para cada clase
+    #     print("GET", request.GET)
+    #     clase_form = SeleccionAsistenciaForm()
+    #     clase_form.fields["clase"].widget = forms.TextInput()
+    #     clase_form.fields["clase"].initial = "2"
 
     else:
-        formset = None
+        clase_form = SeleccionAsistenciaForm()
 
-
-    return render(request, asistencia_templates + "create-all-at-once.html", {
-        "clase_form":clase_form,
-        "asistencia_form": formset,
+    return render(request, asistencia_templates + "create-rezagados.html", {
+        "clase_form": clase_form,
     })
 
 
@@ -422,41 +424,6 @@ def Api_EstudianteGet(request):
     
 
 
-def Api_DiaDeClaseGet(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Use method POST."}, status=403)
-    
-
-    body = loads(request.body)
-    pk = body.get("pk", False)
-
-
-    if not pk:
-        return JsonResponse({"error":"Id no enviado"}, status=400)
-
-
-    try:
-        clase = Clase.objects.filter(pk=pk).first()
-    except DiaDeClase.DoesNotExist:
-        return JsonResponse({"error": "Clase no encontrado"}, status=404)
-    
-
-    # CONGER ID DE LOS HORARIOS Y LUEGOS HACER UN QUERY SEARCH PARA DIA DE CLASES.
-    # POSIBLE PASAR FUNCION EN EL MISMO MODELO CLASE
-    
-    dias = DiaDeClase.objects.filter(horario__clase=clase)
-
-    if not dias:
-        return JsonResponse({"error": "No hay Dias de Clases registradas para esta clase."}, status=400)
-
-    results = [
-        {"id": d.pk, "text":str(d)}
-        for d in dias
-    ]
-
-    return JsonResponse({"results":results}, status=201)
-    
-
 
 
 def Api_AsistenciaForm(request):
@@ -506,47 +473,8 @@ def Api_AsistenciaForm(request):
     return JsonResponse(response, status=201)
 
 
-def Api_EstudiantesInscriptosGetAllAtOnce(request):
-    if request.method != "POST":
-        return JsonResponse({"error": "Use method POST."}, status=403)
-    
 
-    body = loads(request.body)
-    clase_id = body.get("clase_id", False)
-    dia_id = body.get("dia_id", False)
-
-
-    if not clase_id or not dia_id:
-        return JsonResponse({"error":"Id's no enviados"}, status=400)
-
-
-    try:
-        clase = Clase.objects.filter(pk=clase_id).first()
-    except DiaDeClase.DoesNotExist:
-        return JsonResponse({"error": "Clase no encontrado"}, status=404)
-    
-
-    estudiantes = Estudiante.objects.filter(inscripciones__clase=clase)
-
-    estudiantes_data = []
-
-    for e in estudiantes:
-        estudiantes_data.append(dict(nombre_estudiante=str(e), estudiante=e.pk, dia_clase=dia_id))
-
-    estudiantes_numero = clase.inscripciones.count()
-
-    AsistenciaFormSet = modelformset_factory(Asistencias, form=AsistenciaForm, extra=estudiantes_numero, can_delete=False)
-
-    formset = AsistenciaFormSet(
-        initial=estudiantes_data,
-        queryset=Asistencias.objects.none(),
-    )
-
-    return JsonResponse({"form": formset.as_div()}, status=201)
-
-
-def Api_EstudiantesInscriptosGetClasic(request):
-
+def Api_AsistenciaFormRezagados(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use method POST."}, status=403)
     
@@ -560,33 +488,24 @@ def Api_EstudiantesInscriptosGetClasic(request):
 
 
     try:
-        diadeclase = DiaDeClase.objects.filter(pk=pk).first()
+        clase = Clase.objects.filter(pk=pk).first()
     except DiaDeClase.DoesNotExist:
-        return JsonResponse({"error": "Dia de Clase no encontrado"}, status=404)
+        return JsonResponse({"error": "Clase no encontrado"}, status=404)
+    
+    
+    dias = DiaDeClase.objects.filter(horario__clase=clase)
+
+    if not dias:
+        return JsonResponse({"error": "No hay Dias de Clases registradas para esta clase."}, status=400)
     
 
-    clase = diadeclase.horario.clase
+    estudiantes = Estudiante.objects.filter(inscripciones__clase=clase)
 
-    listado_de_inscripciones = Inscripciones.objects.filter(clase=clase)
+    form = AsistenciaRezagadosForm()
 
-    estudiantes_inscriptos = []
+    form.fields["dia_clase"].queryset = dias
+    form.fields["estudiante"].queryset = estudiantes
 
-    if listado_de_inscripciones:
-        for estudiante in listado_de_inscripciones:
-            e = {
-                "id": estudiante.estudiante.id,
-                "text": estudiante.estudiante.__str__(),
-            }
 
-            estudiantes_inscriptos.append(e)
-
-    submit = {
-        "results": estudiantes_inscriptos,
-    }
-
-    return JsonResponse(submit, status=201)
+    return JsonResponse({"form":form.as_div()}, status=201)
     
-
-    from django.forms.models import model_to_dict
-
-
