@@ -36,7 +36,10 @@ urlpatterns = [
     path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),
     path("asistencia/<int:pk>", views.AsistenciaDetailView.as_view(), name="asistencia-detail"),
     path("asistencia/registrar", views.AsistenciaCreate, name="asistencia-create"),
-    path("asistencia/registrar-clasic", views.AsistenciaCreateView.as_view(), name="asistencia-create-clasic"),
+
+    # Drepreciaded???
+    path("asistencia/registrar-all-at-once", views.AsistenciaCreateAllAtOnce, name="asistencia-create-all-at-once"),
+    path("asistencia/registrar-clasic", views.AsistenciaCreateViewClasic.as_view(), name="asistencia-create-clasic"),
 
 
     path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
@@ -44,9 +47,10 @@ urlpatterns = [
     path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),
 
     path("api/clase/diadeclase/", views.Api_DiaDeClaseGet, name="api-clase-diadeclase-get"),
-    path("api/diadeclase/estudiantes", views.Api_EstudiantesInscriptosGet, name="api-inscripciones-estudiantes-get"),
+    path("api/asistencia/form", views.Api_AsistenciaForm, name="api-asistencia-form"),
     
 
+    path("api/diadeclase/estudiantes_at_once", views.Api_EstudiantesInscriptosGetAllAtOnce, name="api-inscripciones-estudiantes-all-at-once-get"),
     path("api/diadeclase/estudiantes_clasic", views.Api_EstudiantesInscriptosGetClasic, name="api-inscripciones-estudiantes-get-clasic"),
     # path("api/representante/edit",   views.Api_RepresentanteEdit, name="api-representante-edit"),
 ]

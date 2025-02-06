@@ -1,13 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
+from django.db import transaction, IntegrityError
 from json import loads
 
 from django import forms
 from django.forms.models import model_to_dict
 
+
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias
-from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm
+from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
 
@@ -233,18 +235,74 @@ class AsistenciaDetailView(DetailView):
     template_name = asistencia_templates + "detail.html"
 
 
-class AsistenciaCreateView(CreateView):
+
+def AsistenciaCreate(request):
+
+    if request.method == "POST":
+        try:
+            with transaction.atomic():
+
+                clase = get_object_or_404(klass=Clase, pk=request.POST.get("clase"))
+                estudiantes_numero = clase.inscripciones.count()    
+
+                dias_form = DiasForm(request.POST)
+
+                if dias_form.is_valid():
+                    dia = dias_form.save()
+
+                    # Como no se puede alterar el formset despues de creado y el request no puede ser modificado,
+                    # creamos una copia y agregamos el dia_clase ahi
+                    post_data = request.POST.copy()
+
+                    for _ in range(int(post_data["form-TOTAL_FORMS"])):
+                        post_data[f"form-{_}-dia_clase"] = dia
+
+                    AsistenciaFormSet = modelformset_factory(Asistencias, form=AsistenciaForm, extra=estudiantes_numero, can_delete=False)
+                    formset = AsistenciaFormSet(post_data)
+
+
+                    if formset.is_valid():
+                        formset.save()
+
+                        response = {
+                            "url_redirect": reverse("dia-de-clase-detail", kwargs={"pk":dia.pk}),
+                        }
+
+                        return JsonResponse(response, status=200)
+                    else:
+                        print(formset.errors)
+                        raise Exception("Formset no valid")
+                    
+                else:
+                    raise Exception("Dias no valid")
+        
+        except Exception as e:
+            return JsonResponse({"error": f"Error al insertar datos en BDD: {e}"}, status=400)
+
+
+
+    return render(request, asistencia_templates + "create.html", {
+        "clase_form": SeleccionAsistenciaForm()
+    })
+
+
+
+class AsistenciaCreateViewClasic(CreateView):
+    # ASISTENCIAS-CLASIC
     model = Asistencias
     fields = "__all__"
 
-    template_name = asistencia_templates + "create.html"
+    template_name = asistencia_templates + "create-all-at-once.html"
 
     def get_success_url(self):
         return reverse("asistencia-detail", kwargs={"pk":self.object.pk})
 
 
+
+
+
 from django.forms import modelformset_factory
-def AsistenciaCreate(request):
+def AsistenciaCreateAllAtOnce(request):
     
     clase_form = SeleccionAsistenciaForm()
 
@@ -272,7 +330,7 @@ def AsistenciaCreate(request):
         formset = None
 
 
-    return render(request, asistencia_templates+"create.html", {
+    return render(request, asistencia_templates + "create-all-at-once.html", {
         "clase_form":clase_form,
         "asistencia_form": formset,
     })
@@ -401,7 +459,54 @@ def Api_DiaDeClaseGet(request):
 
 
 
-def Api_EstudiantesInscriptosGet(request):
+def Api_AsistenciaForm(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    clase_id = body.get("pk", False)
+
+
+    if not clase_id:
+        return JsonResponse({"error":"Id no enviados"}, status=400)
+
+
+    try:
+        clase = Clase.objects.filter(pk=clase_id).first()
+    except DiaDeClase.DoesNotExist:
+        return JsonResponse({"error": "Clase no encontrado"}, status=404)
+    
+
+    estudiantes = Estudiante.objects.filter(inscripciones__clase=clase)
+
+    estudiantes_data = []
+
+    for e in estudiantes:
+        estudiantes_data.append(dict(nombre_estudiante=str(e), estudiante=e.pk))
+
+    estudiantes_numero = clase.inscripciones.count()
+
+    AsistenciaFormSet = modelformset_factory(Asistencias, form=AsistenciaForm, extra=estudiantes_numero, can_delete=False)
+
+    formset = AsistenciaFormSet(
+        initial=estudiantes_data,
+        queryset=Asistencias.objects.none(),
+    )
+
+    dia_form = DiasForm()
+
+    dia_form.fields["horario"].queryset = Horario.objects.filter(clase=clase).order_by("dia_semana")
+
+    response = {
+        "dias_form": dia_form.as_div(),
+        "formset": formset.as_div()
+    }
+
+    return JsonResponse(response, status=201)
+
+
+def Api_EstudiantesInscriptosGetAllAtOnce(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use method POST."}, status=403)
     
@@ -428,7 +533,6 @@ def Api_EstudiantesInscriptosGet(request):
     for e in estudiantes:
         estudiantes_data.append(dict(nombre_estudiante=str(e), estudiante=e.pk, dia_clase=dia_id))
 
-# FALTA CORREGIR CUAL ES EL DIA DE LA CLASE
     estudiantes_numero = clase.inscripciones.count()
 
     AsistenciaFormSet = modelformset_factory(Asistencias, form=AsistenciaForm, extra=estudiantes_numero, can_delete=False)
@@ -439,9 +543,6 @@ def Api_EstudiantesInscriptosGet(request):
     )
 
     return JsonResponse({"form": formset.as_div()}, status=201)
-    
-
-
 
 
 def Api_EstudiantesInscriptosGetClasic(request):

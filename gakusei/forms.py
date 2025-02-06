@@ -168,7 +168,17 @@ class RepresentanteForm(BasePersona):
 
 class SeleccionAsistenciaForm(forms.Form):
 
-    clase = forms.ModelChoiceField(Clase.objects.all())
+    clase = forms.ModelChoiceField(Clase.objects.filter(status=Clase.Status.ACTIVO))
+
+
+class DiasForm(forms.ModelForm):
+    class Meta:
+        model = DiaDeClase
+        fields = "__all__"
+        widgets = {
+            "fecha": forms.DateInput(attrs={"type":"date"}),
+            "status": forms.RadioSelect(),
+        }
 
 
 class AsistenciaForm(forms.ModelForm):

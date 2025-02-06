@@ -13,21 +13,18 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Registro de Asistencia All-at-Once</h1>
-    ESTE FORMULARIO ESTA TERMINADO.
-    PARA REGISTRO DE ASISTENCIAS INDIVIDUALES HACER (O REACTIVAR) EL OTRO FORMULARIO. MENOS MAL NO LO BORRE.
+    <h1>Registro de Asistencia</h1>
 
     <a href="{% url 'asistencia' %}">Regresar a la lista</a>
 
-    <form id="asistencia-form" action="{% url 'asistencia-create' %}" data-dias="{% url 'api-clase-diadeclase-get' %}" data-estudiantes="{% url 'api-inscripciones-estudiantes-get' %}" method="post"> {%csrf_token%}
+    <form id="asistencia-form" action="{% url 'asistencia-create' %}" data-form="{% url 'api-asistencia-form' %}" method="post"> {%csrf_token%}
         
         {{ clase_form }}
 
-        <div id="dias-select">
-            <p>Seleccione una clase primero.</p>
+        <div id="dias-form">
         </div>
         
-        <div id="estudiante-presentes">
+        <div id="estudiantes-formset">
         </div>
 
         <input type="submit" value="Registrar">

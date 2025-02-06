@@ -186,10 +186,11 @@ document.addEventListener("DOMContentLoaded", function(){
     }
     
     $("#id_clase").select2(opciones);
+    // $("#id_estudiante").select2(opciones);
 
 
-    // Buscamos Estudiantes y formulario para dia de clase
-    $("#id_clase").on("select2:select", () => get_forms( $("#id_clase").val() ));
+    // Buscamos Dias de Clase
+    $("#id_clase").on("select2:select", () => get_dias_clase( $("#id_clase").val() ));
 
     // Buscamos Estudiantes Inscritos
     $("#id_dias_de_clase").on("select2:select", () => get_estudiantes( $("#id_clase").val(), $("#id_dias_de_clase").val() ));
@@ -203,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function(){
         $("#id_clase").val(null).trigger("change");
         $("#id_clase").val(val).trigger("change");
 
-        get_forms(val);   
+        get_dias_clase(val);   
     }
 
 
@@ -226,15 +227,15 @@ document.addEventListener("DOMContentLoaded", function(){
         })
         .then(r => {
             if(status){
-                url_redirect = r.url_redirect;
+                url_redirect = "loqdevuelvaelobjcxd";
             }
             else {
                 error_form = r.error_form;
             }
         })
         .finally(() => {
-            if(status){                
-                window.location.href = url_redirect;
+            if(status){
+
             }
             else {
                 document.querySelector("#estudiante-presentes").innerHTML = "";
@@ -247,9 +248,9 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
-async function get_forms(clase_id) {
+async function get_dias_clase(clase_id) {
 
-    let url = document.querySelector("#asistencia-form").dataset.form;
+    let url = document.querySelector("#asistencia-form").dataset.dias;
     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
     let request = {
@@ -260,50 +261,79 @@ async function get_forms(clase_id) {
     }
     
     let response = await fetch(url, request);
-    let obj      = await response.json();
-
-    render_forms(obj);
+    let obj      = await response.json()
+    
+    render_dias_select2(obj.results);
     
     return obj;
 }
 
-function render_forms(forms) {
+/**
+ * 
+ * @param {Array} dias_data - Datos en formato Select2
+ */
+function render_dias_select2(dias_data) {
 
-    let dias_form = forms.dias_form;
-    let estudiantes_formset = forms.formset;
+    document.querySelector("#dias-select").innerHTML = "";
+    document.querySelector("#estudiante-presentes").innerHTML = "";
 
-    document.querySelector("#dias-form").innerHTML = "";
-    document.querySelector("#dias-form").innerHTML = dias_form;
+    if (!dias_data){
+        document.querySelector("#dias-select").innerHTML = "No ha habiado dias de clases para esta Clase.";
+        return;
+    }
+    else {
+        $('#id_dias_de_clase').select2('destroy');
 
-    document.querySelector("#estudiantes-formset").innerHTML = "";
-    document.querySelector("#estudiantes-formset").innerHTML = estudiantes_formset;
+        let select = document.createElement("select");
+        select.id = "id_dias_de_clase";
+        
+        let label = document.createElement("label");
+        label.innerText = "Dia de Clase: ";
+        label.htmlFor = "id_dias_de_clase";
+    
+        document.querySelector("#dias-select").append(label);
+        document.querySelector("#dias-select").append(select);
+    }
+
+    let opciones = {
+        placeholder: "----------",
+        allowClear: true,
+        width: '250px',
+        data: dias_data,
+    }
+
+    // Que renderizar el Select2 que sea nulo
+    $("#id_dias_de_clase").select2(opciones).val(null).trigger("change");
+
+    $("#id_dias_de_clase").on("select2:select", () => get_estudiantes( $("#id_clase").val(), $("#id_dias_de_clase").val() ));
+
 
 }
 
 
-// async function get_estudiantes(clase_id, dia_id) {
+async function get_estudiantes(clase_id, dia_id) {
 
-//     let url = document.querySelector("#asistencia-form").dataset.estudiantes;
-//     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
+    let url = document.querySelector("#asistencia-form").dataset.estudiantes;
+    let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-//     let request = {
-//         method: "POST",
-//         headers: {'X-CSRFToken': csrf_token},
-//         mode: 'same-origin',
-//         body: JSON.stringify({"clase_id": clase_id, "dia_id": dia_id}),
-//     }
+    let request = {
+        method: "POST",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        body: JSON.stringify({"clase_id": clase_id, "dia_id": dia_id}),
+    }
     
-//     let response = await fetch(url, request);
-//     let obj      = await response.json()
-    
-    
-//     document.querySelector("#estudiante-presentes").innerHTML = "";
-//     document.querySelector("#estudiante-presentes").innerHTML = obj.form;
+    let response = await fetch(url, request);
+    let obj      = await response.json()
     
     
+    document.querySelector("#estudiante-presentes").innerHTML = "";
+    document.querySelector("#estudiante-presentes").innerHTML = obj.form;
     
-//     return obj;
-// }
+    
+    
+    return obj;
+}
 
 
 
