@@ -1,0 +1,18 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>{{object}}</h1>
+
+    <a href="{% url 'pagos' %}">Regresar a la lista</a>
+
+    <ul>
+        <li>Estudiante:     {{object.estudiante     }}</li>
+        <li>Clase:          {{object.clase          }}</li>
+        <li>Monto pagado:   {{ object.monto_pagado  }}$</li>
+        <li>Metodo:         {{ object.metodo        }}</li>
+        <li>Referencia:     {{ object.referencia                }}</li>
+        <li>Fecha:          {{ object.fecha|date:"d/m/y f a"       }}</li>
+        <li>Observacion:    {{ object.obs           }}</li>
+    </ul>
+    
+{% endblock %}

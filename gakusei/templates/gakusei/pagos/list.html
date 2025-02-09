@@ -1,0 +1,27 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Pagos</h1>
+
+    
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+    <a href="{% url 'pagos-create' %}"><p>Registrar Pago</p></a>
+
+
+    <table>
+        <thead>
+            <th>Pagos</th>
+            <th></th>
+        </thead>
+        <tbody>
+            {% for pago in object_list %}
+            <tr>
+                <td>{{pago}}</td>
+                <td><a href="{% url 'pagos-detail' pago.pk %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

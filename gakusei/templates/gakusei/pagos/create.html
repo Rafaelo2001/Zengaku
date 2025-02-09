@@ -1,0 +1,28 @@
+{% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script src="{% static 'gakusei/js/pagos/create.js' %}"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>Registro de Pago</h1>
+
+    <a href="{% url 'pagos' %}">Regresar a la lista</a>
+
+    <form id="pago-form" action="{% url 'pagos-create' %}" data-get_clases="{% url 'api-pagos-clases' %}" method="post"> {%csrf_token%}
+        
+        {{ form }}
+
+        <input id="submit-button" type="submit" value="Registrar">
+    </form>
+
+    
+{% endblock %}

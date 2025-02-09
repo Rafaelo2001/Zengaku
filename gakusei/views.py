@@ -8,7 +8,7 @@ from django import forms
 from django.forms import modelformset_factory
 from django.forms.models import model_to_dict
 
-from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias
+from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
@@ -301,8 +301,6 @@ class AsistenciaCreateViewClasic(CreateView):
 
 
 
-
-
 def AsistenciaCreateRezagados(request):
 
     if request.method == "POST":
@@ -338,6 +336,35 @@ def AsistenciaCreateRezagados(request):
     })
 
 
+
+# PAGOS
+pagos_templates = "gakusei/pagos/"
+
+class PagosListView(ListView):
+    model = Pagos
+    ordering = "fecha"
+
+    template_name = pagos_templates + "list.html"
+
+
+class PagosDetailView(DetailView):
+    model = Pagos
+    template_name = pagos_templates + "detail.html"
+
+
+
+class PagosCreateView(CreateView):
+    model = Pagos
+    fields = "__all__"
+
+    template_name = pagos_templates + "create.html"
+    
+    
+    def get_success_url(self):
+        return reverse("pagos-detail", kwargs={"pk":self.object.pk})
+
+
+
 # API
 def Api_RepresentantesGet(request):
     raw_list = Representante.objects.all()
@@ -354,6 +381,7 @@ def Api_RepresentantesGet(request):
     }
 
     return JsonResponse(response, status=201)
+
 
 
 def Api_ClaseGet(request):
@@ -420,9 +448,6 @@ def Api_EstudianteGet(request):
 
     
     return JsonResponse(submit, status=201)
-    
-    
-
 
 
 
@@ -509,3 +534,42 @@ def Api_AsistenciaFormRezagados(request):
 
     return JsonResponse({"form":form.as_div()}, status=201)
     
+
+
+# Obtiene las Clases a las cuales esta inscripto un estudiante.
+def Api_Pagos_Clases(request):
+
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    pk = body.get("pk", False)
+
+
+    if not pk:
+        return JsonResponse({"error":"Id no enviado"}, status=400)
+
+
+    try:
+        estudiante = Estudiante.objects.filter(pk=pk).first()
+    except DiaDeClase.DoesNotExist:
+        return JsonResponse({"error": "Estudiante no encontrado"}, status=404)
+    
+
+    clases = Clase.objects.filter(inscripciones__estudiante=estudiante)
+
+    if clases:
+
+        results = [
+            {"id": c.id, "text": str(c)}
+            for c in clases
+        ]
+
+        return JsonResponse({"results":results}, status=200)
+    
+    else:
+        return JsonResponse({"error": "Estudiante no esta registrado en ninguna clase."}, status=404)
+
+
+

@@ -39,12 +39,20 @@ urlpatterns = [
     path("asistencia/registrar-rezagados", views.AsistenciaCreateRezagados, name="asistencia-create-rezagados"),
 
 
+    path("pagos/", views.PagosListView.as_view(), name="pagos"),
+    path("pagos/<int:pk>", views.PagosDetailView.as_view(), name="pagos-detail"),
+    path("pagos/registrar", views.PagosCreateView.as_view(), name="pagos-create"),
+
+
     path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
     path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),
     path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),
 
     path("api/asistencia/form", views.Api_AsistenciaForm, name="api-asistencia-form"),
     path("api/asistencia/form-rezagados/", views.Api_AsistenciaFormRezagados, name="api-asistencia-form-rezagados"),
-    
 
+
+    path("api/pagos/clases/", views.Api_Pagos_Clases, name="api-pagos-clases"),
+    
+    
 ]
