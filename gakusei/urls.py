@@ -44,6 +44,11 @@ urlpatterns = [
     path("pagos/registrar", views.PagosCreateView.as_view(), name="pagos-create"),
 
 
+    path("solvencias/", views.SolvenciaClaseListView.as_view(), name="solvencias-clase"),
+    path("solvencias/clase-<int:pk>", views.SolvenciaClaseDetailView.as_view(), name="solvencias-clase-detail"),
+
+
+    # API
     path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
     path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),
     path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),

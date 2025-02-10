@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.utils.timezone import now
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
 from django.db import transaction, IntegrityError
@@ -12,6 +13,9 @@ from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripci
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
+
+from dateutil.relativedelta import relativedelta
+
 
 # Create your views here.
 def index(request):
@@ -342,7 +346,7 @@ pagos_templates = "gakusei/pagos/"
 
 class PagosListView(ListView):
     model = Pagos
-    ordering = "fecha"
+    ordering = "-fecha"
 
     template_name = pagos_templates + "list.html"
 
@@ -363,6 +367,35 @@ class PagosCreateView(CreateView):
     def get_success_url(self):
         return reverse("pagos-detail", kwargs={"pk":self.object.pk})
 
+
+
+
+# SOLVENCIAS
+solvencias_templates = "gakusei/solvencia/"
+ 
+class SolvenciaClaseListView(ListView):
+    model = Clase
+    template_name = solvencias_templates + "list-clase.html"
+
+
+class SolvenciaClaseDetailView(DetailView):
+    model = Clase
+    template_name = solvencias_templates + "detail-clase.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # f_inicio = context["clase"].f_inicio
+        # from datetime import date, datetime;
+
+        # print(f_inicio)
+        # print(date.today())
+
+        # diferencia = relativedelta(date.today(), f_inicio)
+
+        # print(diferencia)
+        
+        return context
 
 
 # API

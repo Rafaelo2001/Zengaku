@@ -1,0 +1,31 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Solvencias por Clases</h1>
+
+    
+    <a href="{% url 'index' %}">Regresar al Index</a>
+
+
+    <table>
+        <thead>
+            <th>Sensei</th>
+            <th>Curso</th>
+            <th>Sede</th>
+            <th>N. Estudiantes</th>
+        </thead>
+        <tbody>
+            {% for clase in object_list %}
+            <tr>
+                <td>{{clase.sensei.full_name}}</td>
+                <td>{{clase.curso}}</td>
+                <td>{{clase.sede}}</td>
+                <td>{{clase.inscripciones.count}}</td>
+
+                <td><a href="{% url 'solvencias-clase-detail' clase.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

@@ -14,5 +14,16 @@
         <li>Fecha:          {{ object.fecha|date:"d/m/y f a"       }}</li>
         <li>Observacion:    {{ object.obs           }}</li>
     </ul>
+
+    <h3>Comprobantes de Pago</h3>
+
+    <ul>
+        {% for comprobante in object.comprobantes.all %}
+            <li>{{comprobante.solvencias.clase}} - {{comprobante.solvencias.mes}} ({{comprobante.solvencias.pagado}}) ({{comprobante.monto_aplicado}}$)</li>
+        {% endfor %}
+    </ul>
+
+
+
     
 {% endblock %}
