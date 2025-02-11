@@ -1,0 +1,39 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Beca {{object}}</h1>
+
+    <a href="{% url 'becas' %}">Regresar a la lista</a>
+
+    <ul>
+        <li>Nombre:     {{ object.nombre }}         </li>
+        <li>Descuento:  {{ object.descuento_full }} </li>
+        <li>Status:     {{object.status}}           </li>
+    </ul>
+
+
+    <h3>Estudiantes con {{object}}</h3>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Estudiante</th>
+                <th>Observacion</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for becado in object.becados.all %}
+            <tr>
+                <td>{{becado.estudiante}}</td>
+                {% if becado.obs %} <td>{{becado.obs}}</td> {% else %} <td><i>Ninguna</i></td> {% endif %}
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No hay estudiantes hechos con esta Beca</td>
+            </tr>
+        {% endfor %}    
+        </tbody>
+    </table>
+   
+    
+{% endblock %}

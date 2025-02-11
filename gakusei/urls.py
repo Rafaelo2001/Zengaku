@@ -48,6 +48,32 @@ urlpatterns = [
     path("solvencias/clase-<int:pk>", views.SolvenciaClaseDetailView.as_view(), name="solvencias-clase-detail"),
 
 
+    path("sedes/", views.SedeListView.as_view(), name="sede"),
+    path("sedes/<int:pk>", views.SedeDetailView.as_view(), name="sede-detail"),
+    path("sedes/registrar", views.SedeCreateView.as_view(), name="sede-create"),
+
+
+    path("cursos/", views.CursoListView.as_view(), name="curso"),
+    path("cursos/<int:pk>", views.CursoDetailView.as_view(), name="curso-detail"),
+    path("cursos/registrar", views.CursoCreateView.as_view(), name="curso-create"),
+
+
+    path("metodosdepago/", views.MetodosPagoListView.as_view(), name="metodos-pago"),
+    path("metodosdepago/<int:pk>", views.MetodosPagoDetailView.as_view(), name="metodos-pago-detail"),
+    path("metodosdepago/registrar", views.MetodosPagoCreateView.as_view(), name="metodos-pago-create"),
+
+
+    path("descuentosespeciales/", views.DescuentoEspecialListView.as_view(), name="descuento-especial"),
+    path("descuentosespeciales/<int:pk>", views.DescuentoEspecialDetailView.as_view(), name="descuento-especial-detail"),
+    path("descuentosespeciales/registrar", views.DescuentoEspecialCreateView.as_view(), name="descuento-especial-create"),
+
+
+    path("becas/", views.BecaListView.as_view(), name="becas"),
+    path("becas/<int:pk>", views.BecaDetailView.as_view(), name="becas-detail"),
+    path("becas/registrar", views.BecaCreateView.as_view(), name="becas-create"),
+    path("becas/asignar", views.BecaAssingView.as_view(), name="becas-asignar"),
+
+
     # API
     path("api/representantes/", views.Api_RepresentantesGet, name="api-representantes-get"),
     path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),

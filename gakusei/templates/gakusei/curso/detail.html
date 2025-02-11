@@ -1,0 +1,53 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Curso {{curso}}</h1>
+
+    <a href="{% url 'curso' %}">Regresar a la lista</a>
+
+    <ul>
+        <li>Módulo: {{ curso.modulo }}</li>
+    </ul>
+
+
+    <h3>Clases Activas</h3>
+
+    {% if curso.clases_activas %}
+    <ul>
+        {% for clase in curso.clases_activas %}
+        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p><i>Sin clases activas para este curso.</i></p>
+    {% endif %}
+
+
+    <h3>Clases Culminadas</h3>
+
+    {% if curso.clases_completadas %}
+    <ul>
+        {% for clase in curso.clases_completadas %}
+        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p><i>Sin clases completadas para este curso.</i></p>
+    {% endif %}
+
+
+    <h3>Clases Suspendidas o Pausadas</h3>
+
+    {% if curso.clases_suspendidas_pausa %}
+    <ul>
+        {% for clase in curso.clases_suspendidas_pausa %}
+        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p><i>Sin clases suspendidas o pausadas para este curso.</i></p>
+    {% endif %}
+
+
+    
+{% endblock %}

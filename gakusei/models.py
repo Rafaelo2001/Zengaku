@@ -187,6 +187,15 @@ class Estudiante(models.Model):
 class Curso(models.Model):
     modulo = models.CharField("Módulo", max_length=50, unique=True)
 
+    def clases_activas(self):
+        return self.clases.filter(status=Clase.Status.ACTIVO)
+    
+    def clases_completadas(self):
+        return self.clases.filter(status=Clase.Status.COMPLETADO)
+    
+    def clases_suspendidas_pausa(self):
+        return self.clases.filter(status__in=[Clase.Status.SUSPENDIDO, Clase.Status.PAUSADO])
+
     def __str__(self):
         return self.modulo
 
@@ -322,9 +331,15 @@ class Becas(models.Model):
     )
     status = models.CharField(max_length=15, choices=Status, default=Status.ACTIVO)
 
+    def descuento_full(self):
+        descuento = self.descuento
+        tipo_descuento = "%" if self.tipo_descuento==self.TipoDescuento.PORCENTUAL else "$"
+
+        return f"{descuento}{tipo_descuento}"
+
     def __str__(self):
-        tipo = "%" if self.tipo_descuento==self.TipoDescuento.PORCENTUAL else "$"
-        return f"{self.nombre} ({self.descuento}{tipo})"
+        tipo = self.descuento_full()
+        return f"{self.nombre} ({tipo})"
 
 
 class Becados(models.Model):

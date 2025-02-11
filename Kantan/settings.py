@@ -132,3 +132,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # 0.0.0.0:8000 hace que se pueda conectar sin import la direccion
 # APAGAR VPNNNNNNNNN
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://results-headline-chair-accident.trycloudflare.com"
+]

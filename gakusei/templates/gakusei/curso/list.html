@@ -1,0 +1,26 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Cursos</h1>
+
+
+    <a href="{% url 'index' %}">Regresar al Index</a>
+    
+    <a href="{% url 'curso-create' %}">Registrar Curso</a>
+
+    
+    <table>
+        <thead>
+            <th>Módulo</th>
+        </thead>
+        <tbody>
+            {% for curso in object_list %}
+            <tr>
+                <td>{{curso}}</td>
+                <td><a href="{% url 'curso-detail' curso.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

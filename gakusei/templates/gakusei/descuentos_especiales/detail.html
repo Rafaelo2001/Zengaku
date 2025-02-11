@@ -1,0 +1,15 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Descuento de {{object.descuento}}$ para {{object.estudiante}}</h1>
+
+    <a href="{% url 'descuento-especial' %}">Regresar a la lista</a>
+
+    <ul>
+        <li>Estudiante:      {{ object.estudiante }}     </li>
+        <li>Descuento:       {{ object.descuento }}$     </li>
+        <li>Observaciones:   {% if object.obs %} {{ object.obs }} {% else %} <i>Ninguna.</i> {% endif %}       </li>
+    </ul>
+   
+    
+{% endblock %}

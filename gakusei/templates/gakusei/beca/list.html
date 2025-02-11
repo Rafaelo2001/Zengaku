@@ -1,0 +1,30 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Becas</h1>
+
+
+    <a href="{% url 'index' %}">Regresar al Index</a>
+    
+    <a href="{% url 'becas-create' %}">Registrar Beca</a>
+
+    <a href="{% url 'becas-asignar' %}">Asignar Beca a Estudiante</a>
+
+    
+    <table>
+        <thead>
+            <th>Beca</th>
+            <th>Descuento</th>
+        </thead>
+        <tbody>
+            {% for beca in object_list %}
+            <tr>
+                <td>{{beca.nombre}}</td>
+                <td>{{beca.descuento_full}}</td>
+                <td><a href="{% url 'becas-detail' beca.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

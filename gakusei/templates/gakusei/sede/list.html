@@ -1,0 +1,28 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Listado de Sedes</h1>
+
+
+    <a href="{% url 'index' %}">Regresar al Index</a>
+    
+    <a href="{% url 'sede-create' %}">Registrar Sede</a>
+
+    
+    <table>
+        <thead>
+            <th>Nombre</th>
+            <th>Ubicación</th>
+        </thead>
+        <tbody>
+            {% for sede in object_list %}
+            <tr>
+                <td>{{sede.nombre}}</td>
+                <td>{{sede.ubicacion}}</td>
+                <td><a href="{% url 'sede-detail' sede.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

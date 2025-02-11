@@ -1,0 +1,26 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Métodos de Pago</h1>
+
+
+    <a href="{% url 'index' %}">Regresar al Index</a>
+    
+    <a href="{% url 'metodos-pago-create' %}">Registrar Método</a>
+
+    
+    <table>
+        <thead>
+            <th>Método</th>
+        </thead>
+        <tbody>
+            {% for metodo in object_list %}
+            <tr>
+                <td>{{metodo}}</td>
+                <td><a href="{% url 'metodos-pago-detail' metodo.id %}">View</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+{% endblock %}

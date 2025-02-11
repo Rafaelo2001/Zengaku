@@ -9,7 +9,7 @@ from django import forms
 from django.forms import modelformset_factory
 from django.forms.models import model_to_dict
 
-from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos
+from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
 from django.views.generic import ListView, DetailView, FormView, CreateView
@@ -396,6 +396,145 @@ class SolvenciaClaseDetailView(DetailView):
         # print(diferencia)
         
         return context
+
+
+
+# Sedes
+sede_templates = "gakusei/sede/"
+
+class SedeListView(ListView):
+    model = Sede
+    template_name = sede_templates + "list.html"
+
+
+class SedeDetailView(DetailView):
+    model = Sede
+    template_name = sede_templates + "detail.html"
+
+
+class SedeCreateView(CreateView):
+    model = Sede
+    fields = "__all__"
+
+    template_name = sede_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("sede-detail", kwargs={"pk":self.object.pk})
+
+
+
+# Curso
+curso_templates = "gakusei/curso/"
+
+class CursoListView(ListView):
+    model = Curso
+    template_name = curso_templates + "list.html"
+
+
+class CursoDetailView(DetailView):
+    model = Curso
+    template_name = curso_templates + "detail.html"
+
+
+class CursoCreateView(CreateView):
+    model = Curso
+    fields = "__all__"
+
+    template_name = curso_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("curso-detail", kwargs={"pk":self.object.pk})
+    
+
+
+
+
+# Métodos de Pago
+metodo_templates = "gakusei/metodos_pago/"
+
+class MetodosPagoListView(ListView):
+    model = MetodosPagos
+    template_name = metodo_templates + "list.html"
+
+
+class MetodosPagoDetailView(DetailView):
+    model = MetodosPagos
+    template_name = metodo_templates + "detail.html"
+
+
+class MetodosPagoCreateView(CreateView):
+    model = MetodosPagos
+    fields = "__all__"
+
+    template_name = metodo_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("metodos-pago-detail", kwargs={"pk":self.object.pk})
+
+
+
+
+
+# Descuentos Especiales
+descuento_templates = "gakusei/descuentos_especiales/"
+
+class DescuentoEspecialListView(ListView):
+    model = DescuentoEspecial
+    template_name = descuento_templates + "list.html"
+
+
+class DescuentoEspecialDetailView(DetailView):
+    model = DescuentoEspecial
+    template_name = descuento_templates + "detail.html"
+
+
+class DescuentoEspecialCreateView(CreateView):
+    model = DescuentoEspecial
+    fields = "__all__"
+
+    template_name = descuento_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("descuento-especial-detail", kwargs={"pk":self.object.pk})
+
+
+
+
+
+# Becas
+becas_templates = "gakusei/beca/"
+
+class BecaListView(ListView):
+    model = Becas
+    template_name = becas_templates + "list.html"
+
+
+class BecaDetailView(DetailView):
+    model = Becas
+    template_name = becas_templates + "detail.html"
+
+
+class BecaCreateView(CreateView):
+    model = Becas
+    fields = "__all__"
+
+    template_name = becas_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("becas-detail", kwargs={"pk":self.object.pk})
+    
+
+class BecaAssingView(CreateView):
+    model = Becados
+    fields = "__all__"
+
+    template_name = becas_templates + "asignar.html"
+
+    def get_success_url(self):
+        return reverse("becas-detail", kwargs={"pk":self.object.pk})
+
+
+
 
 
 # API
