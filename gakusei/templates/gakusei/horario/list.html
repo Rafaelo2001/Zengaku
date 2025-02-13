@@ -9,9 +9,12 @@
     <a href="{% url 'horario-create' %}">Registrar Horario</a>
 
 
-    <table>
+    <table border="1">
         <thead>
-            <th>Horario</th>
+            <td>Clase</td>
+            <td>Dia</td>
+            <td>H. Entrada</td>
+            <td>H. Salida</td>
         </thead>
         <tbody>
             <!-- <tr> Ejemplo?
@@ -19,7 +22,10 @@
             </tr> -->
             {% for horario in object_list %}
             <tr>
-                <td>{{horario}}</td>
+                <td>{{horario.clase}}</td>
+                <td>{{horario.dia_semana}}</td>
+                <td>{{horario.entrada}}</td>
+                <td>{{horario.salida}}</td>
                 <td><a href="{% url 'horario-detail' horario.id %}">View</a></td>
             </tr>
             {% endfor %}

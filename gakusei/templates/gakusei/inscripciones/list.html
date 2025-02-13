@@ -9,7 +9,7 @@
     <a href="{% url 'inscripciones-create' %}">Crear Inscripción</a>
 
 
-    <table>
+    <table border="1">
         <thead>
             <th>Clase</th>
             <th>Estudiante</th>
@@ -20,7 +20,7 @@
             <tr>
                 <td>{{inscripcion.clase}}</td>
                 <td>{{inscripcion.estudiante}}</td>
-                <td>{{inscripcion.precio_a_pagar}}</td>
+                <td>{{inscripcion.precio_a_pagar}}$</td>
                 <td><a href="{% url 'inscripciones-detail' inscripcion.id %}">View</a></td>
             </tr>
             {% endfor %}

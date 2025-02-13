@@ -37,7 +37,7 @@
     <a href="">Asignar horario</a>
 
     {% if clase.horarios %}
-    <table>
+    <table border="1">
         <thead>
             <tr>
                 <th>Día</th>
@@ -60,5 +60,16 @@
     {% endif %}
     
 
+    <h3>Dias de clases</h3>
+
+    <a href="">Registrar Asistencia</a>
+
+    <ul>
+        {% for dia in clase.dias_de_clase %}
+            <li>{{dia.simple_str}}</li>
+        {% empty %}
+            <li><i>Todavía no se han dado clases en esta Clase.</i></li>
+        {% endfor %}
+    </ul>
     
 {% endblock %}

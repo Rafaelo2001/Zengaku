@@ -235,6 +235,9 @@ class Clase(models.Model):
 
     def horarios(self):
         return self.horario.all().order_by("dia_semana")
+    
+    def dias_de_clase(self):
+        return DiaDeClase.objects.filter(horario__in=self.horarios()).order_by("fecha")
 
     def __str__(self):
         sensei = self.sensei.personal_data.full_name()
@@ -590,6 +593,8 @@ class DiaDeClase(models.Model):
     status = models.CharField(max_length=10, choices=Status, default=Status.IMPARTIDA)
     obs = models.TextField("Observaciones", blank=True)
 
+    def simple_str(self):
+        return f"Clase N° {self.numero} ({self.status}) - {date_format(self.fecha, 'D d M, Y')}"
 
     def __str__(self):
         # Clase N. {} - ZGN5 Altamira - Mika Ruft 

@@ -15,16 +15,34 @@ document.addEventListener("DOMContentLoaded", function(){
     opciones_clase.disabled = true;
     opciones_clase.data = null;
 
-    $("#id_clase").select2(opciones);
+    $("#id_clase").select2(opciones_clase);
 
 
-    $("#id_estudiante").on("select2:select", () => get_clases( $("#id_estudiante").val() ));
+    $("#id_estudiante").on("select2:select", () => {
+        get_clases( $("#id_estudiante").val() );
+        document.querySelector("#mensualidad").innerHTML = "";
+    });
+
+
+    $("#id_estudiante").on("select2:clear", () => {
+        $("#id_clase").select2(opciones_clase).val(null).change();
+        document.querySelector("#mensualidad").innerHTML = "";
+    });
+
+
+    if( $("#id_estudiante").val() && $("#id_clase").val() ) {
+        val_estudiante = $("#id_estudiante").val();
+        val_clase = $("#id_clase").val();
+
+        get_clases( val_estudiante, val_clase );
+        get_mensualidad();
+    }
 
 });
 
 
 
-async function get_clases(id_estudiante){
+async function get_clases(id_estudiante, id_clase=null){
 
     let url = document.querySelector("#pago-form").dataset.get_clases;
     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
@@ -61,5 +79,34 @@ async function get_clases(id_estudiante){
         $("#id_clase").empty().select2("destroy");
     }
 
-    $("#id_clase").select2(opciones).val(null).change();
+    $("#id_clase").select2(opciones).val(id_clase).change();
+    $("#id_clase").on("select2:select", () => get_mensualidad());
+
+    $("#id_clase").on("select2:clear", () => {
+        document.querySelector("#mensualidad").innerHTML = "";
+    });
+}
+
+
+async function get_mensualidad() {
+
+    let url = document.querySelector("#mensualidad").dataset.mensualidad;
+    let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    let request = {
+        method: "POST",
+        headers: {'X-CSRFToken': csrf_token},
+        mode: 'same-origin',
+        body: JSON.stringify({"estudiante": $("#id_estudiante").val(), "clase": $("#id_clase").val()}),
+    }
+
+    let response = await fetch(url, request);
+    let obj      = await response.json();
+    
+    let status = response.ok;
+    let mensualidad = obj.mensualidad;
+
+    document.querySelector("#mensualidad").innerHTML = "";
+    document.querySelector("#mensualidad").innerHTML = `<p>Mensualidad del Estudiante: ${mensualidad}$</p>`;
+
 }

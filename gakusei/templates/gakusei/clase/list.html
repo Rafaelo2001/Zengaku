@@ -9,22 +9,24 @@
     <a href="{% url 'clase-create' %}">Registrar Clase</a>
 
 
-    <table>
+    <table border="1">
         <thead>
-            <th>Sensei</th>
             <th>Curso</th>
+            <th>Sensei</th>
             <th>Sede</th>
             <th>Horas Semanales</th>
+            <th>Estudiantes</th>
             <th>Clase Individual</th>
             <th>Precio</th>
         </thead>
         <tbody>
             {% for clase in object_list %}
             <tr>
-                <td>{{clase.sensei}}</td>
                 <td>{{clase.curso}}</td>
+                <td>{{clase.sensei.full_name}}</td>
                 <td>{{clase.sede}}</td>
                 <td>{{clase.horas_semanales}}</td>
+                <td>{{clase.inscripciones.count}}</td>
                 <td>
                     {{ clase.individual|yesno:"Si,No" }}
                 </td>

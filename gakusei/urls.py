@@ -84,6 +84,7 @@ urlpatterns = [
 
 
     path("api/pagos/clases/", views.Api_Pagos_Clases, name="api-pagos-clases"),
+    path("api/pagos/mensualidad/", views.Api_Pagos_Mensualidad, name="api-pagos-mensualidad"),
     
     
 ]

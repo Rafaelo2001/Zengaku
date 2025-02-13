@@ -744,4 +744,27 @@ def Api_Pagos_Clases(request):
         return JsonResponse({"error": "Estudiante no esta registrado en ninguna clase."}, status=404)
 
 
+# Obtiene la mensualidad dado un estudiante y la clase
+def Api_Pagos_Mensualidad(request):
+    
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    id_estudiante = body.get("estudiante", False)
+    id_clase = body.get("clase", False)
+
+
+    if not id_estudiante or not id_clase:
+        return JsonResponse({"error":"Ids no enviados"}, status=400)
+    
+
+    try:
+        inscripcion = Inscripciones.objects.filter(estudiante=id_estudiante, clase=id_clase).first()
+    except Inscripciones.DoesNotExist:
+        return JsonResponse({"error": "Inscripcion no encontrada"}, status=404)
+
+    return JsonResponse({"mensualidad":inscripcion.precio_a_pagar}, status=200)
+
 

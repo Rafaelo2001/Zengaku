@@ -14,9 +14,14 @@
         <li>Hora de Salida:   {{horario.salida}}  </li>
     </ul>
 
-    Dias de clases en este horario
-    -
-    -
-    -
+
+    <h3>Dias de clases en este horario</h3>
+    <ul>
+        {% for dia in horario.dias_de_clase.all %}
+            <li>{{dia.simple_str}}</li>
+        {% empty %}
+            <li><i>Todavía no se han dado clases en este Horario.</i></li>
+        {% endfor %}
+    </ul>
     
 {% endblock %}

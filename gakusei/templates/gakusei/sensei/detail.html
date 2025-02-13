@@ -9,9 +9,9 @@
         <li>Status: {{ sensei.status }}  </li>
         <li>Cédula: {{ sensei.cedula }}  </li>
         <li>Primer Nombre: {{ sensei.personal_data.first_name }}      </li>
-        <li>Segundo Nombre: {% if sensei.personal_data.middle_name %}{{ sensei.personal_data.middle_name }}{% else %} <i>No data</i> {% endif %}     </li>
+        <li>Segundo Nombre: {% if sensei.personal_data.middle_name %}{{ sensei.personal_data.middle_name }}{% else %} <i>---</i> {% endif %}     </li>
         <li>Primer Apellido: {{ sensei.personal_data.last_name_1 }}     </li>
-        <li>Segundo Apellido: {% if sensei.personal_data.last_name_2 %}{{ sensei.personal_data.last_name_2 }}{% else %} <i>No data</i> {% endif %}    </li>
+        <li>Segundo Apellido: {% if sensei.personal_data.last_name_2 %}{{ sensei.personal_data.last_name_2 }}{% else %} <i>---</i> {% endif %}    </li>
         <li>Correo Personal: {{ sensei.personal_data.personal_email }}  </li>
         <li>Telefono Movil: {{ sensei.personal_data.telefono }}         </li>
 

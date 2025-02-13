@@ -1,4 +1,17 @@
 {% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script src="{% static 'gakusei/js/clase/create.js' %}"></script>
+{% endblock %}
+
 
 {% block body %}
     <h1>Registro de Clase</h1>
