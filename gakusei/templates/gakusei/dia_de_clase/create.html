@@ -1,14 +1,30 @@
 {% extends 'gakusei/layout.html' %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script src="{% static 'gakusei/js/dia_de_clase/create.js' %}"></script>
+{% endblock %}
 
 {% block body %}
     <h1>Registro de Dia de Clase</h1>
-    <!-- INCOMPLETO -->
 
     <a href="{% url 'dia-de-clase' %}">Regresar a la lista</a>
 
-    <form action="{% url 'dia-de-clase-create' %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit" value="Registrar">
+    <form action="{% url 'dia-de-clase-create' %}" data-form="{% url 'api-dia-de-clase-form' %}" method="post"> {%csrf_token%}
+        {{ form_clase }}
+
+        <div id="dias-form">
+            <p>Seleccione una clase primero.</p>
+        </div>
+
+        <input id="submit-button" type="submit" value="Registrar">
     </form>
     
 {% endblock %}

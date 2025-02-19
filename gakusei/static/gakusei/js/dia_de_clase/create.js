@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#id_clase").select2(opciones);
 
 
-    // Buscamos Estudiantes y formulario para dia de clase
+    // Buscamos formulario para dia de clase
     $("#id_clase").on("select2:select", () => get_form( $("#id_clase").val() ));
 
 
@@ -28,56 +28,17 @@ document.addEventListener("DOMContentLoaded", function(){
     // Al limpiar el campo, se resetea el resto.
     $("#id_clase").on("select2:clear", () => {
         document.querySelector("#dias-form").innerHTML = "";
-        document.querySelector("#estudiantes-formset").innerHTML = "";
 
         document.querySelector("#dias-form").innerHTML = "<p>Seleccione una clase primero.</p>";
 
         document.querySelector("#submit-button").disabled = true;
     });
 
-
-    // Intersepcion de los datos enviados por el formulario
-    document.querySelector("#asistencia-form").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        let form = event.target;
-        let form_data = new FormData(form);
-
-        let status, error_form, url_redirect;
-        fetch(form.action, {
-            method: form.method,
-            body: form_data,
-        })
-        .then(r => {
-            status = r.ok;
-            return r.json();
-        })
-        .then(r => {
-            if(status){
-                url_redirect = r.url_redirect;
-            }
-            else {
-                error_form = r.error_form;
-            }
-        })
-        .finally(() => {
-            if(status){                
-                window.location.href = url_redirect;
-            }
-            else {
-                document.querySelector("#estudiante-presentes").innerHTML = "";
-                document.querySelector("#estudiante-presentes").innerHTML = error_form;
-            }
-        });
-        
-
-    });
-
 });
 
 async function get_form(clase_id) {
 
-    let url = document.querySelector("#asistencia-form").dataset.form;
+    let url = document.querySelector("form").dataset.form;
     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
     let request = {
@@ -90,22 +51,17 @@ async function get_form(clase_id) {
     let response = await fetch(url, request);
     let obj      = await response.json();
 
-    render_forms(obj);
+    render_form(obj);
     
     return obj;
 }
 
-function render_forms(forms) {
+function render_form(forms) {
 
     let dias_form = forms.dias_form;
-    let estudiantes_formset = forms.formset;
 
     document.querySelector("#dias-form").innerHTML = "";
     document.querySelector("#dias-form").innerHTML = dias_form;
 
-    document.querySelector("#estudiantes-formset").innerHTML = "";
-    document.querySelector("#estudiantes-formset").innerHTML = `<h3>Estudiantes</h3>${estudiantes_formset}`;
-
     document.querySelector("#submit-button").disabled = false;
-
 }

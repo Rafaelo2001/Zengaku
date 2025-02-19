@@ -220,6 +220,12 @@ class DiaDeClaseCreateView(CreateView):
         form.fields["fecha"].widget = forms.DateInput(attrs={"type":"date"})
 
         return form
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["form_clase"] = SeleccionAsistenciaForm()
+
+        return context
 
     def get_success_url(self):
         return reverse("dia-de-clase-detail", kwargs={"pk":self.object.pk})
@@ -768,3 +774,29 @@ def Api_Pagos_Mensualidad(request):
     return JsonResponse({"mensualidad":inscripcion.precio_a_pagar}, status=200)
 
 
+
+
+def Api_DiasDeClase_Form(request):
+    if request.method != "POST":
+        return JsonResponse({"error": "Use method POST."}, status=403)
+    
+
+    body = loads(request.body)
+    clase_id = body.get("pk", False)
+
+
+    if not clase_id:
+        return JsonResponse({"error":"Id no enviado"}, status=400)
+
+
+    try:
+        clase = Clase.objects.filter(pk=clase_id).first()
+    except Clase.DoesNotExist:
+        return JsonResponse({"error": "Clase no encontrado"}, status=404)
+    
+
+    dia_form = DiasForm()
+    dia_form.fields["horario"].queryset = Horario.objects.filter(clase=clase).order_by("dia_semana")
+
+
+    return JsonResponse({"dias_form": dia_form.as_div()}, status=201)

@@ -79,6 +79,8 @@ urlpatterns = [
     path("api/clase/", views.Api_ClaseGet, name="api-clase-get"),
     path("api/estudiante/", views.Api_EstudianteGet, name="api-estudiante-get"),
 
+    path("api/diasdeclase/form", views.Api_DiasDeClase_Form, name="api-dia-de-clase-form"),
+
     path("api/asistencia/form", views.Api_AsistenciaForm, name="api-asistencia-form"),
     path("api/asistencia/form-rezagados/", views.Api_AsistenciaFormRezagados, name="api-asistencia-form-rezagados"),
 
