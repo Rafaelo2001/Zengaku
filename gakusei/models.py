@@ -220,9 +220,28 @@ class Clase(models.Model):
         SUSPENDIDO = "Suspendida"
         COMPLETADO = "Terminanda"
 
+    def sensei_eliminado():
+        s = Sensei.objects.get_or_create(
+                personal_data = Persona.objects.get_or_create(
+                                    cedula="000",
+                                    defaults={
+                                        "nacionalidad":Persona.NACIONALITIES.VEN,
+                                        "first_name":"REGISTRO",
+                                        "last_name_1":"ELIMINADO",
+                                        "personal_email":"REGISTRO@ELIMINADO.com",
+                                        "telefono":"0424-0000000",
+                                    }
+                                )[0],
+                defaults={
+                    "institucional_email" : "REGISTROELIMINADO@zengaku.com",
+                }
+            )[0]
+        
+        return s
+
     curso = models.ForeignKey(Curso, on_delete=models.PROTECT, related_name="clases")
-    sensei = models.ForeignKey(Sensei, on_delete=models.SET_NULL, null=True, related_name="clases")
-    sede = models.ForeignKey(Sede, on_delete=models.CASCADE, related_name="clases")
+    sensei = models.ForeignKey(Sensei, on_delete=models.SET(sensei_eliminado), related_name="clases")
+    sede = models.ForeignKey(Sede, on_delete=models.PROTECT, related_name="clases")
 
     f_inicio = models.DateField("Fecha de Inicio")
     f_cierre = models.DateField("Fecha de Cierre", blank=True, null=True)

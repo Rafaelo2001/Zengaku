@@ -50,6 +50,32 @@ def default_sensei(sender, **kwargs):
 
     if sender.name == "gakusei":
 
+        # USUARIO ELIMINADO
+        try:
+            with transaction.atomic():
+                personal_data = Persona.objects.create(
+                    nacionalidad=Persona.NACIONALITIES.VEN,
+                    cedula="000",
+                    first_name="REGISTRO",
+                    last_name_1="ELIMINADO",
+                    personal_email="REGISTRO@ELIMINADO.com",
+                    telefono="0424-0000000",
+                )
+                personal_data.save()
+
+                sensei = Sensei.objects.create(
+                    personal_data = personal_data,
+                    institucional_email = "REGISTROELIMINADO@zengaku.com",
+                    status = Sensei.Status.RETIRADO,
+                )
+                sensei.save()
+
+            print("Sensei Default para registros eliminados creado.")
+        
+        except:
+            print("Sensei Default para registros eliminados ya existe.")
+
+
         # Gabriel Machado
         try:
             with transaction.atomic():
