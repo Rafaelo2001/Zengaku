@@ -1,0 +1,13 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Edición de Sensei</h1>
+
+    <a href="{% url 'sensei' %}">Regresar a la lista</a>
+
+    <form action="{% url 'sensei-edit' sensei.pk %}" method="post"> {%csrf_token%}
+        {{ form }}
+        <input type="submit" value="Guardar Cambios">
+    </form>
+    
+{% endblock %}

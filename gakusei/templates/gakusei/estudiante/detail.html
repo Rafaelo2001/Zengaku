@@ -5,6 +5,9 @@
 
     <a href="{% url 'estudiante' %}">Regresar a la lista</a>
 
+    <a href="{% url 'estudiante-edit' object.pk %}">Editar Estudiante</a>
+
+
     <ul>
         <li>Status: {{ object.status }}  </li>
         <li>Cédula: {{ object.cedula }}  </li>

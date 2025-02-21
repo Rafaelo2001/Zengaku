@@ -8,10 +8,12 @@ urlpatterns = [
     path("sensei/", views.SenseiListView.as_view(), name="sensei"),
     path("sensei/<int:pk>", views.SenseiDetailView.as_view(), name="sensei-detail"),
     path("sensei/registrar", views.SenseiCreateView.as_view(), name="sensei-create"),
+    path("sensei/editar/<int:pk>", views.SenseiEditView.as_view(), name="sensei-edit"),
 
     path("estudiante/", views.EstudianteListView.as_view(), name="estudiante"),
     path("estudiante/<int:pk>", views.EstudianteDetailView.as_view(), name="estudiante-detail"),
     path("estudiante/registrar", views.EstudianteCreateView.as_view(), name="estudiante-create"),
+    path("estudiante/editar/<int:pk>", views.EstudianteEditView.as_view(), name="estudiante-edit"),
     path("estudiante/registrar/representante", views.RepresentanteCreatePopup.as_view(), name="estudiante-create-representante"),
 
     path("representante/registrar", views.RepresentanteCreateView.as_view(), name="representante-create"),

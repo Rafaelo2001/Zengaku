@@ -12,7 +12,7 @@ from django.forms.models import model_to_dict
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
-from django.views.generic import ListView, DetailView, FormView, CreateView
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
 
 from dateutil.relativedelta import relativedelta
 
@@ -33,16 +33,46 @@ class SenseiDetailView(DetailView):
     template_name = sensei_templates + "detail.html"
 
 
-class SenseiCreateView(FormView):
+class SenseiCreateView(CreateView):
+    model = Sensei
     form_class = SenseiForm
     template_name = sensei_templates + "create.html"
 
-    success_url = reverse_lazy("sensei")
+    def get_success_url(self):
+        return reverse("sensei-detail", kwargs={"pk":self.object.pk})
 
-    def form_valid(self, form):
-        sensei = form.save()
+    
 
-        return HttpResponseRedirect(reverse("sensei-detail", kwargs={"pk":sensei.pk}))
+class SenseiEditView(UpdateView):
+    model = Sensei
+    form_class = SenseiForm
+    template_name = sensei_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("sensei-detail", kwargs={"pk":self.object.pk})
+    
+    def get_form_kwargs(self):
+        # Obtenemos los datos que seran colocados en los campos del formulario
+        kwargs = super().get_form_kwargs()
+
+        # Obtenemos al objeto que se va a Editar
+        sensei = self.get_object()
+
+        # Pegamos los datos de 'Personal Data' a la variable que será procesada en el __init__ del formulario
+        kwargs["personal_data"] = {
+            "nacionalidad"   : sensei.personal_data.nacionalidad,
+            "cedula"         : sensei.personal_data.cedula,
+            "first_name"     : sensei.personal_data.first_name,
+            "middle_name"    : sensei.personal_data.middle_name,
+            "last_name_1"    : sensei.personal_data.last_name_1,
+            "last_name_2"    : sensei.personal_data.last_name_2,
+            "telefono"       : sensei.personal_data.telefono,
+            "personal_email" : sensei.personal_data.personal_email,
+        }
+
+        return kwargs
+
+        
     
 
 # Estudiante
@@ -57,16 +87,41 @@ class EstudianteDetailView(DetailView):
     template_name = estudiante_templates + "detail.html"
 
 
-class EstudianteCreateView(FormView):
+class EstudianteCreateView(CreateView):
+    model = Estudiante
     form_class = EstudianteForm
     template_name = estudiante_templates + "create.html"
 
-    success_url = reverse_lazy("estudiante")
+    def get_success_url(self):
+        return reverse("estudiante-detail", kwargs={"pk":self.object.pk})
 
-    def form_valid(self, form):
-        estudiante = form.save()
 
-        return HttpResponseRedirect(reverse("estudiante-detail", kwargs={"pk":estudiante.pk}))
+class EstudianteEditView(UpdateView):
+    model = Estudiante
+    form_class = EstudianteForm
+    template_name = estudiante_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("estudiante-detail", kwargs={"pk":self.object.pk})
+    
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        estudiante = self.get_object()
+
+        kwargs["personal_data"] = {
+            "nacionalidad"   : estudiante.personal_data.nacionalidad,
+            "cedula"         : estudiante.personal_data.cedula,
+            "first_name"     : estudiante.personal_data.first_name,
+            "middle_name"    : estudiante.personal_data.middle_name,
+            "last_name_1"    : estudiante.personal_data.last_name_1,
+            "last_name_2"    : estudiante.personal_data.last_name_2,
+            "telefono"       : estudiante.personal_data.telefono,
+            "personal_email" : estudiante.personal_data.personal_email,
+        }
+
+        return kwargs
+
+
     
     
 # Representante
