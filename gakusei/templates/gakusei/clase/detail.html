@@ -5,6 +5,8 @@
 
     <a href="{% url 'clase' %}">Regresar a la lista</a>
 
+    <a href="{% url 'clase-edit' clase.pk %}">Editar Clase</a>
+
     <ul>
         <li><a href="{% url 'sensei-detail' clase.sensei.id %}">
             Sensei:           {{clase.sensei}}                      </a>
@@ -19,14 +21,24 @@
 
     <h3>Estudiantes</h3>
 
-    <!-- <a href="">Asignar estudiante</a> -->
+    <a href="{% url 'inscripciones-create' %}?clase={{clase.pk}}">Asignar estudiante</a>
 
     {% if clase.inscripciones.all %}
-    <ul>
-        {% for estudiante in clase.inscripciones.all %}
-        <li>{{ estudiante.estudiante }}</li>
-        {% endfor %}
-    </ul>
+    <table border="1">
+        <thead>
+            <th>Estudiante</th>
+            <th>Mensualidad</th>
+        </thead>
+        <tbody>
+            {% for inscripcion in clase.inscripciones.all %}
+            <tr>
+                <td><a href="{% url 'estudiante-detail' inscripcion.estudiante.pk %}">{{inscripcion.estudiante}}</a></td>
+                <td><a href="{% url 'inscripciones-detail' inscripcion.id %}">{{inscripcion.precio_a_pagar}}$</a></td>
+                <!-- <td><a href="{% url 'inscripciones-edit' inscripcion.id %}">Editar</a></td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
     {% else %}
     <p><i>Sin estudiantes asignados para esta clase.</i></p>
     {% endif %}
@@ -34,7 +46,7 @@
 
     <h3>Horarios</h3>
 
-    <!-- <a href="">Asignar horario</a> -->
+    <a href="{% url 'horario-create' %}?clase={{clase.pk}}">Asignar horario</a>
 
     {% if clase.horarios %}
     <table border="1">
@@ -51,6 +63,7 @@
                 <td>{{ horario.dia_semana }}</td>
                 <td>{{ horario.entrada }}</td>
                 <td>{{ horario.salida }}</td>
+                <td><a href="{% url 'horario-edit' horario.pk %}">Editar</a></td>
             </tr>
             {% endfor %}
         </tbody>
@@ -64,12 +77,27 @@
 
     <!-- <a href="">Registrar Asistencia</a> -->
 
-    <ul>
-        {% for dia in clase.dias_de_clase %}
-            <li>{{dia.simple_str}}</li>
-        {% empty %}
-            <li><i>Todavía no se han dado clases en esta Clase.</i></li>
-        {% endfor %}
-    </ul>
+    {% if clase.dias_de_clase %}
+        <table border="1">
+            <thead>
+                <th>N°</th>
+                <th>Fecha</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+                {% for dia in clase.dias_de_clase %}
+                <tr>
+                    <td>Clase N° {{dia.numero}}</td>
+                    <td>{{dia.fecha}}</td>
+                    <td>{{dia.status}}</td>
+                    <td><a href="{% url 'dia-de-clase-detail' dia.id %}">View</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p><i>Todavía no se han dado clases en esta Clase.</i></p>
+    {% endif %}
+    
     
 {% endblock %}

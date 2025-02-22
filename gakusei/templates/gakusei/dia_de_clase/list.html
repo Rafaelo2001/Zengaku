@@ -6,28 +6,26 @@
     
     <a href="{% url 'index' %}">Regresar al Index</a>
 
-    <a href="{% url 'dia-de-clase-create' %}">Registrar Dia de Clase</a>
+    <p><a href="{% url 'asistencia-create' %}">Registrar Asistencia</a> <- Este es el que vas a querer usar.</p>
+    
+    <p><a href="{% url 'dia-de-clase-create' %}">Registrar Dia de Clase</a> <- Registra solamente un Dia de Clase.</p>
+    <p><a href="{% url 'asistencia-create-rezagados' %}">Registrar Asistencia de Rezagados</a> <- Registra Asistencias solamente en Dias ya registrados, un estudinate a la vez.</p>
 
 
-    <table>
+    <table border="1">
         <thead>
-            <!-- <th>N°</th>
-            <th>Fecha</th> -->
-            <!-- <th>Clase</th> -->
-            <!-- <th>Horario</th>
+            <th>N°</th>
+            <th>Clase</th>
             <th>Status</th>
-            <th></th> -->
-            <th>Dias de Clases</th>
-            <th></th>
+            <th>Fecha</th>
         </thead>
         <tbody>
             {% for dia in object_list %}
             <tr>
-                <!-- <td>{{dia.numero}}</td>
+                <td>Clase N° {{dia.numero}}</td>
+                <td>{{dia.clase}}</td>
+                <td>{{dia.status}}</td>
                 <td>{{dia.fecha}}</td>
-                <td>{{dia.horario}}</td>
-                <td>{{dia.status}}</td> -->
-                <td>{{dia}}</td>
                 <td><a href="{% url 'dia-de-clase-detail' dia.id %}">View</a></td>
             </tr>
             {% endfor %}

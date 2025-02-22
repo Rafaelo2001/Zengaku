@@ -384,3 +384,13 @@ class AsistenciaRezagadosForm(forms.ModelForm):
         help_texts = {
             "presente": "Seleccionado: Presente, Sin seleccionar: No Presente",
         }
+
+    
+class ClaseForm(forms.ModelForm):
+    class Meta:
+        model = Clase
+        fields = "__all__"
+        widgets = {
+            "f_inicio": forms.DateInput(attrs={"type":"date"}),
+            "f_cierre": forms.DateInput(attrs={"type":"date"}),
+        }

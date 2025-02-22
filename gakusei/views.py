@@ -184,6 +184,24 @@ class ClaseCreateView(CreateView):
         return form
 
 
+class ClaseEditView(UpdateView):
+    model = Clase
+    fields = "__all__"
+    template_name = clase_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("clase-detail", kwargs={"pk": self.object.pk})
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+
+        form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
+        form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
+
+        return form
+
+
 
 # Horario
 horario_templates = "gakusei/horario/"
@@ -214,7 +232,42 @@ class HorarioCreateView(CreateView):
         form.fields["hora_entrada"].widget = forms.TimeInput(attrs={"type":"time"})
         form.fields["hora_salida"].widget  = forms.TimeInput(attrs={"type":"time"})
 
+        if clase_id := self.request.GET.get("clase"):
+            readonly_select = {"onfocus":"this.blur();", "style":"pointer-events: none;", "disabled":"true"}
+            form.fields["clase"].widget.attrs.update(readonly_select)
+
         return form
+    
+    def get_initial(self):
+        initial = super().get_initial()
+
+        clase_id = self.request.GET.get("clase")
+
+        if clase_id:
+            initial["clase"] = clase_id
+
+        return initial
+
+
+
+
+class HorarioEditView(UpdateView):
+    model = Horario
+    fields = "__all__"
+    template_name = horario_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("horario-detail", kwargs={"pk": self.object.pk})
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+
+        form.fields["hora_entrada"].widget = forms.TimeInput(attrs={"type":"time", "step":"1"})
+        form.fields["hora_salida"].widget  = forms.TimeInput(attrs={"type":"time", "step":"1"})
+
+        return form
+
 
 
 # Inscripciones
@@ -236,6 +289,51 @@ class InscripcionesCreateView(CreateView):
 
     template_name = inscripciones_templates + "create.html"
 
+    def get_initial(self):
+        initial = super().get_initial()
+
+        if clase_id := self.request.GET.get("clase"):
+            initial["clase"] = clase_id
+
+        if estudiante_id := self.request.GET.get("estudiante"):
+            initial["estudiante"] = estudiante_id
+
+        return initial
+
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+        form.fields["clase"].queryset = Clase.objects.filter(status__in=[Clase.Status.ACTIVO, Clase.Status.PAUSADO])
+        form.fields["estudiante"].queryset = Estudiante.objects.filter(status=Estudiante.Status.ACTIVO)
+
+        readonly_select = {"onfocus":"this.blur();", "style":"pointer-events: none;", "disabled":"true"}
+
+        if clase_id := self.request.GET.get("clase"):
+
+            form.fields["estudiante"].queryset = Estudiante.objects.filter(
+                status=Estudiante.Status.ACTIVO
+            ).exclude(
+                pk__in=Inscripciones.objects.filter(clase=Clase.objects.filter(pk=clase_id)[0]).values_list("estudiante", flat=True)
+            )
+
+            form.fields["clase"].widget.attrs.update(readonly_select)
+
+        if estudiante_id := self.request.GET.get("estudiante"):
+            form.fields["estudiante"].widget.attrs.update(readonly_select)
+
+        return form
+
+    def get_success_url(self):
+        return reverse("inscripciones-detail", kwargs={"pk":self.object.pk})
+
+
+class InscripcionesEditView(UpdateView):
+    model = Inscripciones
+    fields = "__all__"
+
+    template_name = inscripciones_templates + "edit.html"
+
 
     def get_form(self, form_class = None):
 
@@ -247,6 +345,7 @@ class InscripcionesCreateView(CreateView):
 
     def get_success_url(self):
         return reverse("inscripciones-detail", kwargs={"pk":self.object.pk})
+
 
 
 # Dia de Clases
@@ -281,6 +380,26 @@ class DiaDeClaseCreateView(CreateView):
         context["form_clase"] = SeleccionAsistenciaForm()
 
         return context
+
+    def get_success_url(self):
+        return reverse("dia-de-clase-detail", kwargs={"pk":self.object.pk})
+    
+
+class DiaDeClaseEditView(UpdateView):
+    model = DiaDeClase
+    fields = "__all__"
+
+    template_name = dia_de_clase_templates + "edit.html"
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+
+        print(self.object.clase())
+        
+        form.fields["horario"].queryset = Horario.objects.filter(clase=self.object.clase())
+        form.fields["fecha"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
+
+        return form
 
     def get_success_url(self):
         return reverse("dia-de-clase-detail", kwargs={"pk":self.object.pk})
@@ -400,6 +519,25 @@ def AsistenciaCreateRezagados(request):
         "clase_form": clase_form,
     })
 
+
+class AsistenciaEditView(UpdateView):
+    model = Asistencias
+    template_name = asistencia_templates + "edit.html"
+    fields = "__all__"
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+
+        readonly_select = {"onfocus":"this.blur();", "style":"pointer-events: none;", "disabled":"true"}
+        
+        form.fields["dia_clase"].widget.attrs.update(readonly_select)
+        form.fields["estudiante"].widget.attrs.update(readonly_select)
+
+        return form
+
+
+    def get_success_url(self):
+        return reverse("dia-de-clase-detail", kwargs={"pk":self.object.dia_clase.pk})
 
 
 # PAGOS

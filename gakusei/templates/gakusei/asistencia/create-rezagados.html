@@ -15,7 +15,8 @@
 {% block body %}
     <h1>Registro de Asistencia para Rezagados</h1>
 
-    <a href="{% url 'asistencia' %}">Regresar a la lista</a>
+    <!-- <a href="{% url 'asistencia' %}">Regresar a la lista</a> -->
+    <a href="{% url 'dia-de-clase' %}">Regresar a la lista</a>
 
     <form id="asistencia-form" action="{% url 'asistencia-create-rezagados' %}" data-asistencia="{% url 'api-asistencia-form-rezagados' %}" method="post"> {%csrf_token%}
         

@@ -4,12 +4,18 @@
     <h1>{{object}}</h1>
 
     <a href="{% url 'dia-de-clase' %}">Regresar a la lista</a>
+    
+    <a href="{% url 'dia-de-clase-edit' object.pk %}">Editar Dia de Clase</a>
 
     <ul>
+        <li><a href="{% url 'clase-detail' object.clase.id %}">
+            Clase:            {{object.clase}}        </a>
+        </li>
         <li>Numero de Clase: {{object.numero}}</li>
         <li>Fecha de la Clase: {{object.fecha}}</li>
         <li>Horario: {{object.horario.simplificado}}</li>
         <li>Status: {{object.status}}</li>
+        <li>Observaciones: {{object.obs}}</li>
     </ul>
 
     <h3>Asistensias</h3>
@@ -18,6 +24,7 @@
         <tr>
             <td>{{estudiante.estudiante.full_name}}</td>
             <td>{{estudiante.presente|yesno:"Presente, No Presente" }}</td>
+            <td><a href="{% url 'asistencia-edit' estudiante.pk %}">Editar</a></td>
         </tr>
         {% empty %}
         <tr>

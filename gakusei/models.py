@@ -245,7 +245,7 @@ class Clase(models.Model):
 
     f_inicio = models.DateField("Fecha de Inicio")
     f_cierre = models.DateField("Fecha de Cierre", blank=True, null=True)
-    horas_semanales = models.PositiveSmallIntegerField("Horas (min) Semanales")
+    horas_semanales = models.PositiveSmallIntegerField("Horas Semanales")
     precio = models.PositiveSmallIntegerField()
 
     individual = models.BooleanField("Clase Individual", default=False)
@@ -611,6 +611,9 @@ class DiaDeClase(models.Model):
     fecha = models.DateField()
     status = models.CharField(max_length=10, choices=Status, default=Status.IMPARTIDA)
     obs = models.TextField("Observaciones", blank=True)
+
+    def clase(self):
+        return self.horario.clase
 
     def simple_str(self):
         return f"Clase N° {self.numero} ({self.status}) - {date_format(self.fecha, 'D d M, Y')}"

@@ -21,24 +21,29 @@ urlpatterns = [
     path("clase/", views.ClaseListView.as_view(), name="clase"),
     path("clase/<int:pk>", views.ClaseDetailView.as_view(), name="clase-detail"),
     path("clase/registrar", views.ClaseCreateView.as_view(), name="clase-create"),
+    path("clase/editar/<int:pk>", views.ClaseEditView.as_view(), name="clase-edit"),
 
     path("horario/", views.HorarioListView.as_view(), name="horario"),
     path("horario/<int:pk>", views.HorarioDetailView.as_view(), name="horario-detail"),
     path("horario/registrar", views.HorarioCreateView.as_view(), name="horario-create"),
+    path("horario/editar/<int:pk>", views.HorarioEditView.as_view(), name="horario-edit"),
 
 
     path("inscripciones/", views.InscripcionesListView.as_view(), name="inscripciones"),
     path("inscripciones/<int:pk>", views.InscripcionesDetailView.as_view(), name="inscripciones-detail"),
     path("inscripciones/registrar", views.InscripcionesCreateView.as_view(), name="inscripciones-create"),
+    path("inscripciones/editar/<int:pk>", views.InscripcionesEditView.as_view(), name="inscripciones-edit"),
 
     path("diadeclase/", views.DiaDeClaseListView.as_view(), name="dia-de-clase"),
     path("diadeclase/<int:pk>", views.DiaDeClaseDetailView.as_view(), name="dia-de-clase-detail"),
     path("diadeclase/registrar", views.DiaDeClaseCreateView.as_view(), name="dia-de-clase-create"),
+    path("diadeclase/editar/<int:pk>", views.DiaDeClaseEditView.as_view(), name="dia-de-clase-edit"),
 
     path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),
     path("asistencia/<int:pk>", views.AsistenciaDetailView.as_view(), name="asistencia-detail"),
     path("asistencia/registrar", views.AsistenciaCreate, name="asistencia-create"),
     path("asistencia/registrar-rezagados", views.AsistenciaCreateRezagados, name="asistencia-create-rezagados"),
+    path("asistencia/editar/<int:pk>", views.AsistenciaEditView.as_view(), name="asistencia-edit"),
 
 
     path("pagos/", views.PagosListView.as_view(), name="pagos"),

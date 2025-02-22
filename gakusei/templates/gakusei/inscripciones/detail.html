@@ -4,6 +4,8 @@
     <h1>Inscripción {{object}}</h1>
 
     <a href="{% url 'inscripciones' %}">Regresar a la lista</a>
+    
+    <a href="{% url 'inscripciones-edit' inscripciones.pk %}">Editar Inscripción</a>
 
     <ul>
         <li><a href="{% url 'clase-detail' inscripciones.clase.id %}">

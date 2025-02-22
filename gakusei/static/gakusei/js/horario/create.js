@@ -8,4 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     $("#id_clase").select2(opciones);
+
+    document.querySelector("#horario-form").addEventListener("submit", () => {
+
+        document.querySelector("#id_clase").disabled  = false;
+    });
 });

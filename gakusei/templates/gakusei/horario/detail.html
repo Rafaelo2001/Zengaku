@@ -5,6 +5,8 @@
 
     <a href="{% url 'horario' %}">Regresar a la lista</a>
 
+    <a href="{% url 'horario-edit' horario.pk %}">Editar Horario</a>
+
     <ul>
         <li><a href="{% url 'clase-detail' horario.clase.id %}">
             Clase:            {{horario.clase}}        </a>

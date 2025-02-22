@@ -65,6 +65,13 @@ $(document).ready(function() {
         let e = {"params": { "data": {"id": val} }}
         get_price_estudiante(e);   
     }
+
+
+    document.querySelector("#inscripciones-form").addEventListener("submit", () => {
+
+        document.querySelector("#id_clase").disabled  = false;
+        document.querySelector("#id_estudiante").disabled  = false;
+    });
 });
 
 async function get_price_clase(e) {
