@@ -18,14 +18,14 @@
 
     <h3>Solvencias</h3>
 
+    {% comment %} Reagrupa la variable 'solvencias' por la key 'estudiante' y lo devuelve como un tuple (estudiante, lista_de_solvencias) llamado sol_list. {% endcomment %}
+    {% regroup solvencias by estudiante as sol_list %}
 
-    {% if clase.inscripciones.all %}
-    
-    
-        {% for estudiante in clase.inscripciones.all %}
+    {% for estudiante, solvencias in sol_list %}
+
         <table border="1">
             <tr>
-                <th colspan="4">{{ estudiante.estudiante.full_name }}</th>
+                <th colspan="4">{{ estudiante.full_name }}</th>
             </tr>
             <tr>
                 <th>Mes</th>
@@ -34,29 +34,70 @@
                 <th>Abonado</th>
             </tr>
             
-            {% for solvencia in estudiante.estudiante.solvencias.all %}
-                {% if object == solvencia.clase %}
-                    <tr 
-                        {% if solvencia.pagado == 'Pagado' %}
-                        style="background-color:lightblue"
-                        {% elif solvencia.pagado == 'Abonado' %}
-                        style="background-color:lightyellow"
-                        {% elif solvencia.pagado == 'Sin Pagar' %}
-                        style="background-color:pink"
-                        {% endif %}
-                    >
-                        <td>{{solvencia.mes|date:"M. Y"}}</td>
-                        <td>{{solvencia.pagado}}</td>
-                        <td>{{solvencia.monto_a_pagar}}$</td>
-                        <td>{{solvencia.monto_abonado}}$</td>
-                    </tr>
-                {% endif %} 
+            {% for solvencia in solvencias %}
+                <tr 
+                    {% if solvencia.pagado == 'Pagado' %}
+                    style="background-color:lightblue"
+                    {% elif solvencia.pagado == 'Abonado' %}
+                    style="background-color:lightyellow"
+                    {% elif solvencia.pagado == 'Sin Pagar' %}
+                    style="background-color:pink"
+                    {% endif %}
+                >
+                    <td>{{solvencia.mes|date:"M. Y"}}</td>
+                    <td>{{solvencia.pagado}}</td>
+                    <td>{{solvencia.monto_a_pagar}}$</td>
+                    <td>{{solvencia.monto_abonado}}$</td>
+                </tr>
             {% endfor %}
         </table> <br>
-        {% endfor %}
-    
-    
-    {% endif %}
+    {% endfor %}
+
+
+
+    {% comment %}
+
+        {% if clase.inscripciones.all %}
+        
+        
+            {% for estudiante in clase.inscripciones.all %}
+            <table border="1">
+                <tr>
+                    <th colspan="4">{{ estudiante.estudiante.full_name }}</th>
+                </tr>
+                <tr>
+                    <th>Mes</th>
+                    <th>Status</th>
+                    <th>Precio</th>
+                    <th>Abonado</th>
+                </tr>
+                
+                {% for solvencia in estudiante.estudiante.solvencias.all %}
+                    {% if object == solvencia.clase %}
+                        <tr 
+                            {% if solvencia.pagado == 'Pagado' %}
+                            style="background-color:lightblue"
+                            {% elif solvencia.pagado == 'Abonado' %}
+                            style="background-color:lightyellow"
+                            {% elif solvencia.pagado == 'Sin Pagar' %}
+                            style="background-color:pink"
+                            {% endif %}
+                        >
+                            <td>{{solvencia.mes|date:"M. Y"}}</td>
+                            <td>{{solvencia.pagado}}</td>
+                            <td>{{solvencia.monto_a_pagar}}$</td>
+                            <td>{{solvencia.monto_abonado}}$</td>
+                        </tr>
+                    {% endif %} 
+                {% endfor %}
+            </table> <br>
+            {% endfor %}
+        
+        
+        {% endif %}
+
+    {% endcomment %}
+
 
 
 
