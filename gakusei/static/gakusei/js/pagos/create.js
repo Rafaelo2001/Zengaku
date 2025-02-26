@@ -21,12 +21,14 @@ document.addEventListener("DOMContentLoaded", function(){
     $("#id_estudiante").on("select2:select", () => {
         get_clases( $("#id_estudiante").val() );
         document.querySelector("#mensualidad").innerHTML = "";
+        document.querySelector("#mensualidad-tabla").innerHTML = "";
     });
 
 
     $("#id_estudiante").on("select2:clear", () => {
         $("#id_clase").select2(opciones_clase).val(null).change();
         document.querySelector("#mensualidad").innerHTML = "";
+        document.querySelector("#mensualidad-tabla").innerHTML = "";
     });
 
 
@@ -60,23 +62,17 @@ async function get_clases(id_estudiante, id_clase=null){
     let status = response.ok;
     let clases = obj.results;
 
-    console.log(obj);
-    console.log(status);
-
-
     let opciones = {
         placeholder: "----------",
         allowClear: true,
         width: '300px',
         disabled: false,
         data: clases,
-    }
-
-    console.log(clases, opciones);
-    
+    } 
 
     if($("#id_clase").hasClass("select2-hidden-accessible")){
         $("#id_clase").empty().select2("destroy");
+        $("#id_clase").off("select2:select");
     }
 
     $("#id_clase").select2(opciones).val(id_clase).change();
@@ -84,6 +80,7 @@ async function get_clases(id_estudiante, id_clase=null){
 
     $("#id_clase").on("select2:clear", () => {
         document.querySelector("#mensualidad").innerHTML = "";
+        document.querySelector("#mensualidad-tabla").innerHTML = "";
     });
 }
 
@@ -105,8 +102,89 @@ async function get_mensualidad() {
     
     let status = response.ok;
     let mensualidad = obj.mensualidad;
+    let solvencias  = obj.solvencias;
+
+    tabla_solvencias(solvencias);
+    
 
     document.querySelector("#mensualidad").innerHTML = "";
-    document.querySelector("#mensualidad").innerHTML = `<p>Mensualidad del Estudiante: ${mensualidad}$</p>`;
+    document.querySelector("#mensualidad").innerHTML = `<p>Mensualidad Actual del Estudiante: ${mensualidad}$</p>`;
 
+}
+
+function tabla_solvencias(solvencias_data) {
+
+    let nombre = solvencias_data.estudiante;
+    let solvencias = solvencias_data.solvencias;
+
+    let tabla = document.createElement("table");
+    let thead = document.createElement("thead");
+    let tbody = document.createElement("tbody");
+
+
+    // Encabezados
+    let trHeadNombre = document.createElement("tr");
+    let thNombre     = document.createElement("th");
+    
+    thNombre.textContent = nombre;
+    thNombre.colSpan = 4;
+
+    trHeadNombre.appendChild(thNombre);
+    thead.appendChild(trHeadNombre); 
+
+
+    let encabezados = ["Mes", "Status", "Precio", "Abonado"];
+    let trHeadSolvencia = document.createElement("tr");
+
+    encabezados.forEach(celda => {
+        let th = document.createElement("th");
+        th.textContent = celda;
+        trHeadSolvencia.appendChild(th);
+    });
+
+    thead.appendChild(trHeadSolvencia); 
+
+
+    // Body
+    console.log(solvencias);
+
+    if(Object.keys(solvencias).length === 0){
+        
+        let tr = document.createElement("tr");
+        let td = document.createElement("td");
+
+        td.innerHTML = "<i>Sin Solvencias Registradas</i>";
+        td.colSpan = 4;
+
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        
+    }else{
+    
+        solvencias.forEach(item => {
+            let tr = document.createElement("tr");
+
+            Object.values(item).forEach(celda => {
+                let td = document.createElement("td");
+
+                td.textContent = celda;
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+
+        
+    }
+
+    // Combinacion
+    tabla.appendChild(thead);
+    tabla.appendChild(tbody);
+
+    tabla.border = 1;
+
+    // Pegado
+    document.querySelector("#mensualidad-tabla").innerHTML = "";
+    document.querySelector("#mensualidad-tabla").appendChild(tabla);
+    
 }

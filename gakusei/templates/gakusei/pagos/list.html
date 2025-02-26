@@ -9,15 +9,22 @@
     <a href="{% url 'pagos-create' %}"><p>Registrar Pago</p></a>
 
 
-    <table>
+    <table border="1">
         <thead>
-            <th>Pagos</th>
-            <th></th>
+            <th>Fecha</th>
+            <th>Clase</th>
+            <th>Estudiante</th>
+            <th>Método</th>
+            <th>Monto</th>
         </thead>
         <tbody>
             {% for pago in object_list %}
             <tr>
-                <td>{{pago}}</td>
+                <td>{{pago.fecha|date:"d/m/y f a"}}</td>
+                <td>{{pago.clase}}</td>
+                <td>{{pago.estudiante}}</td>
+                <td>{{pago.metodo}}</td>
+                <td>${{pago.monto_pagado}}</td>
                 <td><a href="{% url 'pagos-detail' pago.pk %}">View</a></td>
             </tr>
             {% endfor %}
