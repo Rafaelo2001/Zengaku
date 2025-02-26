@@ -98,7 +98,13 @@ async function get_form(clase_id) {
 function render_forms(forms) {
 
     let dias_form = forms.dias_form;
-    let estudiantes_formset = forms.formset;
+    let estudiantes_formset;
+    
+    if (forms.estudiantes_count) {
+        estudiantes_formset = forms.formset;
+    } else {
+        estudiantes_formset = "<p><i>Clase sin estudiantes registrados.</i></p>";
+    }
 
     document.querySelector("#dias-form").innerHTML = "";
     document.querySelector("#dias-form").innerHTML = dias_form;
