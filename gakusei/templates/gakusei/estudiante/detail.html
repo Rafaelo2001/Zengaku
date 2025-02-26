@@ -22,5 +22,31 @@
         <li>Representante: {{ object.representante }}</li>
         {% endif %}
     </ul>
+
+    <h3>Clases Inscritas</h3>
+
+    {% if object.inscripciones.all %}
+    <table border="1">
+        <thead>
+            <th>Clase</th>
+            <th>Status</th>
+            <th>Mensualidad</th>
+        </thead>
+        <tbody>
+            {% for inscripcion in object.inscripciones.all %}
+            <tr>
+                <td><a href="{% url 'clase-detail' inscripcion.clase.pk %}">{{inscripcion.clase}}</a></td>
+                <td>{{inscripcion.clase.status}}</td>
+                <td><a href="{% url 'inscripciones-detail' inscripcion.id %}">{{inscripcion.precio_a_pagar}}$</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p><i>Estudiante no inscripto en ninguna clase.</i></p>
+    {% endif %}
+
+    <h3>Eliminar Estudiante</h3>
+    <a href="{% url 'estudiante-delete' object.pk %}">Eliminar</a>
     
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Registro de Sede</h1>
+
+    <a href="{% url 'sede-detail' sede.pk %}">Regresar a la Sede</a>
+
+    <form action="{% url 'sede-edit' sede.pk %}" method="post"> {%csrf_token%}
+        {{ form }}
+        <input type="submit" value="Guardar Cambios">
+    </form>
+    
+{% endblock %}

@@ -4,8 +4,11 @@
     <h1>Inscripción {{object}}</h1>
 
     <a href="{% url 'inscripciones' %}">Regresar a la lista</a>
+
+    {% if inscripciones.clase.status != "Terminada" and inscripciones.clase.status != "Suspendida" %}
+        <a href="{% url 'inscripciones-edit' inscripciones.pk %}">Editar Inscripción</a>
+    {% endif %}
     
-    <a href="{% url 'inscripciones-edit' inscripciones.pk %}">Editar Inscripción</a>
 
     <ul>
         <li><a href="{% url 'clase-detail' inscripciones.clase.id %}">
@@ -16,5 +19,9 @@
         </li>
         <li>Precio a pagar:   {{inscripciones.precio_a_pagar}}$  </li>
     </ul>
+
+
+    <h3>Eliminar Inscripción</h3>
+    <a href="{% url 'inscripciones-delete' inscripciones.pk %}">Eliminar</a>
 
 {% endblock %}

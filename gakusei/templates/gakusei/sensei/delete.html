@@ -1,0 +1,14 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Eliminar Sensei</h1>
+
+    <a href="{% url 'sensei-detail' sensei.pk %}">Regresar</a>
+
+    <form action="{% url 'sensei-delete' sensei.pk %}" method="post"> {%csrf_token%}
+        <p>¿Seguro que quieres eliminar al Sensei {{sensei}}</i>?</p>
+        {{ form }}
+        <input type="submit" value="ELIMINAR">
+    </form>
+    
+{% endblock %}

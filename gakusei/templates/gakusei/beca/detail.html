@@ -26,6 +26,7 @@
             <tr>
                 <td>{{becado.estudiante}}</td>
                 {% if becado.obs %} <td>{{becado.obs}}</td> {% else %} <td><i>Ninguna</i></td> {% endif %}
+                <td><a href="{% url 'becas-desasignar' becado.pk %}">Retirar Beca</a></td>
             </tr>
             {% empty %}
             <tr>

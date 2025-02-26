@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.utils import dateformat
 from django.utils.timezone import now
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
@@ -9,10 +10,10 @@ from django import forms
 from django.forms import modelformset_factory
 from django.forms.models import model_to_dict
 
-from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados
+from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
 
-from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from dateutil.relativedelta import relativedelta
 
@@ -26,6 +27,7 @@ def index(request):
 sensei_templates = "gakusei/sensei/"
 class SenseiListView(ListView):
     model = Sensei
+    ordering = "personal_data__cedula"
     template_name = sensei_templates + "list.html"
 
 class SenseiDetailView(DetailView):
@@ -72,8 +74,23 @@ class SenseiEditView(UpdateView):
 
         return kwargs
 
+
+class SenseiDeleteView(DeleteView):
+    model = Sensei
+    template_name = sensei_templates + "delete.html"
+    success_url = reverse_lazy("sensei")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
         
-    
+        p = self.object.personal_data
+        p.delete()
+
+        return HttpResponseRedirect(success_url)
+
+
+
 
 # Estudiante
 estudiante_templates = "gakusei/estudiante/"
@@ -120,6 +137,20 @@ class EstudianteEditView(UpdateView):
         }
 
         return kwargs
+
+class EstudianteDeleteView(DeleteView):
+    model = Estudiante
+    template_name = estudiante_templates + "delete.html"
+    success_url = reverse_lazy("estudiante")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        
+        p = self.object.personal_data
+        p.delete()
+
+        return HttpResponseRedirect(success_url)
 
 
     
@@ -200,6 +231,12 @@ class ClaseEditView(UpdateView):
         form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
 
         return form
+    
+class ClaseDeleteView(DeleteView):
+    model = Clase
+    template_name = clase_templates + "delete.html"
+    success_url = reverse_lazy("clase")
+
 
 
 
@@ -267,6 +304,13 @@ class HorarioEditView(UpdateView):
         form.fields["hora_salida"].widget  = forms.TimeInput(attrs={"type":"time", "step":"1"})
 
         return form
+
+
+class HorarioDeleteView(DeleteView):
+    model = Horario
+    template_name = horario_templates + "delete.html"
+    success_url = reverse_lazy("horario")
+
 
 
 
@@ -345,6 +389,12 @@ class InscripcionesEditView(UpdateView):
 
     def get_success_url(self):
         return reverse("inscripciones-detail", kwargs={"pk":self.object.pk})
+
+
+class InscripcionesDeleteView(DeleteView):
+    model = Inscripciones
+    template_name = inscripciones_templates + "delete.html"
+    success_url = reverse_lazy("inscripciones")
 
 
 
@@ -584,15 +634,9 @@ class SolvenciaClaseDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        # f_inicio = context["clase"].f_inicio
-        # from datetime import date, datetime;
+        solvencias = self.get_object().solvencias.all().order_by("estudiante", "mes")
 
-        # print(f_inicio)
-        # print(date.today())
-
-        # diferencia = relativedelta(date.today(), f_inicio)
-
-        # print(diferencia)
+        context["solvencias"] = list(solvencias)
         
         return context
 
@@ -616,6 +660,16 @@ class SedeCreateView(CreateView):
     fields = "__all__"
 
     template_name = sede_templates + "create.html"
+
+    def get_success_url(self):
+        return reverse("sede-detail", kwargs={"pk":self.object.pk})
+    
+
+class SedeEditView(UpdateView):
+    model = Sede
+    fields = "__all__"
+
+    template_name = sede_templates + "edit.html"
 
     def get_success_url(self):
         return reverse("sede-detail", kwargs={"pk":self.object.pk})
@@ -697,6 +751,20 @@ class DescuentoEspecialCreateView(CreateView):
         return reverse("descuento-especial-detail", kwargs={"pk":self.object.pk})
 
 
+class DescuentoEspecialEditView(UpdateView):
+    model = DescuentoEspecial
+    fields = "__all__"
+
+    template_name = descuento_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("descuento-especial-detail", kwargs={"pk":self.object.pk})
+
+
+class DescuentoEspecialDeleteView(DeleteView):
+    model = DescuentoEspecial
+    template_name = descuento_templates + "delete.html"
+    success_url = reverse_lazy("descuento-especial")
 
 
 
@@ -730,8 +798,16 @@ class BecaAssingView(CreateView):
     template_name = becas_templates + "asignar.html"
 
     def get_success_url(self):
-        return reverse("becas-detail", kwargs={"pk":self.object.pk})
+        return reverse("becas-detail", kwargs={"pk":self.object.beca.pk})
 
+
+class BecaDeassingView(DeleteView):
+    model = Becados
+
+    template_name = becas_templates + "desasignar.html"
+
+    def get_success_url(self):
+        return reverse("becas-detail", kwargs={"pk":self.object.beca.pk})
 
 
 
@@ -863,7 +939,8 @@ def Api_AsistenciaForm(request):
 
     response = {
         "dias_form": dia_form.as_div(),
-        "formset": formset.as_div()
+        "formset": formset.as_div(),
+        "estudiantes_count": estudiantes_numero,
     }
 
     return JsonResponse(response, status=201)
@@ -963,8 +1040,20 @@ def Api_Pagos_Mensualidad(request):
         inscripcion = Inscripciones.objects.filter(estudiante=id_estudiante, clase=id_clase).first()
     except Inscripciones.DoesNotExist:
         return JsonResponse({"error": "Inscripcion no encontrada"}, status=404)
+    
+    lista_solvencias = list(Solvencias.objects.filter(estudiante=id_estudiante, clase=id_clase).values("mes","pagado","monto_a_pagar","monto_abonado"))
 
-    return JsonResponse({"mensualidad":inscripcion.precio_a_pagar}, status=200)
+    for s in lista_solvencias:
+        s["mes"] = dateformat.format(s["mes"], "M. Y")
+        s["monto_a_pagar"] = f"{s["monto_a_pagar"]}$"
+        s["monto_abonado"] = f"{s["monto_abonado"]}$"
+
+    solvencias = {
+        "estudiante": inscripcion.estudiante.full_name(),
+        "solvencias": lista_solvencias,
+    }
+
+    return JsonResponse({"mensualidad":inscripcion.precio_a_pagar, "solvencias":solvencias}, status=200)
 
 
 

@@ -1,0 +1,15 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Eliminar Horario</h1>
+
+    <a href="{% url 'horario-detail' object.pk %}">Regresar</a>
+
+    <form action="{% url 'horario-delete' object.pk %}" method="post"> {%csrf_token%}
+        <p>¿Seguro que quieres eliminar el Horario {{object}}</i>?</p>
+        <p>Se eliminarán todos los Dias de Clase y Asistencias relacionados con este Horario.</p>
+        {{ form }}
+        <input type="submit" value="ELIMINAR">
+    </form>
+    
+{% endblock %}

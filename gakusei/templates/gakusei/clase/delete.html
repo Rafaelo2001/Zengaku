@@ -1,0 +1,24 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Eliminar Clase</h1>
+
+    <a href="{% url 'clase-detail' object.pk %}">Regresar</a>
+
+    <form action="{% url 'clase-delete' object.pk %}" method="post"> {%csrf_token%}
+        <p>¿Seguro que quieres eliminar la Clase {{object}}</i>?</p>
+        <p>Se eliminarán todas los registros relacionados con esta clase:</p>
+        <ul>
+            <li>Horarios</li>
+            <li>Dias de Clase</li>
+            <li>Asistencias</li>
+            <li>Inscripciones</li>
+            <li>Pagos</li>
+            <li>Comprobantes</li>
+            <li>Solvencias</li>
+        </ul>
+        {{ form }}
+        <input type="submit" value="ELIMINAR">
+    </form>
+    
+{% endblock %}

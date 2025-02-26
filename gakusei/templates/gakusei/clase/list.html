@@ -17,6 +17,7 @@
             <th>Horas Semanales</th>
             <th>Estudiantes</th>
             <th>Clase Individual</th>
+            <th>Status</th>
             <th>Precio</th>
         </thead>
         <tbody>
@@ -30,7 +31,8 @@
                 <td>
                     {{ clase.individual|yesno:"Si,No" }}
                 </td>
-                <td>{{clase.precio}}</td>
+                <td>{{clase.status}}</td>
+                <td>${{clase.precio}}</td>
                 <td><a href="{% url 'clase-detail' clase.id %}">View</a></td>
             </tr>
             {% endfor %}

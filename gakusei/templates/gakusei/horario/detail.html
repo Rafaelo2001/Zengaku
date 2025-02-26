@@ -25,5 +25,8 @@
             <li><i>Todavía no se han dado clases en este Horario.</i></li>
         {% endfor %}
     </ul>
+
+    <h3>Eliminar Horario</h3>
+    <a href="{% url 'horario-delete' object.pk %}">Eliminar Horario</a>
     
 {% endblock %}

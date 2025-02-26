@@ -9,11 +9,13 @@ urlpatterns = [
     path("sensei/<int:pk>", views.SenseiDetailView.as_view(), name="sensei-detail"),
     path("sensei/registrar", views.SenseiCreateView.as_view(), name="sensei-create"),
     path("sensei/editar/<int:pk>", views.SenseiEditView.as_view(), name="sensei-edit"),
+    path("sensei/eliminar/<int:pk>", views.SenseiDeleteView.as_view(), name="sensei-delete"),
 
     path("estudiante/", views.EstudianteListView.as_view(), name="estudiante"),
     path("estudiante/<int:pk>", views.EstudianteDetailView.as_view(), name="estudiante-detail"),
     path("estudiante/registrar", views.EstudianteCreateView.as_view(), name="estudiante-create"),
     path("estudiante/editar/<int:pk>", views.EstudianteEditView.as_view(), name="estudiante-edit"),
+    path("estudiante/eliminar/<int:pk>", views.EstudianteDeleteView.as_view(), name="estudiante-delete"),
     path("estudiante/registrar/representante", views.RepresentanteCreatePopup.as_view(), name="estudiante-create-representante"),
 
     path("representante/registrar", views.RepresentanteCreateView.as_view(), name="representante-create"),
@@ -22,17 +24,20 @@ urlpatterns = [
     path("clase/<int:pk>", views.ClaseDetailView.as_view(), name="clase-detail"),
     path("clase/registrar", views.ClaseCreateView.as_view(), name="clase-create"),
     path("clase/editar/<int:pk>", views.ClaseEditView.as_view(), name="clase-edit"),
+    path("clase/eliminar/<int:pk>", views.ClaseDeleteView.as_view(), name="clase-delete"),
 
     path("horario/", views.HorarioListView.as_view(), name="horario"),
     path("horario/<int:pk>", views.HorarioDetailView.as_view(), name="horario-detail"),
     path("horario/registrar", views.HorarioCreateView.as_view(), name="horario-create"),
     path("horario/editar/<int:pk>", views.HorarioEditView.as_view(), name="horario-edit"),
+    path("horario/eliminar/<int:pk>", views.HorarioDeleteView.as_view(), name="horario-delete"),
 
 
     path("inscripciones/", views.InscripcionesListView.as_view(), name="inscripciones"),
     path("inscripciones/<int:pk>", views.InscripcionesDetailView.as_view(), name="inscripciones-detail"),
     path("inscripciones/registrar", views.InscripcionesCreateView.as_view(), name="inscripciones-create"),
     path("inscripciones/editar/<int:pk>", views.InscripcionesEditView.as_view(), name="inscripciones-edit"),
+    path("inscripciones/eliminar/<int:pk>", views.InscripcionesDeleteView.as_view(), name="inscripciones-delete"),
 
     path("diadeclase/", views.DiaDeClaseListView.as_view(), name="dia-de-clase"),
     path("diadeclase/<int:pk>", views.DiaDeClaseDetailView.as_view(), name="dia-de-clase-detail"),
@@ -58,6 +63,7 @@ urlpatterns = [
     path("sedes/", views.SedeListView.as_view(), name="sede"),
     path("sedes/<int:pk>", views.SedeDetailView.as_view(), name="sede-detail"),
     path("sedes/registrar", views.SedeCreateView.as_view(), name="sede-create"),
+    path("sedes/editar/<int:pk>", views.SedeEditView.as_view(), name="sede-edit"),
 
 
     path("cursos/", views.CursoListView.as_view(), name="curso"),
@@ -73,12 +79,15 @@ urlpatterns = [
     path("descuentosespeciales/", views.DescuentoEspecialListView.as_view(), name="descuento-especial"),
     path("descuentosespeciales/<int:pk>", views.DescuentoEspecialDetailView.as_view(), name="descuento-especial-detail"),
     path("descuentosespeciales/registrar", views.DescuentoEspecialCreateView.as_view(), name="descuento-especial-create"),
+    path("descuentosespeciales/editar/<int:pk>", views.DescuentoEspecialEditView.as_view(), name="descuento-especial-edit"),
+    path("descuentosespeciales/eliminar/<int:pk>", views.DescuentoEspecialDeleteView.as_view(), name="descuento-especial-delete"),
 
 
     path("becas/", views.BecaListView.as_view(), name="becas"),
     path("becas/<int:pk>", views.BecaDetailView.as_view(), name="becas-detail"),
     path("becas/registrar", views.BecaCreateView.as_view(), name="becas-create"),
     path("becas/asignar", views.BecaAssingView.as_view(), name="becas-asignar"),
+    path("becas/desasingar/<int:pk>", views.BecaDeassingView.as_view(), name="becas-desasignar"),
 
 
     # API

@@ -15,11 +15,11 @@
 {% block body %}
     <h1>Registro de Descuento Especial</h1>
 
-    <a href="{% url 'descuento-especial' %}">Regresar a la lista</a>
+    <a href="{% url 'descuento-especial-detail' object.pk %}">Regresar a la lista</a>
 
-    <form action="{% url 'descuento-especial-create' %}" method="post"> {%csrf_token%}
+    <form action="{% url 'descuento-especial-edit' object.pk %}" method="post"> {%csrf_token%}
         {{ form }}
-        <input type="submit" value="Registar">
+        <input type="submit" value="Guardar Cambios">
     </form>
     
 {% endblock %}

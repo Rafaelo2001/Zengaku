@@ -5,11 +5,15 @@
 
     <a href="{% url 'descuento-especial' %}">Regresar a la lista</a>
 
+    <a href="{% url 'descuento-especial-edit' object.pk %}">Editar descuento</a>
+
     <ul>
         <li>Estudiante:      {{ object.estudiante }}     </li>
         <li>Descuento:       {{ object.descuento }}$     </li>
         <li>Observaciones:   {% if object.obs %} {{ object.obs }} {% else %} <i>Ninguna.</i> {% endif %}       </li>
     </ul>
+
+    <a href="{% url 'descuento-especial-delete' object.pk %}">Eliminar Descuento</a>
    
     
 {% endblock %}

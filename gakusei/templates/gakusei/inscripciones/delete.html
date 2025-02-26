@@ -1,0 +1,15 @@
+{% extends 'gakusei/layout.html' %}
+
+{% block body %}
+    <h1>Eliminar Inscripción</h1>
+
+    <a href="{% url 'inscripciones-detail' object.pk %}">Regresar</a>
+
+    <form action="{% url 'inscripciones-delete' object.pk %}" method="post"> {%csrf_token%}
+        <p>¿Seguro que quieres eliminar la Inscripción {{object}}</i>?</p>
+        <p>Se mantendrán los registro de Pagos y Solvencias.</p>
+        {{ form }}
+        <input type="submit" value="ELIMINAR">
+    </form>
+    
+{% endblock %}

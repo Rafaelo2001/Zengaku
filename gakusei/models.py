@@ -218,7 +218,7 @@ class Clase(models.Model):
         ACTIVO     = "Activa"
         PAUSADO    = "En Pausa"
         SUSPENDIDO = "Suspendida"
-        COMPLETADO = "Terminanda"
+        COMPLETADO = "Terminada"
 
     def sensei_eliminado():
         s = Sensei.objects.get_or_create(
