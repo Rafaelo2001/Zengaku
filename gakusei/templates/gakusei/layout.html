@@ -22,8 +22,18 @@
     {% block style %}{% endblock %}
     {% block script %}{% endblock %}
 </head>
-<body class="p-3 m-0">
-    {%block body%}
-    {%endblock%}
+<body class="">
+    <nav class="navbar bg-body">
+        <div class="container">
+            <a href="{% url 'index' %}">
+                <img src="{% static 'gakusei/img/LOGO FUNDACION ZENGAKU 2024.png' %}" alt="Fundación Zengaku" height="50">
+            </a>
+        </div>
+    </nav>
+
+    <div class="p-3 m-0">
+        {%block body%}
+        {%endblock%}
+    </div>
 </body>
 </html>

@@ -1,10 +1,10 @@
 {% extends 'gakusei/layout.html' %}
 
 {% block body %}
-    <h1>Listado de Dias de Clases</h1>
 
-    
-    <a href="{% url 'index' %}">Regresar al Index</a>
+    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+
+    <h1>Listado de Dias de Clases</h1>
 
     <p><a href="{% url 'asistencia-create' %}">Registrar Asistencia</a> <- Este es el que vas a querer usar: Dia de Clases y todos los Estudiantes a la vez.</p>
     

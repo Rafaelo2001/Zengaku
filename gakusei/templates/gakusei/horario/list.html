@@ -1,10 +1,10 @@
 {% extends 'gakusei/layout.html' %}
 
 {% block body %}
-    <h1>Listado de Horarios</h1>
 
-    
-    <a href="{% url 'index' %}">Regresar al Index</a>
+    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+
+    <h1>Listado de Horarios</h1>
 
     <a href="{% url 'horario-create' %}">Registrar Horario</a>
 

@@ -1,34 +1,41 @@
 {% extends 'gakusei/layout.html' %}
 
 {% block body %}
-    <h1>Listado de Senseis</h1>
 
+    <div class="container">
 
-    <a href="{% url 'index' %}">Regresar al Index</a>
-    
-    <a href="{% url 'sensei-create' %}">Registrar Sensei</a>
+        <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>        
+        
+        <h1 class="mb-4">Listado de Senseis</h1>
+        
+        <a href="{% url 'sensei-create' %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> Registrar Sensei</a>
+        
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                    <th>Cédula</th>
+                    <th>Nombre Completo</th>
+                    <th>Nivel JP</th>
+                    <th>Nivel EN</th>
+                    <th>Telefono</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    {% for sensei in object_list %}
+                    <tr>
+                        <td>{{sensei.cedula}}</td>
+                        <td>{{sensei.full_name}}</td>
+                        <td>{{sensei.JP_level}}</td>
+                        <td>{{sensei.EN_level}}</td>
+                        <td>{{sensei.personal_data.telefono}}</td>
+                        <td><a href="{% url 'sensei-detail' sensei.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-    
-    <table border="1">
-        <thead>
-            <th>Cédula</th>
-            <th>Nombre Completo</th>
-            <th>Nivel JP</th>
-            <th>Nivel EN</th>
-            <th>Telefono</th>
-        </thead>
-        <tbody>
-            {% for sensei in object_list %}
-            <tr>
-                <td>{{sensei.cedula}}</td>
-                <td>{{sensei.full_name}}</td>
-                <td>{{sensei.JP_level}}</td>
-                <td>{{sensei.EN_level}}</td>
-                <td>{{sensei.personal_data.telefono}}</td>
-                <td><a href="{% url 'sensei-detail' sensei.id %}">View</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
+        
 {% endblock %}
