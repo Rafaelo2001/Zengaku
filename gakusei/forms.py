@@ -37,6 +37,7 @@ class BasePersona:
             max_length=12, 
             regex=r"^(0414|0424|0412|0416|0426)[-][0-9]{7}$",
             widget=forms.TextInput(attrs={"type":"tel"}),
+            help_text="Ej.: 0424-1234567",
         )
 
         self.fields["personal_email"] = forms.EmailField(label="Correo Personal", max_length=254)

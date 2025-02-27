@@ -1,4 +1,5 @@
 {% extends 'gakusei/layout.html' %}
+{% load crispy_forms_tags %}
 
 {% block body %}
 
@@ -6,15 +7,22 @@
         
         <a href="{% url 'sensei' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar a la lista</a>
         
-        <form class="card" action="{% url 'sensei-create' %}" method="post"> {%csrf_token%}
-        
-            <div class="card-body">
-                <h1 class="card-title">Registro de Sensei</h1>
+        <div class="card">
 
-                {{ form }}
-                <input class="btn" type="submit" value="Registrar">
+            <div class="card-body">
+                
+                <h1 class="card-title">Registro de Sensei</h1>
+                <p class="card-subtitle mb-2 text-body-secondary"><i>* Obligatorio</i></p>
+                
+                <form action="{% url 'sensei-create' %}" method="post"> {%csrf_token%}
+                    {{ form|crispy }}
+                    <input class="btn btn-lg btn-success" type="submit" value="Registrar">
+                </form>
+
             </div>
-        </form>
+
+        </div>
+
     </div>
     
 {% endblock %}

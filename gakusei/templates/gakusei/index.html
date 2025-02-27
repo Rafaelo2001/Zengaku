@@ -11,56 +11,62 @@
 
 {% block body %}
 
-    <div class="container text-center">
-        
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 ">
+    <div class="container">
 
-            {% with clase="index_a p-3 fs-3 text-decoration-none bg-success-subtle text-reset" %}
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'sensei' %}"><i class="fa-solid fa-chalkboard-user"></i> SENSEI</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'estudiante' %}"><i class="fa-solid fa-users"></i> ESTUDIANTES</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}} bg-info" href="{% url 'clase' %}"><i class="fa-solid fa-chalkboard"></i> CLASES</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'horario' %}"><i class="fa-regular fa-clock"></i> HORARIOS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'inscripciones' %}"><i class="fa-solid fa-book-open"></i> INSCRIPCIONES</a>
-            </div>
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title mb-4">Página Principal</h1>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 text-center">
         
-        
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'dia-de-clase' %}"><i class="fa-solid fa-calendar-days"></i> ASISTENCIAS</a>
+                    {% with clase="index_a p-3 fs-3 text-decoration-none bg-success-subtle text-reset" %}
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'sensei' %}"><i class="fa-solid fa-chalkboard-user"></i> SENSEI</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'estudiante' %}"><i class="fa-solid fa-users"></i> ESTUDIANTES</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}} bg-info" href="{% url 'clase' %}"><i class="fa-solid fa-chalkboard"></i> CLASES</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'horario' %}"><i class="fa-regular fa-clock"></i> HORARIOS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'inscripciones' %}"><i class="fa-solid fa-book-open"></i> INSCRIPCIONES</a>
+                    </div>
+                
+                
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'dia-de-clase' %}"><i class="fa-solid fa-calendar-days"></i> ASISTENCIAS</a>
+                    </div>
+                    <!-- <div class="col"><a class="{{clase}}" href="{% url 'asistencia' %}">ASISTENCIAS old</a></div> -->
+                
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'pagos' %}"><i class="fa-solid fa-comment-dollar"></i> PAGOS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'solvencias-clase' %}"><i class="fa-solid fa-receipt"></i> SOLVENCIAS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'sede' %}"><i class="fa-solid fa-school"></i> SEDES</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'curso' %}"><i class="fa-solid fa-flag"></i> CURSOS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'metodos-pago' %}"><i class="fa-solid fa-credit-card"></i> METODOS DE PAGOS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'descuento-especial' %}"><i class="fa-solid fa-money-bill-1-wave"></i> DESCUENTOS</a>
+                    </div>
+                    <div class="col">
+                        <a class="{{clase}}" href="{% url 'becas' %}"><i class="fa-solid fa-graduation-cap"></i> BECAS</a>
+                    </div>
+                    {% endwith %}
+                </div>
             </div>
-            <!-- <div class="col"><a class="{{clase}}" href="{% url 'asistencia' %}">ASISTENCIAS old</a></div> -->
-        
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'pagos' %}"><i class="fa-solid fa-comment-dollar"></i> PAGOS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'solvencias-clase' %}"><i class="fa-solid fa-receipt"></i> SOLVENCIAS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'sede' %}"><i class="fa-solid fa-school"></i> SEDES</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'curso' %}"><i class="fa-solid fa-flag"></i> CURSOS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'metodos-pago' %}"><i class="fa-solid fa-credit-card"></i> METODOS DE PAGOS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'descuento-especial' %}"><i class="fa-solid fa-money-bill-1-wave"></i> DESCUENTOS</a>
-            </div>
-            <div class="col">
-                <a class="{{clase}}" href="{% url 'becas' %}"><i class="fa-solid fa-graduation-cap"></i> BECAS</a>
-            </div>
-            {% endwith %}
         </div>
+        
             
     </div>
 

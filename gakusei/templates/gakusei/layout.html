@@ -23,11 +23,13 @@
     {% block script %}{% endblock %}
 </head>
 <body class="">
-    <nav class="navbar bg-body">
+    <nav class="navbar bg-body border-bottom">
         <div class="container">
             <a href="{% url 'index' %}">
                 <img src="{% static 'gakusei/img/LOGO FUNDACION ZENGAKU 2024.png' %}" alt="Fundación Zengaku" height="50">
             </a>
+
+            <p>{{user}}</p>
         </div>
     </nav>
 

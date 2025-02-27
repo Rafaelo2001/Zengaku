@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import dateformat
 from django.utils.timezone import now
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
@@ -30,6 +30,9 @@ class SenseiListView(ListView):
     ordering = "personal_data__cedula"
     template_name = sensei_templates + "list.html"
 
+    def get_queryset(self):
+        return super().get_queryset().exclude(pk=999)
+
 class SenseiDetailView(DetailView):
     model = Sensei
     template_name = sensei_templates + "detail.html"
@@ -49,6 +52,11 @@ class SenseiEditView(UpdateView):
     model = Sensei
     form_class = SenseiForm
     template_name = sensei_templates + "edit.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().pk == 999:
+            return redirect(reverse_lazy("sensei"))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse("sensei-detail", kwargs={"pk":self.object.pk})
@@ -79,6 +87,11 @@ class SenseiDeleteView(DeleteView):
     model = Sensei
     template_name = sensei_templates + "delete.html"
     success_url = reverse_lazy("sensei")
+
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object().pk == 999:
+            return redirect(reverse_lazy("sensei"))
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         self.object = self.get_object()
@@ -212,6 +225,8 @@ class ClaseCreateView(CreateView):
         form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"})
         form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"})
 
+        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=999)
+
         return form
 
 
@@ -229,6 +244,8 @@ class ClaseEditView(UpdateView):
 
         form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
         form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
+
+        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=999)
 
         return form
     

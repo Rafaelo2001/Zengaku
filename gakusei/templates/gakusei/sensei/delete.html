@@ -1,14 +1,23 @@
 {% extends 'gakusei/layout.html' %}
 
 {% block body %}
-    <h1>Eliminar Sensei</h1>
 
-    <a href="{% url 'sensei-detail' sensei.pk %}">Regresar</a>
+    <div class="container">
 
-    <form action="{% url 'sensei-delete' sensei.pk %}" method="post"> {%csrf_token%}
-        <p>¿Seguro que quieres eliminar al Sensei {{sensei}}</i>?</p>
-        {{ form }}
-        <input type="submit" value="ELIMINAR">
-    </form>
+        <a class="mb-4 btn bg-success-subtle text-reset" href="{% url 'sensei-detail' sensei.pk %}"><i class="fa-solid fa-angles-left"></i> Regresar</a>
+
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Eliminar Sensei</h1>
+            
+                <form action="{% url 'sensei-delete' sensei.pk %}" method="post"> {%csrf_token%}
+                    <p class="fs-5">¿Seguro que quieres eliminar al <span class="fw-bold">Sensei {{sensei}}</span>?</p>
+                    {{ form }}
+                    <input class="btn btn-lg btn-danger" type="submit" value="ELIMINAR SENSEI">
+                </form>
+            </div>
+        </div>
+        
+    </div>
     
 {% endblock %}

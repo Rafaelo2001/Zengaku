@@ -35,8 +35,15 @@ class Persona(models.Model):
     telefono  = models.CharField(
         "Teléfono Movil",
         max_length = 12,
-        validators = [RegexValidator("^(0414|0424|0412|0416|0426)[-][0-9]{7}$", "El teléfono debe tener el formato 04XX-1234567")]
+        validators = [RegexValidator("^(0414|0424|0412|0416|0426)[-][0-9]{7}$", "El teléfono debe tener el formato 04XX-1234567")],
+        help_text="Ej.: 0424-1234567",
     )
+
+    def delete(self, *args, **kwargs):
+        if self.cedula == 0:
+            raise ValidationError("NO SE DEBE ELIMINAR ESTE REGISTRO")
+
+        super().delete(*args, **kwargs)
 
     def full_name(self, apellido_primero=False):
 
@@ -128,6 +135,12 @@ class Sensei(models.Model):
     def save(self, *args, **kwargs):
         self.institucional_email = self.institucional_email.lower()
         super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        if self.pk == 999:
+            raise ValidationError("NO SE DEBE ELIMINAR ESTE REGISTRO")
+
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.personal_data.__str__()
@@ -223,7 +236,8 @@ class Clase(models.Model):
     def sensei_eliminado():
         s = Sensei.objects.get_or_create(
                 personal_data = Persona.objects.get_or_create(
-                                    cedula="000",
+                                    pk=999,
+                                    cedula="999999999",
                                     defaults={
                                         "nacionalidad":Persona.NACIONALITIES.VEN,
                                         "first_name":"REGISTRO",
@@ -233,7 +247,9 @@ class Clase(models.Model):
                                     }
                                 )[0],
                 defaults={
+                    "pk" : 999,
                     "institucional_email" : "REGISTROELIMINADO@zengaku.com",
+                    "status" : Sensei.Status.RETIRADO,
                 }
             )[0]
         
