@@ -4,7 +4,9 @@ $(document).ready(function() {
     let opciones = {
         placeholder: "Seleccione un Representante",
         allowClear: true,
-        width: '250px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     }
     
     $("#id_representante").select2(opciones);
@@ -35,7 +37,9 @@ async function get_representantes() {
         data: representantes.results,
         placeholder: "Seleccione un Representante",
         allowClear: true,
-        width: '250px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     });
 
 }

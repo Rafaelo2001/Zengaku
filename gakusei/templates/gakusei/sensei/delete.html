@@ -10,8 +10,8 @@
             <div class="card-body">
                 <h1 class="card-title">Eliminar Sensei</h1>
             
+                <p class="fs-5">¿Seguro que quieres eliminar al <span class="fw-bold">Sensei {{sensei}}</span>?</p>
                 <form action="{% url 'sensei-delete' sensei.pk %}" method="post"> {%csrf_token%}
-                    <p class="fs-5">¿Seguro que quieres eliminar al <span class="fw-bold">Sensei {{sensei}}</span>?</p>
                     {{ form }}
                     <input class="btn btn-lg btn-danger" type="submit" value="ELIMINAR SENSEI">
                 </form>
