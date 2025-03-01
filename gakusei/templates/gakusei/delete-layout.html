@@ -12,7 +12,7 @@
 
                 <h1 class="card-title">{% block card-title %}Eliminar{% endblock %}</h1>
             
-                <p class="fs-5">{% block delete-mensaje %}¿Seguro que quieres eliminar?{% endblock %}</p>
+                {% block delete-mensaje %}<p class="fs-5">¿Seguro que quieres eliminar?</p>{% endblock %}
 
                 {% block form %}{% endblock %}
 

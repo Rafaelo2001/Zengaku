@@ -262,7 +262,7 @@ class Clase(models.Model):
     f_inicio = models.DateField("Fecha de Inicio")
     f_cierre = models.DateField("Fecha de Cierre", blank=True, null=True)
     horas_semanales = models.PositiveSmallIntegerField("Horas Semanales")
-    precio = models.PositiveSmallIntegerField()
+    precio = models.PositiveSmallIntegerField("Precio ($)")
 
     individual = models.BooleanField("Clase Individual", default=False)
 

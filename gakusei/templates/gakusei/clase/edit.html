@@ -1,4 +1,5 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/edit-layout.html' %}    
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block style %}
@@ -13,15 +14,15 @@
     <script src="{% static 'gakusei/js/clase/create.js' %}"></script>
 {% endblock %}
 
+    {% block regresar-url %}{% url 'clase-detail' clase.pk %}{% endblock %}
 
-{% block body %}
-    <h1>Registro de Clase</h1>
 
-    <a href="{% url 'clase-detail' clase.pk %}">Regresar a la Clase</a>
+    {% block card-title %}Registro de Clase{% endblock %}
 
+
+    {% block form %}
     <form action="{% url 'clase-edit' clase.pk %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit" value="Guardar Cambios">
+        {{ form|crispy }}
+        <input class="btn btn-lg btn-success" type="submit" value="Guardar Cambios">
     </form>
-    
-{% endblock %}
+    {% endblock %}
