@@ -1,35 +1,26 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Horarios{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'horario-create' %}{% endblock %}
+    {% block create-text %}Registrar Horario{% endblock %}
 
-    <h1>Listado de Horarios</h1>
+    {% block thead %}
+        <td>Clase</td>
+        <td>Dia</td>
+        <td>H. Entrada</td>
+        <td>H. Salida</td>
+        <td></td>
+    {% endblock %}
 
-    <a href="{% url 'horario-create' %}">Registrar Horario</a>
-
-
-    <table border="1">
-        <thead>
-            <td>Clase</td>
-            <td>Dia</td>
-            <td>H. Entrada</td>
-            <td>H. Salida</td>
-        </thead>
-        <tbody>
-            <!-- <tr> Ejemplo?
-                <td>Clase - 5 dias de clase</td>
-            </tr> -->
-            {% for horario in object_list %}
+    {% block tbody %}
+        {% for horario in object_list %}
             <tr>
                 <td>{{horario.clase}}</td>
                 <td>{{horario.dia_semana}}</td>
                 <td>{{horario.entrada}}</td>
                 <td>{{horario.salida}}</td>
-                <td><a href="{% url 'horario-detail' horario.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'horario-detail' horario.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

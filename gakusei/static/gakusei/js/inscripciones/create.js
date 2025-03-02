@@ -14,7 +14,9 @@ $(document).ready(function() {
     let opciones = {
         placeholder: "----------",
         allowClear: true,
-        width: '250px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     }
     
     $("#id_clase").select2(opciones);
@@ -23,6 +25,9 @@ $(document).ready(function() {
 
     // Al limpiar Clase
     $("#id_clase").on("select2:clear", () => {
+        // Agregado esta linea para asegurar el clear
+        $('#id_clase').val(null).trigger('change');
+
         precio_clase = false;
         document.querySelector("#clase-data").innerText = "";
 
@@ -31,10 +36,14 @@ $(document).ready(function() {
 
     // Al limpiar el Estudiante
     $("#id_estudiante").on("select2:clear", () => {
+        $('#id_estudiante').val(null).trigger('change');
+
         beca = false;
         descuento = false;
         document.querySelector("#estudiante-beca").innerText = "";
+        document.querySelector("#estudiante-beca").className = "";
         document.querySelector("#estudiante-descuento").innerText = "";
+        document.querySelector("#estudiante-descuento").className = "";
 
         calculo_precio();
     });
@@ -80,7 +89,19 @@ async function get_price_clase(e) {
     
     precio_clase = clase.precio;
 
-    document.querySelector("#clase-data").innerText = `Precio de la clase: ${clase.precio}$`;
+    let p;
+
+    if (document.querySelector("#clase-data")) {
+        p = document.querySelector("#clase-data");
+    } else {
+        p = document.createElement("p");
+    }
+    
+    p.innerText = `Precio de la clase: ${clase.precio}$`;
+    p.id = "clase-data";
+    p.className = "mt-2";
+
+    document.querySelector("#div_id_clase").append(p);
 
     calculo_precio();
 }
@@ -91,18 +112,23 @@ async function get_price_estudiante(e) {
 
     let beca_data, descuento_data;
 
-    if (estudiante.beca) {
-        // Estudiante -> Beca.
-        beca_data = estudiante.beca;
-        
-        // Declaramos variable global
-        beca = {"descuento": beca_data.descuento, "tipo": beca_data.tipo_descuento[0]};
+    let p_beca, p_descuento;
 
-        document.querySelector("#estudiante-beca").innerText = `Beca: ${beca_data.nombre}`;
+
+
+    if (document.querySelector("#estudiante-beca")) {
+        p_beca = document.querySelector("#estudiante-beca");
     } else {
-        beca = false;
-        document.querySelector("#estudiante-beca").innerText = "";
+        p_beca = document.createElement("p");
     }
+
+    if (document.querySelector("#estudiante-descuento")) {
+        p_descuento = document.querySelector("#estudiante-descuento");
+    } else {
+        p_descuento = document.createElement("p");
+    }
+
+    // Descuento -> Beca
 
     if (estudiante.descuento) {
         // Estudiante -> Descuento Especial -> Cuanto es el descuento.
@@ -110,12 +136,50 @@ async function get_price_estudiante(e) {
 
         descuento = descuento_data;
 
-        document.querySelector("#estudiante-descuento").innerText = `Descuento: ${descuento_data}$`;
+        p_descuento.innerText = `Descuento: ${descuento_data}$`;
+        p_descuento.id = "estudiante-descuento";
+        if (estudiante.beca) {
+            p_descuento.className = "mt-2 mb-0";
+        } else {
+            p_descuento.className = "mt-2";
+        }
+        
+        document.querySelector("#div_id_estudiante").append(p_descuento);
 
     } else {
         descuento = false;
 
-        document.querySelector("#estudiante-descuento").innerText = "";
+        if (document.querySelector("#estudiante-descuento")) {
+            document.querySelector("#estudiante-descuento").innerText = "";
+            document.querySelector("#estudiante-descuento").className = "";
+        }
+    }
+
+    if (estudiante.beca) {
+        
+        // Estudiante -> Beca.
+        beca_data = estudiante.beca;
+        
+        // Declaramos variable global
+        beca = {"descuento": beca_data.descuento, "tipo": beca_data.tipo_descuento[0]};
+
+        p_beca.innerText = `Beca: ${beca_data.nombre}`;
+        p_beca.id = "estudiante-beca";
+        if (estudiante.descuento) {
+            p_beca.className = "mt-0";
+        } else {
+            p_beca.className = "mt-2";
+        }
+        
+        document.querySelector("#div_id_estudiante").append(p_beca);
+
+    } else {
+        beca = false;
+
+        if (document.querySelector("#estudiante-beca")) {
+            document.querySelector("#estudiante-beca").innerText = "";
+            document.querySelector("#estudiante-beca").className = "";
+        }
     }
 
     calculo_precio();
@@ -147,7 +211,22 @@ function calculo_precio() {
         precio_final = Math.round(precio_final);
         
         document.querySelector("#id_precio_a_pagar").value = precio_final;
-        document.querySelector("#precio-final").innerText = `Precio Final = ${precio_final}$`;
+
+
+        let p_final;
+
+        if (document.querySelector("#precio-final")) {
+            p_final = document.querySelector("#precio-final");
+        } else {
+            p_final = document.createElement("p");
+        }
+        
+        p_final.innerText = `Precio Final Calculado = ${precio_final}$`;
+        p_final.id = "precio-final";
+        p_final.className = "mt-2";
+
+        document.querySelector("#div_id_precio_a_pagar").append(p_final);
+
 
     } else {
         document.querySelector("#id_precio_a_pagar").value = "";

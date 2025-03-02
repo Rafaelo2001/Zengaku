@@ -6,7 +6,7 @@
 
 
     {% block edit-url %}{% url 'clase-edit' clase.pk %}{% endblock %}
-    {% block edit-text %}Editar Clase{% endblock %}
+    {% block edit-text %}<i class="fs-4 fa-solid fa-pen-to-square"></i> Editar Clase{% endblock %}
 
 
     {% block card-body %}
@@ -18,6 +18,8 @@
             <li class="list-group-item"><span class="fw-bold">Curso:            </span> {{ clase.curso           }}  </li>
             <li class="list-group-item"><span class="fw-bold">Sede:             </span> {{ clase.sede            }}  </li>
             <li class="list-group-item"><span class="fw-bold">Horas Semanales:  </span> {{ clase.horas_semanales }}  </li>
+            <li class="list-group-item"><span class="fw-bold">Fecha Inicio:     </span> {{ clase.f_inicio }}  </li>
+            <li class="list-group-item"><span class="fw-bold">Fecha Cierre:     </span> {% if clase.f_cierre %} {{ clase.f_cierre }} {% else %} --- {% endif %}  </li>
             <li class="list-group-item"><span class="fw-bold">Precio:           </span> {{ clase.precio          }}  </li>
             <li class="list-group-item"><span class="fw-bold">Clase Individual: </span> {{ clase.individual|yesno:"Si,No" }}  </li>
             <li class="list-group-item"><span class="fw-bold">Status:           </span> {{ clase.status          }}  </li>

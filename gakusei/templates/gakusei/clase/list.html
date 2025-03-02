@@ -11,7 +11,7 @@
         <th>Sede</th>
         <th>Horas Semanales</th>
         <th>Estudiantes</th>
-        <th>Clase Individual</th>
+        <th>Fecha de Inicio</th>
         <th>Status</th>
         <th>Precio</th>
         <th></th>
@@ -26,7 +26,7 @@
                 <td>{{clase.horas_semanales}}</td>
                 <td>{{clase.inscripciones.count}}</td>
                 <td>
-                    {{ clase.individual|yesno:"Si,No" }}
+                    {{ clase.f_inicio|date:"d M. y" }}
                 </td>
                 <td>{{clase.status}}</td>
                 <td>${{clase.precio}}</td>

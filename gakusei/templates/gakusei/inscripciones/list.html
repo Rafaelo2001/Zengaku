@@ -1,30 +1,25 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Inscripciones{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
-
-    <h1>Listado de Inscripciones</h1>
-
-    <a href="{% url 'inscripciones-create' %}">Crear Inscripción</a>
+    {% block create-url %}{% url 'inscripciones-create' %}{% endblock %}
+    {% block create-text %}Crear Inscripción{% endblock %}
 
 
-    <table border="1">
-        <thead>
-            <th>Clase</th>
-            <th>Estudiante</th>
-            <th>Precio a pagar</th>
-        </thead>
-        <tbody>
-            {% for inscripcion in object_list %}
+    {% block thead %}
+        <th>Clase</th>
+        <th>Estudiante</th>
+        <th>Precio a pagar</th>
+        <th></th>
+    {% endblock %}
+
+    {% block tbody %}
+        {% for inscripcion in object_list %}
             <tr>
                 <td>{{inscripcion.clase}}</td>
                 <td>{{inscripcion.estudiante}}</td>
                 <td>{{inscripcion.precio_a_pagar}}$</td>
-                <td><a href="{% url 'inscripciones-detail' inscripcion.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'inscripciones-detail' inscripcion.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

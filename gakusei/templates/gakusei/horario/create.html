@@ -1,31 +1,41 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/create-layout.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
-{% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
+    {% endblock %}
 
-{% block script %}
-    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+    {% block script %}
+        <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
 
-    <script src="{% static 'gakusei/js/horario/create.js' %}"></script>
-{% endblock %}
+        <script src="{% static 'gakusei/js/horario/create.js' %}"></script>
+    {% endblock %}
 
 
-{% block body %}
-    <h1>Registro de Horario</h1>
+    {% block regresar-url %}
+        {% if request.GET.clase %}
+            {% url 'clase-detail' request.GET.clase %}
+        {% else %}
+            {% url 'horario' %}
+        {% endif %}
+    {% endblock %}
 
-    {% if request.GET.clase %}
-        <a href="{% url 'clase-detail' request.GET.clase %}">Regresar a la Clase (Sin guardar)</a>
-    {% else %}
-        <a href="{% url 'horario' %}">Regresar a la lista</a>
-    {% endif %}
+    {% block regresar-text %}
+        {% if request.GET.clase %}
+            Regresar a la Clase (Sin guardar)
+        {% else %}
+            Regresar a la lista
+        {% endif %}
+    {% endblock %}
 
-    <form id="horario-form" action="{% url 'horario-create' %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit" value="Registrar">
-    </form>
-    
-{% endblock %}
+    {% block card-title %}Registro de Horario{% endblock %}
+
+    {% block form %}
+        <form id="horario-form" action="{% url 'horario-create' %}" method="post"> {%csrf_token%}
+            {{ form|crispy }}
+            <input class="btn btn-lg btn-success" type="submit" value="Registrar">
+        </form>
+    {% endblock %}

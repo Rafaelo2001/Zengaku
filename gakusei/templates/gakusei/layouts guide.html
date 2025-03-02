@@ -49,6 +49,7 @@
     {% block card-title %}  {% endblock %}
 
 
+    {% block edit %}    {% endblock %}
     {% block edit-url %}    {% endblock %}
     {% block edit-text %}   {% endblock %}
 
@@ -90,6 +91,9 @@
     <!-- Else -->
     class="mb-4"
     <p class="mb-4"><i>No i en XXX.</i></p>
+
+    <!-- Generic Edit Icon -->
+    <i class="fs-4 fa-solid fa-pen-to-square"></i>
     
 
 <!-- EDIT -->
@@ -114,7 +118,7 @@
 
 
 <!-- DELETE -->
-{% extends 'gakusei/delete-layout.html' %}    
+{% extends 'gakusei/delete-layout.html' %}
 
     {% block regresar-url %}    {% endblock %}
     {% block regresar-text %}   {% endblock %}
@@ -132,3 +136,13 @@
     
     <!-- Delete Button Style -->
     <input class="btn btn-lg btn-danger" type="submit" value="ELIMINAR XXXX">
+
+
+<!-- Select2 Configuration -->
+    let opciones = {
+        placeholder: "----------",
+        allowClear: true,
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
+    }

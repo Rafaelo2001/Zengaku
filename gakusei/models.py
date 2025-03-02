@@ -278,8 +278,9 @@ class Clase(models.Model):
         sensei = self.sensei.personal_data.full_name()
         modulo = self.curso
         sede = self.sede
+        fecha = date_format(self.f_inicio, 'M. Y')
 
-        return f"{modulo} {sede} - {sensei}"
+        return f"{modulo} {sede} ({fecha}) - {sensei}"
 
 
 class Horario(models.Model):

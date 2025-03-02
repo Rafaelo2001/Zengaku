@@ -4,13 +4,16 @@ document.addEventListener("DOMContentLoaded", function() {
     let opciones = {
         placeholder: "----------",
         allowClear: true,
-        width: '250px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     }
 
     $("#id_clase").select2(opciones);
 
     document.querySelector("#horario-form").addEventListener("submit", () => {
 
+        // Para cuando sea asignacion de clases por GET
         document.querySelector("#id_clase").disabled  = false;
     });
 });

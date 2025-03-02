@@ -12,7 +12,9 @@
 
                 <h1 class="card-title mb-4">{% block card-title %}{% endblock %}</h1>
             
-                <a href="{% block edit-url %}{% endblock %}" class="mb-4 btn btn-lg bg-success-subtle text-reset">{% block edit-text %}Editar{% endblock %}</a>
+                {% block edit %}
+                    <a href="{% block edit-url %}{% endblock %}" class="mb-4 btn btn-lg bg-success-subtle text-reset">{% block edit-text %}Editar{% endblock %}</a>
+                {% endblock %}
             
                 {% block card-body %}{% endblock %}
 

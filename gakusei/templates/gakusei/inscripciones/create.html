@@ -1,37 +1,42 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/create-layout.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
-{% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
+    {% endblock %}
 
-{% block script %}
-    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+    {% block script %}
+        <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
 
-    <script src="{% static 'gakusei/js/inscripciones/create.js' %}"></script>
-{% endblock %}
+        <script src="{% static 'gakusei/js/inscripciones/create.js' %}"></script>
+    {% endblock %}
 
-{% block body %}
-    <h1>Nueva Inscripción</h1>
 
-    {% if request.GET.clase %}
-        <a href="{% url 'clase-detail' request.GET.clase %}">Regresar a la Clase (Sin guardar)</a>
-    {% else %}
-        <a href="{% url 'inscripciones' %}">Regresar a la lista</a>
-    {% endif %}
+    {% block regresar-url %}
+        {% if request.GET.clase %}
+            {% url 'clase-detail' request.GET.clase %}
+        {% else %}
+            {% url 'inscripciones' %}
+        {% endif %}
+    {% endblock %}
 
-    <form id="inscripciones-form" action="{% url 'inscripciones-create' %}" autocomplete="off" data-clase_url="{% url 'api-clase-get' %}" data-estudiante_url="{% url 'api-estudiante-get' %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit" value="Registrar">
-    </form>
+    {% block regresar-text %}
+        {% if request.GET.clase %}
+            Regresar a la Clase (Sin guardar)
+        {% else %}
+            Regresar a la lista
+        {% endif %}
+    {% endblock %}
 
-    <p id="clase-data"></p>
-    <p id="estudiante-descuento"></p>
-    <p id="estudiante-beca"></p>
 
-    <p id="precio-final"></p>
+    {% block card-title %}Nueva Inscripción{% endblock %}
 
-    
-{% endblock %}
+    {% block form %}
+        <form id="inscripciones-form" action="{% url 'inscripciones-create' %}" autocomplete="off" data-clase_url="{% url 'api-clase-get' %}" data-estudiante_url="{% url 'api-estudiante-get' %}" method="post"> {%csrf_token%}
+            {{ form|crispy }}
+            <input class="btn btn-lg btn-success" type="submit" value="Registrar">
+        </form>
+    {% endblock %}
