@@ -19,8 +19,10 @@
                 {% block card-body %}{% endblock %}
 
 
-                <h3>{% block delete-title %}Eliminar{% endblock %}</h3>
-                <a href="{% block delete-url %}{% endblock %}" class="btn btn-lg btn-danger">{% block delete-text %}Eliminar{% endblock %}</a>
+                {% block delete %}
+                    <h3>{% block delete-title %}Eliminar{% endblock %}</h3>
+                    <a href="{% block delete-url %}{% endblock %}" class="btn btn-lg btn-danger">{% block delete-text %}Eliminar{% endblock %}</a>
+                {% endblock %}
             
             </div>
 

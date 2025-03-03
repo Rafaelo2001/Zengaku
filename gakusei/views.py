@@ -9,9 +9,10 @@ from json import loads
 from django import forms
 from django.forms import modelformset_factory
 from django.forms.models import model_to_dict
+from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
-from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm
+from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -472,6 +473,12 @@ class DiaDeClaseEditView(UpdateView):
         return reverse("dia-de-clase-detail", kwargs={"pk":self.object.pk})
 
 
+class DiaDeClaseDeleteView(DeleteView):
+    model = DiaDeClase
+    template_name = dia_de_clase_templates + "delete.html"
+    success_url = reverse_lazy("dia-de-clase")
+
+
 
 # Asistencias
 asistencia_templates = "gakusei/asistencia/"
@@ -599,6 +606,8 @@ class AsistenciaEditView(UpdateView):
         
         form.fields["dia_clase"].widget.attrs.update(readonly_select)
         form.fields["estudiante"].widget.attrs.update(readonly_select)
+
+        form.fields["presente"].help_text = "Seleccionado: Presente, Sin seleccionar: No Presente"
 
         return form
 
@@ -914,7 +923,6 @@ def Api_EstudianteGet(request):
     return JsonResponse(submit, status=201)
 
 
-
 def Api_AsistenciaForm(request):
     if request.method != "POST":
         return JsonResponse({"error": "Use method POST."}, status=403)
@@ -939,7 +947,7 @@ def Api_AsistenciaForm(request):
     estudiantes_data = []
 
     for e in estudiantes:
-        estudiantes_data.append(dict(nombre_estudiante=str(e), estudiante=e.pk))
+        estudiantes_data.append(dict(nombre_estudiante=e.full_name(), estudiante=e.pk))
 
     estudiantes_numero = clase.inscripciones.count()
 
@@ -950,13 +958,15 @@ def Api_AsistenciaForm(request):
         queryset=Asistencias.objects.none(),
     )
 
+    h = AsistenciaFormsetHelper()
+
     dia_form = DiasForm()
 
     dia_form.fields["horario"].queryset = Horario.objects.filter(clase=clase).order_by("dia_semana")
 
     response = {
-        "dias_form": dia_form.as_div(),
-        "formset": formset.as_div(),
+        "dias_form": render_crispy_form(dia_form),
+        "formset": render_crispy_form(formset, h),
         "estudiantes_count": estudiantes_numero,
     }
 
@@ -997,7 +1007,7 @@ def Api_AsistenciaFormRezagados(request):
     form.fields["estudiante"].queryset = estudiantes
 
 
-    return JsonResponse({"form":form.as_div()}, status=201)
+    return JsonResponse({"form":render_crispy_form(form)}, status=201)
     
 
 
@@ -1098,4 +1108,4 @@ def Api_DiasDeClase_Form(request):
     dia_form.fields["horario"].queryset = Horario.objects.filter(clase=clase).order_by("dia_semana")
 
 
-    return JsonResponse({"dias_form": dia_form.as_div()}, status=201)
+    return JsonResponse({"dias_form": render_crispy_form(dia_form)}, status=201)

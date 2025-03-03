@@ -4,6 +4,11 @@ from django.db import transaction, IntegrityError
 
 from .models import Persona, Sensei, Estudiante, Representante, DiaDeClase, Asistencias, Clase
 
+
+from crispy_forms.helper import FormHelper
+
+from crispy_forms.layout import Layout, Div, Field
+
 class BasePersona:
     """Mixin para Campo de PersonalData. Colocar en los argumentos de las clases de primero al definir la clase."""
 
@@ -368,14 +373,29 @@ class AsistenciaForm(forms.ModelForm):
         fields = ["nombre_estudiante", "presente", "estudiante","dia_clase"]
         widgets = {
             "nombre_estudiante": forms.TextInput(attrs={"readonly":True}),
-            "estudiante": forms.HiddenInput(attrs={"readonly":True}),
+            "estudiante": forms.HiddenInput(attrs={"readonly":True,}),
             "dia_clase": forms.HiddenInput(attrs={"readonly":True}),
         }
         labels = {
             "nombre_estudiante": "",
-            "presente": "",
         }
         
+
+
+class AsistenciaFormsetHelper(FormHelper):
+    def __init__(self, *args, **kwargs):
+        super(AsistenciaFormsetHelper, self).__init__(*args, **kwargs)
+        self.layout = Layout(
+            Div(
+                Field('nombre_estudiante', wrapper_class='me-auto flex-grow-1'),
+                Field('presente',          wrapper_class='mx-auto ps-5 pe-3'),  
+                Field('estudiante'),  
+                Field('dia_clase'),  
+                css_class='d-flex align-items-baseline'
+            ) 
+        )
+        
+
 
 class AsistenciaRezagadosForm(forms.ModelForm):
 

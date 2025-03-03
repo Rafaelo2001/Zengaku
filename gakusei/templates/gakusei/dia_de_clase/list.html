@@ -1,35 +1,36 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Dias de Clases{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'asistencia-create' %}{% endblock %}
+    {% block create-text %}Registrar Asistencia{% endblock %}
 
-    <h1>Listado de Dias de Clases</h1>
+    {% block create-otros %}
+        <div class="mb-4">
+            <p><a class="btn btn-primary d-block d-md-inline" href="{% url 'dia-de-clase-create' %}">Registrar un Dia de Clase</a>                 <span class="d-none d-md-inline"><i class="fa-regular fa-arrow-left"></i> Registra solamente un Dia de Clase.</span></p>
+            <p><a class="btn btn-primary d-block d-md-inline" href="{% url 'asistencia-create-rezagados' %}">Registrar Asistencia de Rezagados</a> <span class="d-none d-md-inline-block mt-2 mt-lg-1 d-lg-inline"><i class="fa-regular fa-arrow-up d-none d-md-inline d-lg-none"></i><i class="fa-regular fa-arrow-left d-none d-lg-inline"></i> Registra Asistencias solamente en Dias ya registrados, un estudinate a la vez.</span></p>
+        </div>
+    {% endblock %}
 
-    <p><a href="{% url 'asistencia-create' %}">Registrar Asistencia</a> <- Este es el que vas a querer usar: Dia de Clases y todos los Estudiantes a la vez.</p>
-    
-    <p><a href="{% url 'dia-de-clase-create' %}">Registrar Dia de Clase</a> <- Registra solamente un Dia de Clase.</p>
-    <p><a href="{% url 'asistencia-create-rezagados' %}">Registrar Asistencia de Rezagados</a> <- Registra Asistencias solamente en Dias ya registrados, un estudinate a la vez.</p>
+    {% block thead %}
+        <th>N°</th>
+        <th>Clase</th>
+        <th>Status</th>
+        <th>Fecha</th>
+        <th></th>
+    {% endblock %}
 
-
-    <table border="1">
-        <thead>
-            <th>N°</th>
-            <th>Clase</th>
-            <th>Status</th>
-            <th>Fecha</th>
-        </thead>
-        <tbody>
-            {% for dia in object_list %}
+    {% block tbody %}
+        {% for dia in object_list %}
             <tr>
                 <td>Clase N° {{dia.numero}}</td>
                 <td>{{dia.clase}}</td>
                 <td>{{dia.status}}</td>
                 <td>{{dia.fecha}}</td>
-                <td><a href="{% url 'dia-de-clase-detail' dia.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'dia-de-clase-detail' dia.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}
+
+
+

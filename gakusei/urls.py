@@ -43,6 +43,7 @@ urlpatterns = [
     path("diadeclase/<int:pk>", views.DiaDeClaseDetailView.as_view(), name="dia-de-clase-detail"),
     path("diadeclase/registrar", views.DiaDeClaseCreateView.as_view(), name="dia-de-clase-create"),
     path("diadeclase/editar/<int:pk>", views.DiaDeClaseEditView.as_view(), name="dia-de-clase-edit"),
+    path("diadeclase/eliminar/<int:pk>", views.DiaDeClaseDeleteView.as_view(), name="dia-de-clase-delete"),
 
     path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),
     path("asistencia/<int:pk>", views.AsistenciaDetailView.as_view(), name="asistencia-detail"),

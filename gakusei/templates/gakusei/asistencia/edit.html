@@ -1,4 +1,5 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/edit-layout.html' %}    
+{% load crispy_forms_tags %}
 {% load static %}
 
 {% block style %}
@@ -13,17 +14,19 @@
     <script src="{% static 'gakusei/js/asistencia/edit.js' %}"></script>
 {% endblock %}
 
-{% block body %}
-    <h1>Edición de Asistencia</h1>
+    {% block regresar-url %}{% url 'dia-de-clase-detail' asistencias.dia_clase.pk %}{% endblock %}
+    {% block regresar-text %}Regresar al Dia de Clase{% endblock %}
 
-    <a href="{% url 'asistencia' %}">Regresar a la lista</a>
 
-    <form id="asistencia-form" action="{% url 'asistencia-edit' asistencias.pk %}" method="post"> {%csrf_token%}
-        
-        {{ form }}
+    {% block card-title %}Edición de Asistencia{% endblock %}
 
-        <input id="submit-button" type="submit" value="Guardar Cambios">
-    </form>
 
-    
-{% endblock %}
+    {% block form %}
+        <form id="asistencia-form" action="{% url 'asistencia-edit' asistencias.pk %}" method="post"> {%csrf_token%}
+            
+            {{ form|crispy }}
+
+            <input id="submit-button" class="btn btn-lg btn-success" type="submit" value="Guardar Cambios">
+        </form>
+    {% endblock %}
+

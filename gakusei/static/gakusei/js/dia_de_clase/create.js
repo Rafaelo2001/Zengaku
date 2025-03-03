@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", function(){
     let opciones = {
         placeholder: "----------",
         allowClear: true,
-        width: '250px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     }
     
     $("#id_clase").select2(opciones);

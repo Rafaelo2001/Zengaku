@@ -1,34 +1,33 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/create-layout.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
-{% block style %}
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
-    <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
-{% endblock %}
+    {% block style %}
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+        <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
+    {% endblock %}
 
-{% block script %}
-    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
-    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+    {% block script %}
+        <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+        <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
 
-    <script src="{% static 'gakusei/js/asistencia/create-rezagados.js' %}"></script>
-{% endblock %}
+        <script src="{% static 'gakusei/js/asistencia/create-rezagados.js' %}"></script>
+    {% endblock %}
 
-{% block body %}
-    <h1>Registro de Asistencia para Rezagados</h1>
 
-    <!-- <a href="{% url 'asistencia' %}">Regresar a la lista</a> -->
-    <a href="{% url 'dia-de-clase' %}">Regresar a la lista</a>
+    {% block regresar-url %}{% url 'dia-de-clase' %}{% endblock %}
 
-    <form id="asistencia-form" action="{% url 'asistencia-create-rezagados' %}" data-asistencia="{% url 'api-asistencia-form-rezagados' %}" method="post"> {%csrf_token%}
-        
-        {{ clase_form }}
+    {% block card-title %}Registro de Asistencia para Rezagados{% endblock %}
 
-        <div id="rezagados-form">
-            <p>Seleccione una clase primero.</p>
-        </div>
+    {% block form %}
+        <form id="asistencia-form" action="{% url 'asistencia-create-rezagados' %}" data-asistencia="{% url 'api-asistencia-form-rezagados' %}" method="post"> {%csrf_token%}
+            
+            {{ clase_form }}
 
-        <input id="submit-button" disabled type="submit" value="Registrar">
-    </form>
+            <div id="rezagados-form">
+                <p>Seleccione una clase primero.</p>
+            </div>
 
-    
-{% endblock %}
+            <input id="submit-button" class="btn btn-lg btn-success" disabled type="submit" value="Registrar">
+        </form>
+    {% endblock %}
