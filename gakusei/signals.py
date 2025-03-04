@@ -13,6 +13,12 @@ def default_users(sender, **kwargs):
         else:
             print('Superusuario "admin" ya existe.')
 
+        if not User.objects.filter(username="Kita").exists():
+            User.objects.create_user("Kita", None, "kita")
+            print('Usuario "Kita" creado.')
+        else:
+            print('Usuario "Kita" ya existe.')
+
 
 @receiver(post_migrate, dispatch_uid="gakusei_default_data")
 def default_data(sender, **kwargs):

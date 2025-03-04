@@ -18,8 +18,38 @@ from django.views.generic import ListView, DetailView, FormView, CreateView, Upd
 
 from dateutil.relativedelta import relativedelta
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_not_required
 
-# Create your views here.
+
+@login_not_required
+def login_view(request):
+    if request.method == "POST":
+
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return render(request, "gakusei/login.html", {
+                "message": "Usuario o Contraseña Inválida."
+            })
+    else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse("index"))
+        return render(request, "gakusei/login.html")
+    
+
+@login_not_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("login"))
+
+
+
 def index(request):
     return render(request, "gakusei/index.html")
 

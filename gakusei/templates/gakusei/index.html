@@ -15,7 +15,8 @@
 
         <div class="card">
             <div class="card-body">
-                <h1 class="card-title mb-4">Página Principal</h1>
+                <h1 class="card-title mb-2">Página Principal</h1>
+                <h3 class="card-title mb-4"><i>Bienvenido {{user}}</i></h3>
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 text-center">
         
                     {% with clase="index_a p-3 fs-3 text-decoration-none bg-success-subtle text-reset" %}
@@ -62,18 +63,15 @@
                     <div class="col">
                         <a class="{{clase}}" href="{% url 'becas' %}"><i class="fa-solid fa-graduation-cap"></i> BECAS</a>
                     </div>
+                    {% if user.is_staff %}
+                    <div class="col">
+                        <a class="{{clase}}" href="/admin"><i class="fa-solid fa-user-tie"></i> ADMIN</a>
+                    </div>
+                    {% endif %}
                     {% endwith %}
                 </div>
             </div>
         </div>
-        
-            
+
     </div>
-
-
-        <br>
-        <br>
-        <div class="col"><a class="{{clase}}" href="/admin"><i class="fa-solid fa-user-tie"></i> Sitio Admin</a></div>    
-        usuario: admin
-        clave:   admin
 {%endblock%}
