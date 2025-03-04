@@ -5,7 +5,9 @@ document.addEventListener("DOMContentLoaded", function(){
     let opciones = {
         placeholder: "----------",
         allowClear: true,
-        width: '300px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
     }
 
     $("#id_estudiante").select2(opciones);
@@ -65,7 +67,9 @@ async function get_clases(id_estudiante, id_clase=null){
     let opciones = {
         placeholder: "----------",
         allowClear: true,
-        width: '300px',
+        containerCssClass : 'select form-select',
+        theme: "bootstrap-5",
+        width: 'auto',
         disabled: false,
         data: clases,
     } 
@@ -87,7 +91,7 @@ async function get_clases(id_estudiante, id_clase=null){
 
 async function get_mensualidad() {
 
-    let url = document.querySelector("#mensualidad").dataset.mensualidad;
+    let url = document.querySelector("#mensualidad-tabla").dataset.mensualidad;
     let csrf_token = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
     let request = {
@@ -105,10 +109,21 @@ async function get_mensualidad() {
     let solvencias  = obj.solvencias;
 
     tabla_solvencias(solvencias);
-    
 
-    document.querySelector("#mensualidad").innerHTML = "";
-    document.querySelector("#mensualidad").innerHTML = `<p>Mensualidad Actual del Estudiante: ${mensualidad}$</p>`;
+
+    let p_mensualidad;
+
+    if (document.querySelector("#mensualidad")) {
+        p_mensualidad = document.querySelector("#mensualidad");
+    } else {
+        p_mensualidad = document.createElement("p");
+    }
+
+    p_mensualidad.innerText = `Mensualidad Actual del Estudiante: ${mensualidad}$`;
+    p_mensualidad.id = "mensualidad";
+    p_mensualidad.className = "mt-2 fw-bold text-end";
+
+    document.querySelector("#div_id_monto_pagado").append(p_mensualidad);
 
 }
 
@@ -122,11 +137,17 @@ function tabla_solvencias(solvencias_data) {
     let tbody = document.createElement("tbody");
 
 
+    // Clases
+    tabla.className = "table table-striped table-hover table-bordered mt-4";
+    thead.className = "table-primary";
+
+
     // Encabezados
     let trHeadNombre = document.createElement("tr");
     let thNombre     = document.createElement("th");
     
     thNombre.textContent = nombre;
+    thNombre.className = "text-center";
     thNombre.colSpan = 4;
 
     trHeadNombre.appendChild(thNombre);
@@ -180,8 +201,6 @@ function tabla_solvencias(solvencias_data) {
     // Combinacion
     tabla.appendChild(thead);
     tabla.appendChild(tbody);
-
-    tabla.border = 1;
 
     // Pegado
     document.querySelector("#mensualidad-tabla").innerHTML = "";

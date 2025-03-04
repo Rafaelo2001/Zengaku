@@ -12,7 +12,9 @@
 
                 <h1 class="card-title mb-4">{% block card-title %}Listado{% endblock %}</h1>
                 
+                {% block create %}
                 <a href="{% block create-url %}{% endblock %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> {% block create-text %}Registrar{% endblock %}</a>
+                {% endblock %}
                 
                 {% block create-otros %}{% endblock %}
                 

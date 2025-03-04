@@ -6,6 +6,7 @@
 
     {% block card-title %}  {% endblock %}
 
+    {% block create %}  {% endblock %}
     {% block create-url %}  {% endblock %}
     {% block create-text %} {% endblock %}
 
@@ -16,6 +17,7 @@
 
     <!-- View Button Style -->
     <td class="text-center align-middle"><a href=""><i class="fs-4 fa-solid fa-eye"></i></a></td>
+    <i class="fs-4 fa-solid fa-eye"></i>
 
 
 
@@ -40,7 +42,7 @@
 
 
 <!-- DETAIL -->
-{% extends 'gakusei/detail-layout.html' %}    
+{% extends 'gakusei/detail-layout.html' %}
 
     {% block regresar-url %}    {% endblock %}
     {% block regresar-text %}   {% endblock %}

@@ -1076,7 +1076,7 @@ def Api_Pagos_Mensualidad(request):
         s["monto_abonado"] = f"{s["monto_abonado"]}$"
 
     solvencias = {
-        "estudiante": inscripcion.estudiante.full_name(),
+        "estudiante": str(inscripcion.estudiante),
         "solvencias": lista_solvencias,
     }
 

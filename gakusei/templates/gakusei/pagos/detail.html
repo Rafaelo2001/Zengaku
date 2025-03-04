@@ -1,29 +1,32 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/detail-layout.html' %}
 
-{% block body %}
-    <h1>{{object}}</h1>
-
-    <a href="{% url 'pagos' %}">Regresar a la lista</a>
-
-    <ul>
-        <li>Estudiante:     {{object.estudiante     }}</li>
-        <li>Clase:          {{object.clase          }}</li>
-        <li>Monto pagado:   {{ object.monto_pagado  }}$</li>
-        <li>Metodo:         {{ object.metodo        }}</li>
-        <li>Referencia:     {{ object.referencia                }}</li>
-        <li>Fecha:          {{ object.fecha|date:"d/m/y f a"       }}</li>
-        <li>Observacion:    {{ object.obs           }}</li>
-    </ul>
-
-    <h3>Comprobantes de Pago</h3>
-
-    <ul>
-        {% for comprobante in object.comprobantes.all %}
-            <li>{{comprobante.solvencias.clase}} - {{comprobante.solvencias.mes}} ({{comprobante.solvencias.pagado}}) ({{comprobante.monto_aplicado}}$)</li>
-        {% endfor %}
-    </ul>
+    {% block regresar-url %}{% url 'pagos' %}{% endblock %}
 
 
+    {% block card-title %}{{object}}{% endblock %}
 
-    
-{% endblock %}
+
+    {% block edit %}{% endblock %}
+    {% block delete %}{% endblock %}
+
+
+    {% block card-body %}
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Estudiante:</span>     {{object.estudiante     }}</li>
+            <li class="list-group-item"><span class="fw-bold">Clase:</span>          {{object.clase          }}</li>
+            <li class="list-group-item"><span class="fw-bold">Monto pagado:</span>   {{ object.monto_pagado  }}$</li>
+            <li class="list-group-item"><span class="fw-bold">Metodo:</span>         {{ object.metodo        }}</li>
+            <li class="list-group-item"><span class="fw-bold">Referencia:</span>     {{ object.referencia                }}</li>
+            <li class="list-group-item"><span class="fw-bold">Fecha:</span>          {{ object.fecha|date:"d/m/y f a"       }}</li>
+            <li class="list-group-item"><span class="fw-bold">Observacion:</span>    {% if object.obs %}{{ object.obs }}{% else %}---{% endif %}</li>
+        </ul>
+
+
+        <h3>Comprobantes de Pago</h3>
+
+        <ul class="mb-4 list-group">
+            {% for comprobante in object.comprobantes.all %}
+                <li class="list-group-item">{{comprobante.solvencias.clase}} - {{comprobante.solvencias.mes}} ({{comprobante.solvencias.pagado}}) ({{comprobante.monto_aplicado}}$)</li>
+            {% endfor %}
+        </ul>
+    {% endblock %}

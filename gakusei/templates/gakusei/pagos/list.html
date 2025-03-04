@@ -1,34 +1,28 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Pagos{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'pagos-create' %}{% endblock %}
+    {% block create-text %}Registrar Pago{% endblock %}
 
-    <h1>Listado de Pagos</h1>
+    {% block thead %}
+        <th>Fecha</th>
+        <th>Clase</th>
+        <th>Estudiante</th>
+        <th>Método</th>
+        <th>Monto</th>
+        <th></th>
+    {% endblock %}
 
-    <a href="{% url 'pagos-create' %}"><p>Registrar Pago</p></a>
-
-
-    <table border="1">
-        <thead>
-            <th>Fecha</th>
-            <th>Clase</th>
-            <th>Estudiante</th>
-            <th>Método</th>
-            <th>Monto</th>
-        </thead>
-        <tbody>
-            {% for pago in object_list %}
+    {% block tbody %}
+        {% for pago in object_list %}
             <tr>
                 <td>{{pago.fecha|date:"d/m/y f a"}}</td>
                 <td>{{pago.clase}}</td>
                 <td>{{pago.estudiante}}</td>
                 <td>{{pago.metodo}}</td>
                 <td>${{pago.monto_pagado}}</td>
-                <td><a href="{% url 'pagos-detail' pago.pk %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'pagos-detail' pago.pk %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}
