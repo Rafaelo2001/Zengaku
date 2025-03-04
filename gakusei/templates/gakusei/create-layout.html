@@ -4,8 +4,9 @@
 
     <div class="container">
         
+        {% block regresar %}
         <a href="{% block regresar-url %}{% endblock %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> {% block regresar-text %}Regresar a la lista{% endblock %}</a>
-        
+        {%endblock%}
         <div class="card">
 
             <div class="card-body">
