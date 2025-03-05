@@ -1,26 +1,21 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Métodos de Pago{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'metodos-pago-create' %}{% endblock %}
+    {% block create-text %}Registrar Método{% endblock %}
 
-    <h1>Métodos de Pago</h1>
-    
-    <a href="{% url 'metodos-pago-create' %}">Registrar Método</a>
 
-    
-    <table border="1">
-        <thead>
-            <th>Método</th>
-        </thead>
-        <tbody>
-            {% for metodo in object_list %}
+    {% block thead %}
+        <th>Método</th>
+        <th style="width: 10%;"></th>
+    {% endblock %}
+
+    {% block tbody %}
+        {% for metodo in object_list %}
             <tr>
                 <td>{{metodo}}</td>
-                <td><a href="{% url 'metodos-pago-detail' metodo.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'metodos-pago-detail' metodo.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

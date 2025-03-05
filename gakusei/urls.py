@@ -73,6 +73,7 @@ urlpatterns = [
     path("cursos/", views.CursoListView.as_view(), name="curso"),
     path("cursos/<int:pk>", views.CursoDetailView.as_view(), name="curso-detail"),
     path("cursos/registrar", views.CursoCreateView.as_view(), name="curso-create"),
+    path("cursos/editar/<int:pk>", views.CursoEditView.as_view(), name="curso-edit"),
 
 
     path("metodosdepago/", views.MetodosPagoListView.as_view(), name="metodos-pago"),

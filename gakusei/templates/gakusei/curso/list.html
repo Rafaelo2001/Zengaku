@@ -1,26 +1,21 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Cursos{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'curso-create' %}{% endblock %}
+    {% block create-text %}Registrar Curso{% endblock %}
 
-    <h1>Listado de Cursos</h1>
+
+    {% block thead %}
+        <th>Módulo</th>
+        <th style="width: 10%;"></th>
+    {% endblock %}
     
-    <a href="{% url 'curso-create' %}">Registrar Curso</a>
-
-    
-    <table border="1">
-        <thead>
-            <th>Módulo</th>
-        </thead>
-        <tbody>
-            {% for curso in object_list %}
+    {% block tbody %}
+        {% for curso in object_list %}
             <tr>
                 <td>{{curso}}</td>
-                <td><a href="{% url 'curso-detail' curso.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'curso-detail' curso.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

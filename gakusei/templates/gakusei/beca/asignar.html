@@ -1,13 +1,13 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/create-layout.html' %}
+{% load crispy_forms_tags %}
 
-{% block body %}
-    <h1>Asignar Beca</h1>
+    {% block regresar-url %}{% url 'becas' %}{% endblock %}
 
-    <a href="{% url 'becas' %}">Regresar a la lista</a>
+    {% block card-title %}Asignar Beca{% endblock %}
 
-    <form action="{% url 'becas-asignar' %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit">
-    </form>
-    
-{% endblock %}
+    {% block form %}
+        <form action="{% url 'becas-asignar' %}" method="post"> {%csrf_token%}
+            {{ form|crispy }}
+            <input class="btn btn-lg btn-success" type="submit" value="Asignar Beca">
+        </form>
+    {% endblock %}

@@ -1,19 +1,23 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/detail-layout.html' %}
 
-{% block body %}
-    <h1>Descuento de {{object.descuento}}$ para {{object.estudiante}}</h1>
 
-    <a href="{% url 'descuento-especial' %}">Regresar a la lista</a>
+    {% block regresar-url %}{% url 'descuento-especial' %}{% endblock %}
 
-    <a href="{% url 'descuento-especial-edit' object.pk %}">Editar descuento</a>
 
-    <ul>
-        <li>Estudiante:      {{ object.estudiante }}     </li>
-        <li>Descuento:       {{ object.descuento }}$     </li>
-        <li>Observaciones:   {% if object.obs %} {{ object.obs }} {% else %} <i>Ninguna.</i> {% endif %}       </li>
-    </ul>
+    {% block card-title %}Descuento de {{object.descuento}}$ para {{object.estudiante}}{% endblock %}
 
-    <a href="{% url 'descuento-especial-delete' object.pk %}">Eliminar Descuento</a>
-   
-    
-{% endblock %}
+
+    {% block edit-url %}{% url 'descuento-especial-edit' object.pk %}{% endblock %}
+    {% block edit-text %}<i class="fs-4 fa-solid fa-pen-to-square"></i> Editar descuento{% endblock %}
+
+
+    {% block card-body %}
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Estudiante:</span>      {{ object.estudiante }}     </li>
+            <li class="list-group-item"><span class="fw-bold">Descuento:</span>       {{ object.descuento }}$     </li>
+            <li class="list-group-item"><span class="fw-bold">Observaciones:</span>   {% if object.obs %} {{ object.obs }} {% else %}---{% endif %}       </li>
+        </ul>
+    {% endblock %}
+
+    {% block delete-title %}Eliminar Descuento{% endblock %}
+    {% block delete-url %}{% url 'descuento-especial-delete' object.pk %}{% endblock %}

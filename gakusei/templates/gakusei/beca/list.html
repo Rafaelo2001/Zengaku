@@ -1,30 +1,28 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
-
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
-
-    <h1>Listado de Becas</h1>
+    {% block card-title %}Listado de Becas{% endblock %}
     
-    <a href="{% url 'becas-create' %}">Registrar Beca</a>
+    {% block create-url %}{% url 'becas-asignar' %}{% endblock %}
+    {% block create-text %}Asignar Beca a Estudiante{% endblock %}
 
-    <a href="{% url 'becas-asignar' %}">Asignar Beca a Estudiante</a>
+    {% block create-otros %}
+        <div class="mb-4">
+            <p><a class="btn btn-primary d-block d-md-inline" href="{% url 'becas-create' %}">Registrar Beca</a></p>
+        </div>
+    {% endblock %}
 
-    
-    <table>
-        <thead>
-            <th>Beca</th>
-            <th>Descuento</th>
-        </thead>
-        <tbody>
-            {% for beca in object_list %}
+    {% block thead %}
+        <th>Beca</th>
+        <th>Descuento</th>
+        <th></th>
+    {% endblock %}
+
+    {% block tbody %}
+        {% for beca in object_list %}
             <tr>
                 <td>{{beca.nombre}}</td>
                 <td>{{beca.descuento_full}}</td>
-                <td><a href="{% url 'becas-detail' beca.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'becas-detail' beca.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

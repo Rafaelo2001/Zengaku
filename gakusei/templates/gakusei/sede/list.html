@@ -1,28 +1,22 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/list-layout.html' %}
 
-{% block body %}
+    {% block card-title %}Listado de Sedes{% endblock %}
 
-    <a href="{% url 'index' %}" class="mb-4 btn bg-success-subtle text-reset"><i class="fa-solid fa-angles-left"></i> Regresar al Index</a>
+    {% block create-url %}{% url 'sede-create' %}{% endblock %}
+    {% block create-text %}Registrar Sede{% endblock %}
 
-    <h1>Listado de Sedes</h1>
-    
-    <a href="{% url 'sede-create' %}">Registrar Sede</a>
+    {% block thead %}
+        <th>Nombre</th>
+        <th>Ubicación</th>
+        <th></th>
+    {% endblock %}
 
-    
-    <table border="1">
-        <thead>
-            <th>Nombre</th>
-            <th>Ubicación</th>
-        </thead>
-        <tbody>
-            {% for sede in object_list %}
+    {% block tbody %}
+        {% for sede in object_list %}
             <tr>
                 <td>{{sede.nombre}}</td>
                 <td>{{sede.ubicacion}}</td>
-                <td><a href="{% url 'sede-detail' sede.id %}">View</a></td>
+                <td class="text-center align-middle"><a href="{% url 'sede-detail' sede.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    
-{% endblock %}
+        {% endfor %}
+    {% endblock %}

@@ -1,26 +1,30 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/detail-layout.html' %}
 
-{% block body %}
-    <h1>Sede {{object}}</h1>
-
-    <a href="{% url 'metodos-pago' %}">Regresar a la lista</a>
-
-    <ul>
-        <li>Método:          {{ object.metodo }}    </li>
-        <li>Datos de Pago:   {{ object.datos }}     </li>
-        <li>Observaciones:   {% if object.obs %} {{ object.obs }} {% else %} <i>Ninguna.</i> {% endif %}       </li>
-    </ul>
+    {% block regresar-url %}{% url 'metodos-pago' %}{% endblock %}
 
 
-    <h3>Pagos con {{object}}</h3>
+    {% block card-title %}{{object}}{% endblock %}
 
-    <ul>
-        {% for pago in object.pagos.all %}
-            <li>{{pago}}</li>
-        {% empty %}
-            <li><i>No hay pagos hechos con este Método</i></li>
-        {% endfor %}
-    </ul>
-   
+
+    {% block card-body %}
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Método:</span>          {{ object.metodo }}    </li>
+            <li class="list-group-item"><span class="fw-bold">Datos de Pago:</span>   {{ object.datos }}     </li>
+            <li class="list-group-item"><span class="fw-bold">Observaciones:</span>   {% if object.obs %} {{ object.obs }} {% else %}---{% endif %}       </li>
+        </ul>
+
+
+        <h3>Pagos con {{object}}</h3>
+
+        <ul class="mb-4 list-group">
+            {% for pago in object.pagos.all %}
+                <li class="list-group-item">{{pago}}</li>
+            {% empty %}
+                <li class="list-group-item"><i>No hay pagos hechos con este Método</i></li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+
     
-{% endblock %}
+    {% block edit %}{% endblock %}
+    {% block delete %}{% endblock %}

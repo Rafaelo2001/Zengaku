@@ -219,7 +219,7 @@ class Sede(models.Model):
     contacto = models.TextField("Formas de Contacto")
 
     # Usar el link (src) que viene en el iframe de insertar un mapa
-    maps = models.URLField("Google Maps", max_length=500, blank=True)
+    maps = models.URLField("Google Maps", max_length=500, blank=True, help_text="Usar el link (src) que viene en el iframe de insertar un mapa")
 
     def __str__(self):
         return self.nombre

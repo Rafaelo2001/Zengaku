@@ -1,13 +1,13 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/create-layout.html' %}
+{% load crispy_forms_tags %}
 
-{% block body %}
-    <h1>Registro de Sede</h1>
+    {% block regresar-url %}{% url 'sede' %}{% endblock %}
 
-    <a href="{% url 'sede' %}">Regresar a la lista</a>
+    {% block card-title %}Registro de Sede{% endblock %}
 
-    <form action="{% url 'sede-create' %}" method="post"> {%csrf_token%}
-        {{ form }}
-        <input type="submit" value="Registar">
-    </form>
-    
-{% endblock %}
+    {% block form %}
+        <form action="{% url 'sede-create' %}" method="post"> {%csrf_token%}
+            {{ form|crispy }}
+            <input class="btn btn-lg btn-success" type="submit" value="Registar">
+        </form>
+    {% endblock %}

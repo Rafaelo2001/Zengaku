@@ -755,6 +755,16 @@ class CursoCreateView(CreateView):
         return reverse("curso-detail", kwargs={"pk":self.object.pk})
     
 
+class CursoEditView(UpdateView):
+    model = Curso
+    fields = "__all__"
+
+    template_name = curso_templates + "edit.html"
+
+    def get_success_url(self):
+        return reverse("curso-detail", kwargs={"pk":self.object.pk})
+    
+
 
 
 

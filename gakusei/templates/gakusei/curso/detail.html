@@ -1,53 +1,63 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/detail-layout.html' %}
 
-{% block body %}
-    <h1>Curso {{curso}}</h1>
-
-    <a href="{% url 'curso' %}">Regresar a la lista</a>
-
-    <ul>
-        <li>Módulo: {{ curso.modulo }}</li>
-    </ul>
+    {% block regresar-url %}{% url 'curso' %}{% endblock %}
 
 
-    <h3>Clases Activas</h3>
+    {% block card-title %}Curso {{curso}}{% endblock %}
 
-    {% if curso.clases_activas %}
-    <ul>
-        {% for clase in curso.clases_activas %}
-        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p><i>Sin clases activas para este curso.</i></p>
-    {% endif %}
+    {% block edit-url %}{% url 'curso-edit' curso.pk %}{% endblock %}
+    {% block edit-text %}<i class="fs-4 fa-solid fa-pen-to-square"></i> Editar Curso{% endblock %}
 
 
-    <h3>Clases Culminadas</h3>
-
-    {% if curso.clases_completadas %}
-    <ul>
-        {% for clase in curso.clases_completadas %}
-        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p><i>Sin clases completadas para este curso.</i></p>
-    {% endif %}
-
-
-    <h3>Clases Suspendidas o Pausadas</h3>
-
-    {% if curso.clases_suspendidas_pausa %}
-    <ul>
-        {% for clase in curso.clases_suspendidas_pausa %}
-        <li><a href="{% url 'clase-detail' clase.id %}">{{ clase }}</a></li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p><i>Sin clases suspendidas o pausadas para este curso.</i></p>
-    {% endif %}
-
+    {% block card-body %}
 
     
-{% endblock %}
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Módulo:</span> {{ curso.modulo }}</li>
+        </ul>
+
+
+
+        <h3>Clases Activas</h3>
+
+        {% if curso.clases_activas %}
+        <ul class="mb-4 list-group">
+            {% for clase in curso.clases_activas %}
+            <a class="list-group-item list-group-item-action" href="{% url 'clase-detail' clase.id %}">{{ clase }}</a>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="mb-4"><i>Sin clases activas para este curso.</i></p>
+        {% endif %}
+
+
+        <h3>Clases Culminadas</h3>
+
+        {% if curso.clases_completadas %}
+        <ul class="mb-4 list-group">
+            {% for clase in curso.clases_completadas %}
+            <a class="list-group-item list-group-item-action" href="{% url 'clase-detail' clase.id %}">{{ clase }}</a>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="mb-4"><i>Sin clases completadas para este curso.</i></p>
+        {% endif %}
+
+
+        <h3>Clases Suspendidas o Pausadas</h3>
+
+        {% if curso.clases_suspendidas_pausa %}
+        <ul class="mb-4 list-group">
+            {% for clase in curso.clases_suspendidas_pausa %}
+            <a class="list-group-item list-group-item-action" href="{% url 'clase-detail' clase.id %}">{{ clase }}</a>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="mb-4"><i>Sin clases suspendidas o pausadas para este curso.</i></p>
+        {% endif %}
+
+
+
+    {% endblock %}
+
+    {% block delete %}{% endblock %}

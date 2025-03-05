@@ -1,24 +1,32 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/detail-layout.html' %}
 
-{% block body %}
-    <h1>Sede {{sede}}</h1>
-
-    <a href="{% url 'sede' %}">Regresar a la lista</a>
-
-    <a href="{% url 'sede-edit' sede.pk %}">Editar Sede</a>
-
-    <ul>
-        <li>Nombre:                     {{ sede.nombre }}     </li>
-        <li>Ubicación:                  {{ sede.ubicacion }}  </li>
-        <li>Informacioón de Contacto:   {{ sede.contacto }}   </li>
-        <li>Google Maps:                {{ sede.maps }}       </li>
-    </ul>
+    {% block regresar-url %}{% url 'sede' %}{% endblock %}
 
 
-    {% if sede.maps %}
-    {% endif %}
+    {% block card-title %}Sede {{sede}}{% endblock %}
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3243.7473230714345!2d139.5459290752948!3d35.609298972610574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6018f0c78860b2f9%3A0x73004f5815f536bc!2zWkVOR0FLVeW8lei2iuOCu-ODs-OCv-ODvA!5e0!3m2!1ses!2sve!4v1739200772205!5m2!1ses!2sve" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+    {% block edit-url %}{% url 'sede-edit' sede.pk %}{% endblock %}
+    {% block edit-text %}<i class="fs-4 fa-solid fa-pen-to-square"></i> Editar Sede{% endblock %}
+
+
+    {% block card-body %}
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Nombre:</span>                     {{ sede.nombre }}     </li>
+            <li class="list-group-item"><span class="fw-bold">Ubicación:</span>                  {{ sede.ubicacion }}  </li>
+            <li class="list-group-item"><span class="fw-bold">Información de Contacto:</span>   {{ sede.contacto }}   </li>
+        </ul>
+
+
+        <h3>Google Maps</h3>
+        {% if sede.maps %}
+            <div class="p-3" style="width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center;">
+                <iframe src="{{ sede.maps }}" style="width: 100%; height: 100%; border: none;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        {% else %}
+            <p class="mb-4"><i>Sin Google Map registrado.</i></p>
+        {% endif %}
+    {% endblock %}
+
     
-    
-{% endblock %}
+    {% block delete %}{% endblock %}

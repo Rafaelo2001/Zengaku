@@ -1,14 +1,18 @@
-{% extends 'gakusei/layout.html' %}
+{% extends 'gakusei/delete-layout.html' %}
 
-{% block body %}
-    <h1>Desasignar Beca</h1>
+    {% block regresar-url %}{% url 'descuento-especial-detail' object.pk %}{% endblock %}
 
-    <a href="{% url 'descuento-especial-detail' object.pk %}">Regresar</a>
 
-    <form action="{% url 'descuento-especial-delete' object.pk %}" method="post"> {%csrf_token%}
-        <p>¿Seguro que quieres retirar la Descuento Especial de <i>${{object.descuento}}</i> del Estudiante <i>{{object.estudiante}}</i>?</p>
-        {{ form }}
-        <input type="submit" value="ELIMINAR">
-    </form>
-    
-{% endblock %}
+    {% block card-title %}Desasignar Beca{% endblock %}
+
+    {% block delete-mensaje %}
+        <p class="fs-5">¿Seguro que quieres retirar el <span class="fw-bold">Descuento Especial de <i>${{object.descuento}}</i> del Estudiante <i>{{object.estudiante}}</i></span>?</p>
+    {% endblock %}
+
+
+    {% block form %}
+        <form action="{% url 'descuento-especial-delete' object.pk %}" method="post"> {%csrf_token%}
+            {{ form }}
+            <input class="btn btn-lg btn-danger" type="submit" value="ELIMINAR DESCUENTO ESPECIAL">
+        </form>
+    {% endblock %}
