@@ -142,7 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # APAGAR VPNNNNNNNNN
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
-    "https://results-headline-chair-accident.trycloudflare.com"
+    "https://results-headline-chair-accident.trycloudflare.com",
+    "https://pension-confidential-amended-bm.trycloudflare.com"
 ]
 
 # CRISPY FORMS BOOTSTRAP5

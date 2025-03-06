@@ -1149,3 +1149,21 @@ def Api_DiasDeClase_Form(request):
 
 
     return JsonResponse({"dias_form": render_crispy_form(dia_form)}, status=201)
+
+
+def SolvenciaGenerator(request):
+    from .solvencias_emails import solvencias_generator
+
+    a = solvencias_generator()
+    
+    return HttpResponse(a)
+
+
+def EmailSender(request):
+    from .solvencias_emails import email_sender
+
+    emails = email_sender()
+
+    print(emails)
+
+    return HttpResponse(emails)
