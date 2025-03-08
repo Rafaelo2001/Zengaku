@@ -59,6 +59,7 @@ sensei_templates = "gakusei/sensei/"
 class SenseiListView(ListView):
     model = Sensei
     ordering = "personal_data__cedula"
+    paginate_by = 20
     template_name = sensei_templates + "list.html"
 
     def get_queryset(self):
@@ -140,6 +141,7 @@ class SenseiDeleteView(DeleteView):
 estudiante_templates = "gakusei/estudiante/"
 class EstudianteListView(ListView):
     model = Estudiante
+    paginate_by = 20
     template_name = estudiante_templates + "list.html"
 
 
@@ -233,6 +235,7 @@ clase_templates = "gakusei/clase/"
 
 class ClaseListView(ListView):
     model = Clase
+    paginate_by = 20
     template_name = clase_templates + "list.html"
 
 
@@ -294,6 +297,7 @@ horario_templates = "gakusei/horario/"
 class HorarioListView(ListView):
     model = Horario
     ordering = "clase"
+    paginate_by = 20
     template_name = horario_templates + "list.html"
 
 
@@ -368,6 +372,7 @@ inscripciones_templates = "gakusei/inscripciones/"
 class InscripcionesListView(ListView):
     model = Inscripciones
     ordering = "clase"
+    paginate_by = 20
 
     template_name = inscripciones_templates + "list.html"
 
@@ -452,6 +457,7 @@ dia_de_clase_templates = "gakusei/dia_de_clase/"
 class DiaDeClaseListView(ListView):
     model = DiaDeClase
     ordering = "-fecha"
+    paginate_by = 20
 
     template_name = dia_de_clase_templates + "list.html"
 
@@ -516,6 +522,7 @@ asistencia_templates = "gakusei/asistencia/"
 class AsistenciaListView(ListView):
     model = Asistencias
     ordering = "dia_clase"
+    paginate_by = 20
 
     template_name = asistencia_templates + "list.html"
 
@@ -652,6 +659,7 @@ pagos_templates = "gakusei/pagos/"
 class PagosListView(ListView):
     model = Pagos
     ordering = "-fecha"
+    paginate_by = 20
 
     template_name = pagos_templates + "list.html"
 
@@ -680,6 +688,7 @@ solvencias_templates = "gakusei/solvencia/"
  
 class SolvenciaClaseListView(ListView):
     model = Clase
+    paginate_by = 20
     template_name = solvencias_templates + "list-clase.html"
 
 
@@ -703,6 +712,7 @@ sede_templates = "gakusei/sede/"
 
 class SedeListView(ListView):
     model = Sede
+    paginate_by = 20
     template_name = sede_templates + "list.html"
 
 
@@ -737,6 +747,7 @@ curso_templates = "gakusei/curso/"
 
 class CursoListView(ListView):
     model = Curso
+    paginate_by = 20
     template_name = curso_templates + "list.html"
 
 
@@ -773,6 +784,7 @@ metodo_templates = "gakusei/metodos_pago/"
 
 class MetodosPagoListView(ListView):
     model = MetodosPagos
+    paginate_by = 20
     template_name = metodo_templates + "list.html"
 
 
@@ -799,6 +811,7 @@ descuento_templates = "gakusei/descuentos_especiales/"
 
 class DescuentoEspecialListView(ListView):
     model = DescuentoEspecial
+    paginate_by = 20
     template_name = descuento_templates + "list.html"
 
 
@@ -839,6 +852,7 @@ becas_templates = "gakusei/beca/"
 
 class BecaListView(ListView):
     model = Becas
+    paginate_by = 20
     template_name = becas_templates + "list.html"
 
 

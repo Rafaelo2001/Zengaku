@@ -6,7 +6,7 @@ from django.utils.timezone import now
 
 # Para Email
 from .models import Estudiante
-
+from django.core.mail import send_mail
 
 
 def solvencias_generator():
@@ -88,5 +88,12 @@ def email_sender():
 
     # enviador_de_emails(email_list)
     # send_mass_mail() Usar este
+
+    send_mail(
+        subject="Prueba",
+        message="Cuerpo der mensaje",
+        from_email="5a0819418f5681@demomailtrap.co",
+        recipient_list=["rrbastardom2011@gmail.com"],
+    )
 
     return email_list
