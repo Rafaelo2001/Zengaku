@@ -5,9 +5,7 @@
     {% block create %}{% endblock %}
 
     {% block thead %}
-        <th>Sensei</th>
-        <th>Curso</th>
-        <th>Sede</th>
+        <th>Clase</th>
         <th>N. Estudiantes</th>
         <th></th>
     {% endblock %}
@@ -15,9 +13,7 @@
     {% block tbody %}
         {% for clase in object_list %}
             <tr>
-                <td>{{clase.sensei.full_name}}</td>
-                <td>{{clase.curso}}</td>
-                <td>{{clase.sede}}</td>
+                <td>{{clase}}</td>
                 <td>{{clase.inscripciones.count}}</td>
 
                 <td class="text-center align-middle"><a href="{% url 'solvencias-clase-detail' clase.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>

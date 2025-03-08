@@ -23,13 +23,21 @@
             <li class="list-group-item"><span class="fw-bold">Segundo Nombre:</span> {% if object.personal_data.middle_name %}{{ object.personal_data.middle_name }}{% else %} <i>---</i> {% endif %}     </li>
             <li class="list-group-item"><span class="fw-bold">Primer Apellido:</span> {{ object.personal_data.last_name_1 }}     </li>
             <li class="list-group-item"><span class="fw-bold">Segundo Apellido:</span> {% if object.personal_data.last_name_2 %}{{ object.personal_data.last_name_2 }}{% else %} <i>---</i> {% endif %}    </li>
+            <li class="list-group-item"><span class="fw-bold">Teléfono Móvil:</span> {{ object.personal_data.telefono }}         </li>
             <li class="list-group-item"><span class="fw-bold">Correo Personal:</span> {{ object.personal_data.personal_email }}  </li>
-            <li class="list-group-item"><span class="fw-bold">Telefono Movil:</span> {{ object.personal_data.telefono }}         </li>
 
-            {% if object.representante %}
-            <li class="list-group-item"><span class="fw-bold">Representante:</span> {{ object.representante }}</li>
-            {% endif %}
         </ul>
+        
+        {% if object.representante %}
+        <h2>Representante</h2>
+        <ul class="mb-4 list-group list-group-flush">
+            <li class="list-group-item"><span class="fw-bold">Cédula:</span> {{ object.representante.cedula }}</li>
+            <li class="list-group-item"><span class="fw-bold">Nombre Completo:</span> {{ object.representante.full_name }}</li>
+            <li class="list-group-item"><span class="fw-bold">Teléfono Móvil:</span> {{ object.representante.personal_data.telefono }}</li>
+            <li class="list-group-item"><span class="fw-bold">Correo Personal:</span> {{ object.representante.personal_data.personal_email }}</li>
+        </ul>
+        {% endif %}
+
 
         <h3>Clases Inscritas</h3>
 

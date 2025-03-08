@@ -2,6 +2,9 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
+    {% block index-url %}{% endblock %}
+    {% block logout %}{% endblock %}
+
     {% block script %}
         <script src="{% static 'gakusei/js/estudiante/representante_popup.js' %}"></script>
     {% endblock %}
