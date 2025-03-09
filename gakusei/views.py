@@ -13,6 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
+from .filters import SenseiFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -133,6 +134,13 @@ class SenseiDeleteView(DeleteView):
         p.delete()
 
         return HttpResponseRedirect(success_url)
+    
+
+def SenseiFilterView(request):
+    sensei_list = Sensei.objects.all().exclude(pk=999)
+    sensei_filter = SenseiFilter(request.GET, queryset=sensei_list)
+    
+    return render(request, sensei_templates + "filter.html", {"filter":sensei_filter})
 
 
 

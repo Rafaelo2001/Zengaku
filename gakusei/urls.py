@@ -13,6 +13,7 @@ urlpatterns = [
     path("sensei/registrar", views.SenseiCreateView.as_view(), name="sensei-create"),
     path("sensei/editar/<int:pk>", views.SenseiEditView.as_view(), name="sensei-edit"),
     path("sensei/eliminar/<int:pk>", views.SenseiDeleteView.as_view(), name="sensei-delete"),
+    path("sensei/buscar", views.SenseiFilterView, name="sensei-filter"),
 
     path("estudiante/", views.EstudianteListView.as_view(), name="estudiante"),
     path("estudiante/<int:pk>", views.EstudianteDetailView.as_view(), name="estudiante-detail"),
