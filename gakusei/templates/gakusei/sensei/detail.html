@@ -10,7 +10,7 @@
             <div class="card-body">
                 <h1 class="card-title mb-4">Sensei {{sensei.full_name}}</h1>
             
-                {% if sensei.pk == 999 %}{% else %}
+                {% if sensei.pk == 1 %}{% else %}
                 <a href="{% url 'sensei-edit' sensei.pk %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-user-pen"></i> Editar Sensei</a>
                 {% endif %}
             
@@ -69,7 +69,7 @@
                 {% endif %}
 
 
-                {% if sensei.pk == 999 %}{% else %}
+                {% if sensei.pk == 1 %}{% else %}
                     <h3>Eliminar Sensei</h3>
                     <a href="{% url 'sensei-delete' sensei.pk %}" class="btn btn-lg btn-danger">Eliminar</a>
                 {% endif %}

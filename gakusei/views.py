@@ -64,7 +64,7 @@ class SenseiListView(ListView):
     template_name = sensei_templates + "list.html"
 
     def get_queryset(self):
-        return super().get_queryset().exclude(pk=999)
+        return super().get_queryset().exclude(pk=1)
 
 class SenseiDetailView(DetailView):
     model = Sensei
@@ -87,7 +87,7 @@ class SenseiEditView(UpdateView):
     template_name = sensei_templates + "edit.html"
 
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object().pk == 999:
+        if self.get_object().pk == 1:
             return redirect(reverse_lazy("sensei"))
         return super().dispatch(request, *args, **kwargs)
 
@@ -122,7 +122,7 @@ class SenseiDeleteView(DeleteView):
     success_url = reverse_lazy("sensei")
 
     def dispatch(self, request, *args, **kwargs):
-        if self.get_object().pk == 999:
+        if self.get_object().pk == 1:
             return redirect(reverse_lazy("sensei"))
         return super().dispatch(request, *args, **kwargs)
 
@@ -137,7 +137,7 @@ class SenseiDeleteView(DeleteView):
     
 
 def SenseiFilterView(request):
-    sensei_list = Sensei.objects.all().exclude(pk=999)
+    sensei_list = Sensei.objects.all().exclude(pk=1)
     sensei_filter = SenseiFilter(request.GET, queryset=sensei_list)
 
     paginator = Paginator(sensei_filter.qs, 20)
@@ -271,7 +271,7 @@ class ClaseCreateView(CreateView):
         form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"})
         form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"})
 
-        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=999)
+        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=1)
 
         return form
 
@@ -291,7 +291,7 @@ class ClaseEditView(UpdateView):
         form.fields["f_inicio"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
         form.fields["f_cierre"].widget = forms.DateInput(attrs={"type":"date"}, format="%Y-%m-%d")
 
-        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=999)
+        form.fields["sensei"].queryset = Sensei.objects.filter(status=Sensei.Status.ACTIVO).exclude(pk=1)
 
         return form
     

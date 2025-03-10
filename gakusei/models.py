@@ -137,7 +137,7 @@ class Sensei(models.Model):
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        if self.pk == 999:
+        if self.pk == 1:
             raise ValidationError("NO SE DEBE ELIMINAR ESTE REGISTRO")
 
         super().delete(*args, **kwargs)
@@ -236,7 +236,7 @@ class Clase(models.Model):
     def sensei_eliminado():
         s = Sensei.objects.get_or_create(
                 personal_data = Persona.objects.get_or_create(
-                                    pk=999,
+                                    pk=1,
                                     cedula="999999999",
                                     defaults={
                                         "nacionalidad":Persona.NACIONALITIES.VEN,
@@ -247,7 +247,7 @@ class Clase(models.Model):
                                     }
                                 )[0],
                 defaults={
-                    "pk" : 999,
+                    "pk" : 1,
                     "institucional_email" : "REGISTROELIMINADO@zengaku.com",
                     "status" : Sensei.Status.RETIRADO,
                 }

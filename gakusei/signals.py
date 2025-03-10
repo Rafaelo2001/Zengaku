@@ -60,7 +60,7 @@ def default_sensei(sender, **kwargs):
         try:
             with transaction.atomic():
                 personal_data = Persona.objects.create(
-                    pk=999,
+                    pk=1,
                     nacionalidad=Persona.NACIONALITIES.VEN,
                     cedula="999999999",
                     first_name="REGISTRO",
@@ -71,7 +71,7 @@ def default_sensei(sender, **kwargs):
                 personal_data.save()
 
                 sensei = Sensei.objects.create(
-                    pk=999,
+                    pk=1,
                     personal_data = personal_data,
                     institucional_email = "REGISTROELIMINADO@zengaku.com",
                     status = Sensei.Status.RETIRADO,
