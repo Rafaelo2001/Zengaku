@@ -21,6 +21,10 @@
                 <td>{{asistencia}}</td>
                 <td><a href="{% url 'asistencia-detail' asistencia.id %}">View</a></td>
             </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="text-center fw-bold fst-italic">Sin Registros</td>
+            </tr>
             {% endfor %}
         </tbody>
     </table>

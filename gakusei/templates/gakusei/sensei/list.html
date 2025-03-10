@@ -10,7 +10,14 @@
             <div class="card-body">
                 <h1 class="card-title mb-4">Listado de Senseis</h1>
                 
-                <a href="{% url 'sensei-create' %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> Registrar Sensei</a>
+                
+                <div class="d-flex d-md-block justify-content-between">
+                    
+                    <a href="{% url 'sensei-create' %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> Registrar Sensei</a>                    
+                    
+                    <a href="{% url 'sensei-filter' %}" class="mb-4 btn btn-lg bg-primary-subtle text-reset"><i class="fa-solid fa-magnifying-glass"></i> <span class="d-none d-md-inline">Buscar Registro</span></a>
+                    
+                </div>
                 
                 
                 <div class="table-responsive">
@@ -32,6 +39,10 @@
                                 <td>{{sensei.EN_level}}</td>
                                 <td>{{sensei.personal_data.telefono}}</td>
                                 <td class="text-center align-middle"><a href="{% url 'sensei-detail' sensei.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center fw-bold fst-italic">Sin Registros</td>
                             </tr>
                             {% endfor %}
                         </tbody>

@@ -10,6 +10,10 @@
     {% block create-url %}  {% endblock %}
     {% block create-text %} {% endblock %}
 
+    {% block filter %}  {% endblock %}
+    {% block filter-url %}  {% endblock %}
+    {% block filter-text %} {% endblock %}
+
     {% block create-otros %}    {% endblock %}
 
     {% block thead %}   {% endblock %}
@@ -151,3 +155,59 @@
         theme: "bootstrap-5",
         width: 'auto',
     }
+
+
+<!-- FILTER -->
+
+{% extends 'gakusei/filter-layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'gakusei/select2/select2-bootstrap-5-theme.min.css' %}">
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+{% endblock %}
+
+
+{% block regresar-url %}    {% endblock %}
+{% block regresar-text %}   {% endblock %}
+
+{% block card-title %}Buscar {% endblock %}
+
+
+{% block form %}
+
+{% endblock %}
+
+<div class="d-flex align-items-baseline justify-content-between flex-wrap-reverse">
+			
+    <button class="btn btn-lg btn-success mt-2" type="submit">Buscar</button>
+
+    <a class="btn btn-primary" href="">Limpiar</a>
+</div>
+
+
+{% block results %}
+
+{% endblock %}
+
+
+{% block thead %}
+
+{% endblock %}
+
+
+{% block tbody %}
+
+{% endblock %}
+
+    {% empty %}
+        <tr>
+            <td colspan="6" class="text-center fw-bold fst-italic">Sin Resultados</td>
+        </tr>
+    {% endfor %}

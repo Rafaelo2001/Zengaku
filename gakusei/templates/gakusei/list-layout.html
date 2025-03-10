@@ -12,9 +12,14 @@
 
                 <h1 class="card-title mb-4">{% block card-title %}Listado{% endblock %}</h1>
                 
-                {% block create %}
-                <a href="{% block create-url %}{% endblock %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> {% block create-text %}Registrar{% endblock %}</a>
-                {% endblock %}
+                <div class="d-flex d-md-block justify-content-between">
+                    {% block create %}
+                    <a href="{% block create-url %}{% endblock %}" class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> {% block create-text %}Registrar{% endblock %}</a>
+                    {% endblock %}
+                    {% block filter %}
+                    <a href="{% block filter-url %}{% endblock %}" class="mb-4 btn btn-lg bg-primary-subtle text-reset"><i class="fa-solid fa-magnifying-glass"></i> <span class="d-none d-md-inline">{% block filter-text %}Buscar Registro{% endblock %}</span></a>
+                    {% endblock %}
+                </div>
                 
                 {% block create-otros %}{% endblock %}
                 

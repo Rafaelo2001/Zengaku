@@ -32,5 +32,9 @@
                 <td>${{clase.precio}}</td>
                 <td class="text-center align-middle"><a href="{% url 'clase-detail' clase.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
+        {% empty %}
+            <tr>
+                <td colspan="9" class="text-center fw-bold fst-italic">Sin Registros</td>
+            </tr>
         {% endfor %}
     {% endblock %}

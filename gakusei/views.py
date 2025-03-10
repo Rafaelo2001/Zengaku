@@ -17,7 +17,7 @@ from .filters import SenseiFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
-from dateutil.relativedelta import relativedelta
+from django.core.paginator import Paginator
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_not_required
@@ -139,8 +139,12 @@ class SenseiDeleteView(DeleteView):
 def SenseiFilterView(request):
     sensei_list = Sensei.objects.all().exclude(pk=999)
     sensei_filter = SenseiFilter(request.GET, queryset=sensei_list)
+
+    paginator = Paginator(sensei_filter.qs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
     
-    return render(request, sensei_templates + "filter.html", {"filter":sensei_filter})
+    return render(request, sensei_templates + "filter.html", {"filter":sensei_filter, "page_obj": page_obj})
 
 
 

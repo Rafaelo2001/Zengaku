@@ -18,5 +18,9 @@
 
                 <td class="text-center align-middle"><a href="{% url 'solvencias-clase-detail' clase.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
             </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2" class="text-center fw-bold fst-italic">Sin Registros</td>
+            </tr>
         {% endfor %}
     {% endblock %}

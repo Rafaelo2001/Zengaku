@@ -3,7 +3,7 @@
     {% block card-title %}Listado de Becas{% endblock %}
     
     {% block create-url %}{% url 'becas-asignar' %}{% endblock %}
-    {% block create-text %}Asignar Beca a Estudiante{% endblock %}
+    {% block create-text %}Asignar Beca{% endblock %}
 
     {% block create-otros %}
         <div class="mb-4">
@@ -23,6 +23,10 @@
                 <td>{{beca.nombre}}</td>
                 <td>{{beca.descuento_full}}</td>
                 <td class="text-center align-middle"><a href="{% url 'becas-detail' beca.id %}"><i class="fs-4 fa-solid fa-eye"></i></a></td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="text-center fw-bold fst-italic">Sin Registros</td>
             </tr>
         {% endfor %}
     {% endblock %}

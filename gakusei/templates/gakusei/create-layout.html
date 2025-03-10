@@ -18,6 +18,16 @@
                 {% endblock %}
 
                 {% block otros %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead class="table-primary">
+                                {% block thead %}{% endblock %}
+                            </thead>
+                            <tbody>
+                                {% block tbody %}{% endblock %}
+                            </tbody>
+                        </table>
+                    </div>
                 {% endblock %}
 
             </div>
