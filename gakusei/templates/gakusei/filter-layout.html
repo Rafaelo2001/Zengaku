@@ -42,17 +42,17 @@
             <div class="card-footer text-body-secondary">
                 <ul class="pagination justify-content-center mb-0">
                     
-                    {% if page_obj.has_previous %}
+                    {% if object_list.has_previous %}
                         <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page=1#resultados">&laquo;</a></li>
-                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}#resultados">Atrás</a></li>
+                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ object_list.previous_page_number }}#resultados">Atrás</a></li>
                     {% endif %}
             
-                        <li class="page-item"><span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span></li>
+                        <li class="page-item"><span class="page-link">{{ object_list.number }} de {{ object_list.paginator.num_pages }}</span></li>
             
             
-                    {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.next_page_number }}#resultados">Siguiente</a></li>
-                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ page_obj.paginator.num_pages }}#resultados">&raquo;</a></li>
+                    {% if object_list.has_next %}
+                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ object_list.next_page_number }}#resultados">Siguiente</a></li>
+                        <li class="page-item"><a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ object_list.paginator.num_pages }}#resultados">&raquo;</a></li>
                     {% endif %}
 
                     

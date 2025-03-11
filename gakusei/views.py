@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter
+from .filters import SenseiFilter, EstudianteFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -59,7 +59,6 @@ def index(request):
 sensei_templates = "gakusei/sensei/"
 class SenseiListView(ListView):
     model = Sensei
-    ordering = "personal_data__cedula"
     paginate_by = 20
     template_name = sensei_templates + "list.html"
 
@@ -144,7 +143,7 @@ def SenseiFilterView(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     
-    return render(request, sensei_templates + "filter.html", {"filter":sensei_filter, "page_obj": page_obj})
+    return render(request, sensei_templates + "filter.html", {"filter":sensei_filter, "object_list": page_obj})
 
 
 
@@ -209,6 +208,17 @@ class EstudianteDeleteView(DeleteView):
         p.delete()
 
         return HttpResponseRedirect(success_url)
+    
+
+def EstudianteFilterView(request):
+    estudiante_filter = EstudianteFilter(request.GET, queryset=Estudiante.objects.all())
+
+    paginator = Paginator(estudiante_filter.qs, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    
+    return render(request, estudiante_templates + "filter.html", {"filter":estudiante_filter, "object_list": page_obj})
+
 
 
     
@@ -308,7 +318,6 @@ horario_templates = "gakusei/horario/"
 
 class HorarioListView(ListView):
     model = Horario
-    ordering = "clase"
     paginate_by = 20
     template_name = horario_templates + "list.html"
 
@@ -383,7 +392,6 @@ inscripciones_templates = "gakusei/inscripciones/"
 
 class InscripcionesListView(ListView):
     model = Inscripciones
-    ordering = "clase"
     paginate_by = 20
 
     template_name = inscripciones_templates + "list.html"
@@ -468,7 +476,6 @@ dia_de_clase_templates = "gakusei/dia_de_clase/"
 
 class DiaDeClaseListView(ListView):
     model = DiaDeClase
-    ordering = "-fecha"
     paginate_by = 20
 
     template_name = dia_de_clase_templates + "list.html"
@@ -533,7 +540,6 @@ asistencia_templates = "gakusei/asistencia/"
 
 class AsistenciaListView(ListView):
     model = Asistencias
-    ordering = "dia_clase"
     paginate_by = 20
 
     template_name = asistencia_templates + "list.html"
@@ -670,7 +676,6 @@ pagos_templates = "gakusei/pagos/"
 
 class PagosListView(ListView):
     model = Pagos
-    ordering = "-fecha"
     paginate_by = 20
 
     template_name = pagos_templates + "list.html"

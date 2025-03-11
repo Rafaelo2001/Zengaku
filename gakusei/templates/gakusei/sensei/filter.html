@@ -44,7 +44,7 @@
 {% endblock %}
 
 {% block tbody %}
-	{% for sensei in page_obj %}
+	{% for sensei in object_list %}
 		<tr>
 			<td>{{sensei.cedula}}</td>
 			<td>{{sensei.full_name}}</td>

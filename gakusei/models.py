@@ -88,6 +88,9 @@ class Persona(models.Model):
 
 class Sensei(models.Model):
 
+    class Meta:
+        ordering = ["status", "personal_data__cedula"]
+
     class EN_Levels(models.TextChoices):
         A1 = "A1"
         A2 = "A2"
@@ -161,6 +164,9 @@ class Representante(models.Model):
 
 class Estudiante(models.Model):
 
+    class Meta:
+        ordering = ["status", "personal_data__cedula"]
+
     class Status(models.TextChoices):
         ACTIVO  = "Activo"
         RETIRADO = "Retirado"
@@ -227,6 +233,9 @@ class Sede(models.Model):
 
 class Clase(models.Model):
 
+    class Meta:
+        ordering = ["status", "f_inicio", "curso"]
+
     class Status(models.TextChoices):
         ACTIVO     = "Activa"
         PAUSADO    = "En Pausa"
@@ -285,6 +294,9 @@ class Clase(models.Model):
 
 class Horario(models.Model):
 
+    class Meta:
+        ordering = ["clase", "dia_semana", "hora_entrada"]
+
     class Weekdays(models.TextChoices):
         LUNES     = "Lunes"
         MARTES    = "Martes"
@@ -325,7 +337,9 @@ class Horario(models.Model):
 
 
 class Inscripciones(models.Model):
+
     class Meta:
+        ordering = ["clase", "precio_a_pagar"]
         verbose_name = "Inscripción"
         verbose_name_plural = "Inscripciones"
 
@@ -427,7 +441,9 @@ class MetodosPagos(models.Model):
 
 
 class Pagos(models.Model):
+
     class Meta:
+        ordering = ["-fecha",]
         verbose_name = "Pago"
         verbose_name_plural = "Pagos"
 
@@ -558,6 +574,7 @@ class Pagos(models.Model):
 
 class Solvencias(models.Model):
     class Meta:
+        ordering = ["clase__status", "clase__f_inicio", "clase__curso"]
         verbose_name = "Solvencia"
         verbose_name_plural = "Solvencias"
 
@@ -618,6 +635,10 @@ class Comprobantes(models.Model):
 
 # ASISTENCIAS
 class DiaDeClase(models.Model):
+
+    class Meta:
+        ordering = ["-fecha"]
+
     class Status(models.TextChoices):
         IMPARTIDA  = "Impartida"
         SUSPENDIDA = "Suspendida"
@@ -649,6 +670,7 @@ class Asistencias(models.Model):
     presente = models.BooleanField(default=False)
 
     class Meta:
+        ordering = ["dia_clase"]
         verbose_name_plural = "Asistencias"
 
         constraints = [

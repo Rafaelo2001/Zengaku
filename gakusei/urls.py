@@ -21,6 +21,7 @@ urlpatterns = [
     path("estudiante/editar/<int:pk>", views.EstudianteEditView.as_view(), name="estudiante-edit"),
     path("estudiante/eliminar/<int:pk>", views.EstudianteDeleteView.as_view(), name="estudiante-delete"),
     path("estudiante/registrar/representante", views.RepresentanteCreatePopup.as_view(), name="estudiante-create-representante"),
+    path("estudiante/buscar", views.EstudianteFilterView, name="estudiante-filter"),
 
     path("representante/registrar", views.RepresentanteCreateView.as_view(), name="representante-create"),
 

@@ -11,8 +11,13 @@
                 
                 <h1 class="card-title mb-4">Listado de Estudiantes</h1>
             
-                <a href="{% url 'estudiante-create' %}"  class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> Registrar Estudiante</a>
-            
+                <div class="d-flex d-md-block justify-content-between">
+                    
+                    <a href="{% url 'estudiante-create' %}"  class="mb-4 btn btn-lg bg-success-subtle text-reset"><i class="fa-solid fa-plus"></i> Registrar Estudiante</a>           
+                    
+                    <a href="{% url 'estudiante-filter' %}" class="mb-4 btn btn-lg bg-primary-subtle text-reset"><i class="fa-solid fa-magnifying-glass"></i> <span class="d-none d-md-inline">Buscar Registro</span></a>
+                    
+                </div>
             
                 <div class="table-responsive">
                     <table class="table table-striped table-hover table-bordered">
