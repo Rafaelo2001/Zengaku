@@ -210,12 +210,18 @@ class EstudianteDeleteView(DeleteView):
         return HttpResponseRedirect(success_url)
     
 
-def EstudianteFilterView(request):
-    estudiante_filter = EstudianteFilter(request.GET, queryset=Estudiante.objects.all())
+def paginator_filter_view(request, Model, ModelFilter, items_per_page = 20):
+    model_filter = ModelFilter(request.GET, queryset=Model.objects.all())
 
-    paginator = Paginator(estudiante_filter.qs, 20)
+    paginator = Paginator(model_filter.qs, items_per_page)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
+
+    return model_filter, page_obj
+    
+
+def EstudianteFilterView(request):
+    estudiante_filter, page_obj = paginator_filter_view(request, Estudiante, EstudianteFilter)
     
     return render(request, estudiante_templates + "filter.html", {"filter":estudiante_filter, "object_list": page_obj})
 
