@@ -1,4 +1,5 @@
 {% extends 'gakusei/layout.html' %}
+{% load crispy_forms_tags %}
 
 {% block body %}
 
@@ -14,6 +15,17 @@
                 <h1 class="card-title">{% block card-title %}Buscar{% endblock %}</h1>
                 
                 {% block form %}
+                <form method="get" action="{% block url-filter-form %}{% endblock %}#resultados">
+                    {% block form-filter %}{{ filter.form|crispy }}{% endblock %}
+                    
+                
+                    <div class="d-flex align-items-baseline justify-content-between flex-wrap-reverse">
+                        
+                        <button class="btn btn-lg btn-success mt-2" type="submit">Buscar</button>
+                
+                        <a class="btn btn-primary" href="{% block url-filter-button %}{% endblock %}">Limpiar</a>
+                    </div>
+                </form>                
                 {% endblock %}
 
             </div>

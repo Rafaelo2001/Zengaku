@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -21,6 +21,17 @@ from django.core.paginator import Paginator
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_not_required
+
+
+# Filter View + Pagination Function
+def paginator_filter_view(request, Model, ModelFilter, items_per_page = 20):
+    model_filter = ModelFilter(request.GET, queryset=Model.objects.all())
+
+    paginator = Paginator(model_filter.qs, items_per_page)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return model_filter, page_obj
 
 
 @login_not_required
@@ -195,6 +206,7 @@ class EstudianteEditView(UpdateView):
 
         return kwargs
 
+
 class EstudianteDeleteView(DeleteView):
     model = Estudiante
     template_name = estudiante_templates + "delete.html"
@@ -208,17 +220,7 @@ class EstudianteDeleteView(DeleteView):
         p.delete()
 
         return HttpResponseRedirect(success_url)
-    
 
-def paginator_filter_view(request, Model, ModelFilter, items_per_page = 20):
-    model_filter = ModelFilter(request.GET, queryset=Model.objects.all())
-
-    paginator = Paginator(model_filter.qs, items_per_page)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return model_filter, page_obj
-    
 
 def EstudianteFilterView(request):
     estudiante_filter, page_obj = paginator_filter_view(request, Estudiante, EstudianteFilter)
@@ -315,6 +317,12 @@ class ClaseDeleteView(DeleteView):
     model = Clase
     template_name = clase_templates + "delete.html"
     success_url = reverse_lazy("clase")
+
+
+def ClaseFilterView(request):
+    clase_filter, page_obj = paginator_filter_view(request, Clase, ClaseFilter)
+    
+    return render(request, clase_templates + "filter.html", {"filter":clase_filter, "object_list": page_obj})
 
 
 

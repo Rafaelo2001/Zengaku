@@ -30,6 +30,7 @@ urlpatterns = [
     path("clase/registrar", views.ClaseCreateView.as_view(), name="clase-create"),
     path("clase/editar/<int:pk>", views.ClaseEditView.as_view(), name="clase-edit"),
     path("clase/eliminar/<int:pk>", views.ClaseDeleteView.as_view(), name="clase-delete"),
+    path("clase/buscar", views.ClaseFilterView, name="clase-filter"),
 
     path("horario/", views.HorarioListView.as_view(), name="horario"),
     path("horario/<int:pk>", views.HorarioDetailView.as_view(), name="horario-detail"),

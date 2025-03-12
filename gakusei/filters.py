@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante
+from .models import Sensei, Estudiante, Clase
 from django import forms
 import django_filters
 
@@ -66,4 +66,31 @@ class EstudianteFilter(django_filters.FilterSet):
             apellidos = Concat("personal_data__last_name_1", Value(" "), "personal_data__last_name_2", output_field=CharField())
         ).filter(Q(personal_data__last_name_1__icontains=value) | Q(personal_data__last_name_2__icontains=value) | Q(apellidos__icontains=value))
 
+
+
+class ClaseFilter(django_filters.FilterSet):
+    class Meta:
+        model = Clase
+        fields = ["status", "curso", "sensei", "sede", "f_inicio", "f_inicio__lt", "f_inicio__gt", "f_cierre", "f_cierre__gt", "f_cierre__lt", "horas_semanales", "precio", "precio__gt", "precio__lt",  "individual", ]
+
+    status = django_filters.ChoiceFilter(choices=Clase.Status , widget=forms.RadioSelect, empty_label="Cualquier Status")
+    individual = django_filters.ChoiceFilter(
+        widget=forms.RadioSelect, empty_label="Cualquiera", 
+        choices=[
+            (True, "Si"),
+            (False, "No"),
+        ]
+    )
+
+    precio     = django_filters.NumberFilter(field_name="precio", label="Precio Exacto ($)")
+    precio__gt = django_filters.NumberFilter(field_name="precio", label="Mayor a Precio ($)", lookup_expr="gt")
+    precio__lt = django_filters.NumberFilter(field_name="precio", label="Menor a Precio ($)", lookup_expr="lt")
+
+    f_inicio     = django_filters.DateFilter(field_name="f_inicio", label="Fecha de Inicio Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
+    f_inicio__gt = django_filters.DateFilter(field_name="f_inicio", label="Después de Fecha de Inicio", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
+    f_inicio__lt = django_filters.DateFilter(field_name="f_inicio", label="Antes de Fecha de Inicio",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
+
+    f_cierre     = django_filters.DateFilter(field_name="f_cierre", label="Fecha de Cierre Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
+    f_cierre__gt = django_filters.DateFilter(field_name="f_cierre", label="Después de Fecha de Cierre", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
+    f_cierre__lt = django_filters.DateFilter(field_name="f_cierre", label="Antes de Fecha de Cierre",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
 

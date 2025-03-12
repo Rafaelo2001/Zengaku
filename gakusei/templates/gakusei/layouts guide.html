@@ -184,12 +184,20 @@
 
 {% endblock %}
 
-<div class="d-flex align-items-baseline justify-content-between flex-wrap-reverse">
-			
-    <button class="btn btn-lg btn-success mt-2" type="submit">Buscar</button>
+{% block url-filter-form %}  {% endblock %}
+{% block url-filter-button %}  {% endblock %}
+{% block form-filter %}{{ filter.form|crispy }}{% endblock %}
 
-    <a class="btn btn-primary" href="">Limpiar</a>
-</div>
+<form method="get" action="{% url 'XXX-filter' %}#resultados">
+    {{ filter.form|crispy }}
+
+    <div class="d-flex align-items-baseline justify-content-between flex-wrap-reverse">
+        
+        <button class="btn btn-lg btn-success mt-2" type="submit">Buscar</button>
+
+        <a class="btn btn-primary" href="{% url 'XXX-filter' %}">Limpiar</a>
+    </div>
+</form>
 
 
 {% block results %}
