@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos
+from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos, MetodosPagos
 from django import forms
 import django_filters
 
@@ -142,6 +142,7 @@ class PagosFilter(django_filters.FilterSet):
     monto_pagado__gt = django_filters.NumberFilter(field_name="monto_pagado", label="Mayor a Monto Pagado ($)", lookup_expr="gt")
     monto_pagado__lt = django_filters.NumberFilter(field_name="monto_pagado", label="Menor a Monto Pagado ($)", lookup_expr="lt")
 
+    referencia   = django_filters.CharFilter(lookup_expr="icontains", label="Referencia")
 
     fecha     = django_filters.DateFilter(field_name="fecha", label="Fecha de Pago Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
     fecha__gt = django_filters.DateFilter(field_name="fecha", label="Después de Fecha de Pago", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
@@ -175,3 +176,11 @@ class SolvenciaFilter(django_filters.FilterSet):
     f_cierre__lt = django_filters.DateFilter(field_name="f_cierre", label="Antes de Fecha de Cierre",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
 
 
+
+class MetodosPagosFilter(django_filters.FilterSet):
+    class Meta:
+        model = MetodosPagos
+        exclude = ["obs"]
+
+    metodo = django_filters.CharFilter(lookup_expr="icontains", label="Método")
+    datos  = django_filters.CharFilter(lookup_expr="icontains", label="Datos de Pago")

@@ -92,6 +92,7 @@ urlpatterns = [
     path("metodosdepago/", views.MetodosPagoListView.as_view(), name="metodos-pago"),
     path("metodosdepago/<int:pk>", views.MetodosPagoDetailView.as_view(), name="metodos-pago-detail"),
     path("metodosdepago/registrar", views.MetodosPagoCreateView.as_view(), name="metodos-pago-create"),
+    path("metodosdepago/buscar", views.MetodosPagoFilterView, name="metodos-pago-filter"),
 
 
     path("descuentosespeciales/", views.DescuentoEspecialListView.as_view(), name="descuento-especial"),
