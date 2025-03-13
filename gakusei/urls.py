@@ -74,6 +74,7 @@ urlpatterns = [
 
     path("solvencias/", views.SolvenciaClaseListView.as_view(), name="solvencias-clase"),
     path("solvencias/clase-<int:pk>", views.SolvenciaClaseDetailView.as_view(), name="solvencias-clase-detail"),
+    path("solvencias/buscar", views.SolvenciaFilterView, name="solvencias-filter"),
 
 
     path("sedes/", views.SedeListView.as_view(), name="sede"),

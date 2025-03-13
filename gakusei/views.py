@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter, SolvenciaFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -761,6 +761,12 @@ class SolvenciaClaseDetailView(DetailView):
         context["solvencias"] = list(solvencias)
         
         return context
+
+def SolvenciaFilterView(request):
+    solvencias_filter, page_obj = paginator_filter_view(request, Clase, SolvenciaFilter)
+    
+    return render(request, solvencias_templates + "filter.html", {"filter":solvencias_filter, "object_list": page_obj})
+
 
 
 
