@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase, Horario
+from .models import Sensei, Estudiante, Clase, Horario, Inscripciones
 from django import forms
 import django_filters
 
@@ -109,3 +109,12 @@ class HorarioFilter(django_filters.FilterSet):
     hora_salida_gt = django_filters.TimeFilter(field_name="hora_salida", label="Después de Hora Salida", widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="gt")
     hora_salida_lt = django_filters.TimeFilter(field_name="hora_salida", label="Antes de Hora Salida",   widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="lt")
 
+
+class InscripcionesFilter(django_filters.FilterSet):
+    class Meta:
+        model = Inscripciones
+        exclude = []
+
+    precio_a_pagar     = django_filters.NumberFilter(field_name="precio_a_pagar", label="Precio a pagar ($) Exacto")
+    precio_a_pagar__gt = django_filters.NumberFilter(field_name="precio_a_pagar", label="Mayor a Precio a pagar ($)", lookup_expr="gt")
+    precio_a_pagar__lt = django_filters.NumberFilter(field_name="precio_a_pagar", label="Menor a Precio a pagar ($)", lookup_expr="lt")

@@ -48,6 +48,7 @@ urlpatterns = [
     path("inscripciones/registrar", views.InscripcionesCreateView.as_view(), name="inscripciones-create"),
     path("inscripciones/editar/<int:pk>", views.InscripcionesEditView.as_view(), name="inscripciones-edit"),
     path("inscripciones/eliminar/<int:pk>", views.InscripcionesDeleteView.as_view(), name="inscripciones-delete"),
+    path("inscripciones/buscar", views.InscripcionesFilterView, name="inscripciones-filter"),
 
 
     path("diadeclase/", views.DiaDeClaseListView.as_view(), name="dia-de-clase"),

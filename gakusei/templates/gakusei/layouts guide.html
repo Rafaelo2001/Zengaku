@@ -159,6 +159,10 @@
 
 <!-- FILTER -->
 
+<!-- For List.html -->
+{% block filter-url %}{% url 'XXX-filter' %}{% endblock %}
+
+
 {% extends 'gakusei/filter-layout.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
