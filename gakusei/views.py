@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -558,6 +558,14 @@ class DiaDeClaseDeleteView(DeleteView):
     model = DiaDeClase
     template_name = dia_de_clase_templates + "delete.html"
     success_url = reverse_lazy("dia-de-clase")
+
+
+
+def DiaDeClaseFilterView(request):
+    dia_de_clase_filter, page_obj = paginator_filter_view(request, DiaDeClase, DiaDeClaseFilter)
+    
+    return render(request, dia_de_clase_templates + "filter.html", {"filter":dia_de_clase_filter, "object_list": page_obj})
+
 
 
 

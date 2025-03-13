@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase, Horario, Inscripciones
+from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase
 from django import forms
 import django_filters
 
@@ -118,3 +118,16 @@ class InscripcionesFilter(django_filters.FilterSet):
     precio_a_pagar     = django_filters.NumberFilter(field_name="precio_a_pagar", label="Precio a pagar ($) Exacto")
     precio_a_pagar__gt = django_filters.NumberFilter(field_name="precio_a_pagar", label="Mayor a Precio a pagar ($)", lookup_expr="gt")
     precio_a_pagar__lt = django_filters.NumberFilter(field_name="precio_a_pagar", label="Menor a Precio a pagar ($)", lookup_expr="lt")
+
+
+class DiaDeClaseFilter(django_filters.FilterSet):
+    class Meta:
+        model = DiaDeClase
+        fields = ["status", "horario__clase", "numero", "fecha__lt", "fecha", "fecha__gt",]
+
+    horario__clase = django_filters.ModelChoiceFilter(label="Clase", queryset=Clase.objects.all())
+
+    fecha     = django_filters.DateFilter(field_name="fecha", label="Fecha de Clase Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
+    fecha__gt = django_filters.DateFilter(field_name="fecha", label="Después de Fecha de Clase", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
+    fecha__lt = django_filters.DateFilter(field_name="fecha", label="Antes de Fecha de Clase",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
+

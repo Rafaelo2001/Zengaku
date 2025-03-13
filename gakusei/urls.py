@@ -56,6 +56,7 @@ urlpatterns = [
     path("diadeclase/registrar", views.DiaDeClaseCreateView.as_view(), name="dia-de-clase-create"),
     path("diadeclase/editar/<int:pk>", views.DiaDeClaseEditView.as_view(), name="dia-de-clase-edit"),
     path("diadeclase/eliminar/<int:pk>", views.DiaDeClaseDeleteView.as_view(), name="dia-de-clase-delete"),
+    path("diadeclase/buscar", views.DiaDeClaseFilterView, name="dia-de-clase-filter"),
 
 
     path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),

@@ -175,6 +175,20 @@
 {% block script %}
     <script src="{% static 'gakusei/js/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'gakusei/select2/select2.full.min.js' %}"></script>
+
+    <script>
+        $(document).ready(function() {
+            let opciones = {
+                placeholder: "----------",
+                allowClear: true,
+                containerCssClass : 'select form-select',
+                theme: "bootstrap-5",
+                width: 'auto',
+            }
+            
+            $("#id_XXX").select2(opciones);
+        });
+    </script>
 {% endblock %}
 
 

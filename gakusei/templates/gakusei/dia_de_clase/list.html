@@ -5,6 +5,8 @@
     {% block create-url %}{% url 'asistencia-create' %}{% endblock %}
     {% block create-text %}Registrar Asistencia{% endblock %}
 
+    {% block filter-url %}{% url 'dia-de-clase-filter' %}{% endblock %}
+
     {% block create-otros %}
         <div class="mb-4">
             <p><a class="btn btn-primary d-block d-md-inline" href="{% url 'dia-de-clase-create' %}">Registrar un Dia de Clase</a>                 <span class="d-none d-md-inline"><i class="fa-regular fa-arrow-left"></i> Registra solamente un Dia de Clase.</span></p>
