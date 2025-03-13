@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -730,6 +730,12 @@ class PagosCreateView(CreateView):
     
     def get_success_url(self):
         return reverse("pagos-detail", kwargs={"pk":self.object.pk})
+
+
+def PagosFilterView(request):
+    pagos_filter, page_obj = paginator_filter_view(request, Pagos, PagosFilter)
+    
+    return render(request, pagos_templates + "filter.html", {"filter":pagos_filter, "object_list": page_obj})
 
 
 

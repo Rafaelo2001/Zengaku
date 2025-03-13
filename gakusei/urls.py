@@ -69,6 +69,7 @@ urlpatterns = [
     path("pagos/", views.PagosListView.as_view(), name="pagos"),
     path("pagos/<int:pk>", views.PagosDetailView.as_view(), name="pagos-detail"),
     path("pagos/registrar", views.PagosCreateView.as_view(), name="pagos-create"),
+    path("pagos/buscar", views.PagosFilterView, name="pagos-filter"),
 
 
     path("solvencias/", views.SolvenciaClaseListView.as_view(), name="solvencias-clase"),

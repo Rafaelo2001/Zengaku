@@ -22,14 +22,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
     $("#id_estudiante").on("select2:select", () => {
         get_clases( $("#id_estudiante").val() );
-        document.querySelector("#mensualidad").innerHTML = "";
+        if (document.querySelector("#mensualidad")) {
+            document.querySelector("#mensualidad").innerHTML = "";
+        }
         document.querySelector("#mensualidad-tabla").innerHTML = "";
     });
 
 
     $("#id_estudiante").on("select2:clear", () => {
         $("#id_clase").select2(opciones_clase).val(null).change();
-        document.querySelector("#mensualidad").innerHTML = "";
+        if (document.querySelector("#mensualidad")) {
+            document.querySelector("#mensualidad").innerHTML = "";
+        }
         document.querySelector("#mensualidad-tabla").innerHTML = "";
     });
 
@@ -167,8 +171,6 @@ function tabla_solvencias(solvencias_data) {
 
 
     // Body
-    console.log(solvencias);
-
     if(Object.keys(solvencias).length === 0){
         
         let tr = document.createElement("tr");
@@ -187,6 +189,16 @@ function tabla_solvencias(solvencias_data) {
 
             Object.values(item).forEach(celda => {
                 let td = document.createElement("td");
+
+                if (item.pagado == 'Pagado' ) {
+                    td.className = "bg-info-subtle";
+                }
+                else if (item.pagado == 'Abonado' ) {
+                    td.className = "bg-warning-subtle";
+                }
+                else if (item.pagado == 'Sin Pagar' ) {
+                    td.className = "bg-danger-subtle";
+                }
 
                 td.textContent = celda;
                 tr.appendChild(td);
