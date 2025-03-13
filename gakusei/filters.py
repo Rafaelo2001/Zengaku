@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase
+from .models import Sensei, Estudiante, Clase, Horario
 from django import forms
 import django_filters
 
@@ -93,4 +93,19 @@ class ClaseFilter(django_filters.FilterSet):
     f_cierre     = django_filters.DateFilter(field_name="f_cierre", label="Fecha de Cierre Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
     f_cierre__gt = django_filters.DateFilter(field_name="f_cierre", label="Después de Fecha de Cierre", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
     f_cierre__lt = django_filters.DateFilter(field_name="f_cierre", label="Antes de Fecha de Cierre",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
+
+
+class HorarioFilter(django_filters.FilterSet):
+    class Meta:
+        model = Horario
+        fields = ["clase", "dia_semana", "hora_entrada_lt", "hora_entrada", "hora_entrada_gt", "hora_salida_lt", "hora_salida", "hora_salida_gt",]
+
+    
+    hora_entrada    = django_filters.TimeFilter(field_name="hora_entrada", label="Hora Entrada Exacta",     widget=forms.TimeInput(attrs={"type":"time"}))
+    hora_entrada_gt = django_filters.TimeFilter(field_name="hora_entrada", label="Después de Hora Entrada", widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="gt")
+    hora_entrada_lt = django_filters.TimeFilter(field_name="hora_entrada", label="Antes de Hora Entrada",   widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="lt")
+
+    hora_salida    = django_filters.TimeFilter(field_name="hora_salida", label="Hora Salida Exacta",     widget=forms.TimeInput(attrs={"type":"time"}))
+    hora_salida_gt = django_filters.TimeFilter(field_name="hora_salida", label="Después de Hora Salida", widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="gt")
+    hora_salida_lt = django_filters.TimeFilter(field_name="hora_salida", label="Antes de Hora Salida",   widget=forms.TimeInput(attrs={"type":"time"}), lookup_expr="lt")
 

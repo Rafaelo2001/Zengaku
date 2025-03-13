@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -398,6 +398,12 @@ class HorarioDeleteView(DeleteView):
     template_name = horario_templates + "delete.html"
     success_url = reverse_lazy("horario")
 
+
+
+def HorarioFilterView(request):
+    horario_filter, page_obj = paginator_filter_view(request, Horario, HorarioFilter)
+    
+    return render(request, horario_templates + "filter.html", {"filter":horario_filter, "object_list": page_obj})
 
 
 

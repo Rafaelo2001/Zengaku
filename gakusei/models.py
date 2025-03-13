@@ -295,7 +295,7 @@ class Clase(models.Model):
 class Horario(models.Model):
 
     class Meta:
-        ordering = ["clase", "dia_semana", "hora_entrada"]
+        ordering = ["-clase", "hora_entrada"]
 
     class Weekdays(models.TextChoices):
         LUNES     = "Lunes"

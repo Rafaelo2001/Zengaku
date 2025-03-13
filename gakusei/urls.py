@@ -23,7 +23,9 @@ urlpatterns = [
     path("estudiante/registrar/representante", views.RepresentanteCreatePopup.as_view(), name="estudiante-create-representante"),
     path("estudiante/buscar", views.EstudianteFilterView, name="estudiante-filter"),
 
+
     path("representante/registrar", views.RepresentanteCreateView.as_view(), name="representante-create"),
+
 
     path("clase/", views.ClaseListView.as_view(), name="clase"),
     path("clase/<int:pk>", views.ClaseDetailView.as_view(), name="clase-detail"),
@@ -32,11 +34,13 @@ urlpatterns = [
     path("clase/eliminar/<int:pk>", views.ClaseDeleteView.as_view(), name="clase-delete"),
     path("clase/buscar", views.ClaseFilterView, name="clase-filter"),
 
+
     path("horario/", views.HorarioListView.as_view(), name="horario"),
     path("horario/<int:pk>", views.HorarioDetailView.as_view(), name="horario-detail"),
     path("horario/registrar", views.HorarioCreateView.as_view(), name="horario-create"),
     path("horario/editar/<int:pk>", views.HorarioEditView.as_view(), name="horario-edit"),
     path("horario/eliminar/<int:pk>", views.HorarioDeleteView.as_view(), name="horario-delete"),
+    path("horario/buscar", views.HorarioFilterView, name="horario-filter"),
 
 
     path("inscripciones/", views.InscripcionesListView.as_view(), name="inscripciones"),
@@ -45,11 +49,13 @@ urlpatterns = [
     path("inscripciones/editar/<int:pk>", views.InscripcionesEditView.as_view(), name="inscripciones-edit"),
     path("inscripciones/eliminar/<int:pk>", views.InscripcionesDeleteView.as_view(), name="inscripciones-delete"),
 
+
     path("diadeclase/", views.DiaDeClaseListView.as_view(), name="dia-de-clase"),
     path("diadeclase/<int:pk>", views.DiaDeClaseDetailView.as_view(), name="dia-de-clase-detail"),
     path("diadeclase/registrar", views.DiaDeClaseCreateView.as_view(), name="dia-de-clase-create"),
     path("diadeclase/editar/<int:pk>", views.DiaDeClaseEditView.as_view(), name="dia-de-clase-edit"),
     path("diadeclase/eliminar/<int:pk>", views.DiaDeClaseDeleteView.as_view(), name="dia-de-clase-delete"),
+
 
     path("asistencia/", views.AsistenciaListView.as_view(), name="asistencia"),
     path("asistencia/<int:pk>", views.AsistenciaDetailView.as_view(), name="asistencia-detail"),
