@@ -13,8 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter, SolvenciaFilter, MetodosPagosFilter, DescuentoEspecialFilter
-
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter, SolvenciaFilter, MetodosPagosFilter, DescuentoEspecialFilter, BecasFilter, BecadosFilter
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
 from django.core.paginator import Paginator
@@ -966,6 +965,16 @@ class BecaDeassingView(DeleteView):
     def get_success_url(self):
         return reverse("becas-detail", kwargs={"pk":self.object.beca.pk})
 
+
+def BecasFilterView(request):
+    becas_filter, page_obj = paginator_filter_view(request, Becas, BecasFilter)
+    
+    return render(request, becas_templates + "filter.html", {"filter":becas_filter, "object_list": page_obj})
+
+def BecadosFilterView(request):
+    becados_filter, page_obj = paginator_filter_view(request, Becados, BecadosFilter)
+    
+    return render(request, becas_templates + "becados-filter.html", {"filter":becados_filter, "object_list": page_obj})
 
 
 

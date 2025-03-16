@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos, MetodosPagos, DescuentoEspecial
+from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos, MetodosPagos, DescuentoEspecial, Becas, Becados
 from django import forms
 import django_filters
 
@@ -196,3 +196,22 @@ class DescuentoEspecialFilter(django_filters.FilterSet):
     descuento__lt = django_filters.NumberFilter(field_name="descuento", label="Menor a Descuento ($)", lookup_expr="lt")
 
 
+class BecasFilter(django_filters.FilterSet):
+    class Meta:
+        model = Becas
+        fields = ["nombre", "descuento", "descuento__gt", "descuento__lt", "tipo_descuento", "status",]
+
+    nombre         = django_filters.CharFilter(lookup_expr="icontains", label="Nombre Beca")
+
+    descuento     = django_filters.NumberFilter(field_name="descuento", label="Descuento Exacto ($ o %)")
+    descuento__gt = django_filters.NumberFilter(field_name="descuento", label="Mayor a Descuento ($ o %)", lookup_expr="gt")
+    descuento__lt = django_filters.NumberFilter(field_name="descuento", label="Menor a Descuento ($ o %)", lookup_expr="lt")
+
+    tipo_descuento = django_filters.ChoiceFilter(choices=Becas.TipoDescuento , widget=forms.RadioSelect, empty_label="Cualquier Tipo")
+    status         = django_filters.ChoiceFilter(choices=Becas.Status , widget=forms.RadioSelect, empty_label="Cualquier Status")
+
+
+class BecadosFilter(django_filters.FilterSet):
+    class Meta:
+        model = Becados
+        exclude = ["obs"]

@@ -108,6 +108,8 @@ urlpatterns = [
     path("becas/registrar", views.BecaCreateView.as_view(), name="becas-create"),
     path("becas/asignar", views.BecaAssingView.as_view(), name="becas-asignar"),
     path("becas/desasingar/<int:pk>", views.BecaDeassingView.as_view(), name="becas-desasignar"),
+    path("becas/buscar", views.BecasFilterView, name="becas-filter"),
+    path("becados/buscar", views.BecadosFilterView, name="becados-filter"),
 
 
     # API
