@@ -1,4 +1,4 @@
-from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos, MetodosPagos
+from .models import Sensei, Estudiante, Clase, Horario, Inscripciones, DiaDeClase, Pagos, MetodosPagos, DescuentoEspecial
 from django import forms
 import django_filters
 
@@ -184,3 +184,15 @@ class MetodosPagosFilter(django_filters.FilterSet):
 
     metodo = django_filters.CharFilter(lookup_expr="icontains", label="Método")
     datos  = django_filters.CharFilter(lookup_expr="icontains", label="Datos de Pago")
+
+
+class DescuentoEspecialFilter(django_filters.FilterSet):
+    class Meta:
+        model = DescuentoEspecial
+        exclude = ['obs']
+
+    descuento     = django_filters.NumberFilter(field_name="descuento", label="Descuento ($)")
+    descuento__gt = django_filters.NumberFilter(field_name="descuento", label="Mayor a Descuento ($)", lookup_expr="gt")
+    descuento__lt = django_filters.NumberFilter(field_name="descuento", label="Menor a Descuento ($)", lookup_expr="lt")
+
+

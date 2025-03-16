@@ -100,6 +100,7 @@ urlpatterns = [
     path("descuentosespeciales/registrar", views.DescuentoEspecialCreateView.as_view(), name="descuento-especial-create"),
     path("descuentosespeciales/editar/<int:pk>", views.DescuentoEspecialEditView.as_view(), name="descuento-especial-edit"),
     path("descuentosespeciales/eliminar/<int:pk>", views.DescuentoEspecialDeleteView.as_view(), name="descuento-especial-delete"),
+    path("descuentosespeciales/buscar", views.DescuentoEspecialFilterView, name="descuento-especial-filter"),
 
 
     path("becas/", views.BecaListView.as_view(), name="becas"),

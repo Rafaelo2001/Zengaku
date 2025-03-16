@@ -13,7 +13,7 @@ from crispy_forms.utils import render_crispy_form
 
 from .models import Sensei, Estudiante, Representante, Clase, Horario, Inscripciones, DiaDeClase, Asistencias, Pagos, Sede, Curso, MetodosPagos, DescuentoEspecial, Becas, Becados, Solvencias
 from .forms import SenseiForm, EstudianteForm, RepresentanteForm, SeleccionAsistenciaForm, AsistenciaForm, DiasForm, AsistenciaRezagadosForm, AsistenciaFormsetHelper
-from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter, SolvenciaFilter, MetodosPagosFilter
+from .filters import SenseiFilter, EstudianteFilter, ClaseFilter, HorarioFilter, InscripcionesFilter, DiaDeClaseFilter, PagosFilter, SolvenciaFilter, MetodosPagosFilter, DescuentoEspecialFilter
 
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView, DeleteView
 
@@ -913,6 +913,14 @@ class DescuentoEspecialDeleteView(DeleteView):
     model = DescuentoEspecial
     template_name = descuento_templates + "delete.html"
     success_url = reverse_lazy("descuento-especial")
+
+
+def DescuentoEspecialFilterView(request):
+    descuento_filter, page_obj = paginator_filter_view(request, DescuentoEspecial, DescuentoEspecialFilter)
+    
+    return render(request, descuento_templates + "filter.html", {"filter":descuento_filter, "object_list": page_obj})
+
+
 
 
 
