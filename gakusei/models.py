@@ -522,7 +522,7 @@ class Pagos(models.Model):
 
                 # Meses enteros
                 for mes in range(meses_pagados):
-                    if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).last():
+                    if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).order_by("mes").last():
                         fecha_vieja = mes_anterior.mes
                         fecha_mes = fecha_vieja + relativedelta(months=+1, day=1)
 
@@ -546,7 +546,7 @@ class Pagos(models.Model):
 
                 # Mes sobrante (abonado)
                 if monto_abonado:
-                    if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).last():
+                    if mes_anterior := Solvencias.objects.filter(estudiante=self.estudiante, clase=self.clase).order_by("mes").last():
                         fecha_vieja = mes_anterior.mes
                         fecha_mes = fecha_vieja + relativedelta(months=+1, day=1)
 
