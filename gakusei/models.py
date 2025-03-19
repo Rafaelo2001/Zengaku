@@ -8,6 +8,7 @@ from django.utils.formats import date_format, time_format
 from django.utils.safestring import mark_safe
 
 import datetime
+from django.utils.timezone import now
 from dateutil.relativedelta import relativedelta
 
 
@@ -452,7 +453,8 @@ class Pagos(models.Model):
     metodo = models.ForeignKey(MetodosPagos, on_delete=models.CASCADE, related_name="pagos")
     monto_pagado = models.PositiveSmallIntegerField(validators = [MinValueValidator(1)])
     referencia = models.CharField(max_length=255)
-    fecha = models.DateTimeField("Fecha de Pago", auto_now_add=True)
+    fecha = models.DateTimeField("Fecha Registro de Pago", auto_now_add=True)
+    fecha_pago = models.DateField("Fecha del Pago", default=now)
     obs = models.TextField("Observaciones", blank=True)
 
     def __str__(self):

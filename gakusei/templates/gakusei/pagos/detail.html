@@ -17,7 +17,8 @@
             <li class="list-group-item"><span class="fw-bold">Monto pagado:</span>   {{ object.monto_pagado  }}$</li>
             <li class="list-group-item"><span class="fw-bold">Metodo:</span>         {{ object.metodo        }}</li>
             <li class="list-group-item"><span class="fw-bold">Referencia:</span>     {{ object.referencia                }}</li>
-            <li class="list-group-item"><span class="fw-bold">Fecha:</span>          {{ object.fecha|date:"d/m/y f a"       }}</li>
+            <li class="list-group-item"><span class="fw-bold">Fecha de Pago:</span>  {{ object.fecha_pago|date:"d/m/y"       }}</li>
+            <li class="list-group-item"><span class="fw-bold">Fecha Registro de Pago:</span>  {{ object.fecha|date:"d/m/y f a"       }}</li>
             <li class="list-group-item"><span class="fw-bold">Observacion:</span>    {% if object.obs %}{{ object.obs }}{% else %}---{% endif %}</li>
         </ul>
 

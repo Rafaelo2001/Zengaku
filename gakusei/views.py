@@ -725,6 +725,13 @@ class PagosCreateView(CreateView):
     fields = "__all__"
 
     template_name = pagos_templates + "create.html"
+
+    def get_form(self, form_class = None):
+
+        form = super().get_form(form_class)
+        form.fields["fecha_pago"].widget = forms.DateInput(attrs={"type":"date"})
+
+        return form
     
     
     def get_success_url(self):

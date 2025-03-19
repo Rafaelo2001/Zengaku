@@ -135,7 +135,7 @@ class DiaDeClaseFilter(django_filters.FilterSet):
 class PagosFilter(django_filters.FilterSet):
     class Meta:
         model = Pagos
-        fields = ["estudiante", "clase", "metodo", "monto_pagado__lt", "monto_pagado", "monto_pagado__gt", "fecha__lt", "fecha", "fecha__gt", "referencia",]
+        fields = ["estudiante", "clase", "metodo", "monto_pagado__lt", "monto_pagado", "monto_pagado__gt", "fecha__lt", "fecha", "fecha__gt", "referencia", "fecha_pago__lt", "fecha_pago", "fecha_pago__gt",]
 
 
     monto_pagado     = django_filters.NumberFilter(field_name="monto_pagado", label="Monto Pagado Exacto ($)")
@@ -144,9 +144,13 @@ class PagosFilter(django_filters.FilterSet):
 
     referencia   = django_filters.CharFilter(lookup_expr="icontains", label="Referencia")
 
-    fecha     = django_filters.DateFilter(field_name="fecha", label="Fecha de Pago Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
-    fecha__gt = django_filters.DateFilter(field_name="fecha", label="Después de Fecha de Pago", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
-    fecha__lt = django_filters.DateFilter(field_name="fecha", label="Antes de Fecha de Pago",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
+    fecha     = django_filters.DateFilter(field_name="fecha", label="Fecha de Registro de Pago Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
+    fecha__gt = django_filters.DateFilter(field_name="fecha", label="Después de Fecha de Registro de Pago", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
+    fecha__lt = django_filters.DateFilter(field_name="fecha", label="Antes de Fecha de Registro de Pago",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
+
+    fecha_pago     = django_filters.DateFilter(field_name="fecha_pago", label="Fecha del Pago Exacta",     widget=forms.DateInput(attrs={"type":"date"}))
+    fecha_pago__gt = django_filters.DateFilter(field_name="fecha_pago", label="Después de Fecha del Pago", widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="gt")
+    fecha_pago__lt = django_filters.DateFilter(field_name="fecha_pago", label="Antes de Fecha del Pago",   widget=forms.DateInput(attrs={"type":"date"}), lookup_expr="lt")
 
 
 class SolvenciaFilter(django_filters.FilterSet):

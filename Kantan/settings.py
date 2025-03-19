@@ -146,7 +146,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "https://results-headline-chair-accident.trycloudflare.com",
-    "https://pension-confidential-amended-bm.trycloudflare.com"
+    "https://pension-confidential-amended-bm.trycloudflare.com",
+    "https://deemed-hope-slightly-cindy.trycloudflare.com",
 ]
 
 # CRISPY FORMS BOOTSTRAP5
