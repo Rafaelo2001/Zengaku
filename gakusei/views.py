@@ -1259,18 +1259,8 @@ def Api_DiasDeClase_Form(request):
 
 
 def SolvenciaGenerator(request):
-    from .solvencias_emails import solvencias_generator
+    from .solvencias_generator import solvencias_generator
 
     status, message = solvencias_generator()
     
     return JsonResponse({"status": status, "mensaje": message,})
-
-
-def EmailSender(request):
-    from .solvencias_emails import email_sender
-
-    emails = email_sender()
-
-    print(emails)
-
-    return HttpResponse(emails)

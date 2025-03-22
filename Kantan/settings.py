@@ -136,32 +136,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
-
-# Servidores Permitidos. Solo activar para desarrollo
 # Activar con python manage.py runserver 0.0.0.0:8000
-# 0.0.0.0:8000 hace que se pueda conectar sin import la direccion
-# APAGAR VPNNNNNNNNN
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = [
-    "https://results-headline-chair-accident.trycloudflare.com",
-    "https://pension-confidential-amended-bm.trycloudflare.com",
-    "https://deemed-hope-slightly-cindy.trycloudflare.com",
-]
 
 # CRISPY FORMS BOOTSTRAP5
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
-
-# Email Configuration
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-# Looking to send emails in production? Check out our Email API/SMTP product!
-EMAIL_HOST = 'bulk.smtp.mailtrap.io'
-EMAIL_HOST_USER = 'api'
-EMAIL_HOST_PASSWORD = '204472ea5d6c8a8c0d7c2cb915c398ef'
-EMAIL_PORT = '587'
-
-EMAIL_USE_TLS = True

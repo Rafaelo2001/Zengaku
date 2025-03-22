@@ -127,9 +127,7 @@ urlpatterns = [
     path("api/pagos/mensualidad/", views.Api_Pagos_Mensualidad, name="api-pagos-mensualidad"),
 
 
-    # Solvencias Generator / Email Sender
-    path("api/solvencias/generate", views.SolvenciaGenerator, name="api-solvencias-generator"),
-    path("api/emails/send", views.EmailSender, name="api-email-send"),
-    
+    # Solvencias Generator
+    path("api/solvencias/generate", views.SolvenciaGenerator, name="api-solvencias-generator"),    
     
 ]
