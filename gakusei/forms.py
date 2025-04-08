@@ -1,6 +1,6 @@
 from django import forms
 
-from django.db import transaction, IntegrityError
+from django.db import transaction
 
 from .models import Persona, Sensei, Estudiante, Representante, DiaDeClase, Asistencias, Clase
 
@@ -82,90 +82,6 @@ class BasePersona:
         return ci
 
 
-# class SenseiForm(BasePersona, forms.Form):
-    
-#     institucional_email = forms.EmailField(label="Correo Institucional", max_length=254)
-
-#     status = forms.ChoiceField(
-#         choices=Sensei.Status,
-#         widget=forms.RadioSelect(),
-#         initial=Sensei.Status.ACTIVO,
-#         required=True,
-#     )
-
-#     EN_level = forms.ChoiceField(
-#         label="Nivel de Inglés",
-#         choices=Sensei.EN_Levels,
-#         widget=forms.RadioSelect(),
-#         required=True,
-#     )
-
-#     JP_level = forms.ChoiceField(
-#         label="Nivel de Japonés",
-#         choices=Sensei.JP_Levels,
-#         widget=forms.RadioSelect(),
-#         required=True,
-#     )
-
-#     def save(self, commit=True):
-#         try:
-#             with transaction.atomic():
-                
-#                 personal_data = Persona.objects.create(
-#                     nacionalidad = self.cleaned_data.get("nacionalidad"),
-#                     cedula = self.cleaned_data.get("cedula"),
-#                     first_name = self.cleaned_data.get("first_name"),
-#                     middle_name = self.cleaned_data.get("middle_name"),
-#                     last_name_1 = self.cleaned_data.get("last_name_1"),
-#                     last_name_2 = self.cleaned_data.get("last_name_2"),
-#                     personal_email = self.cleaned_data.get("personal_email"),
-#                     telefono = self.cleaned_data.get("telefono"),
-#                 )
-
-#                 sensei = Sensei.objects.create(
-#                     personal_data = personal_data,
-#                     institucional_email = self.cleaned_data.get("institucional_email"),
-#                     EN_level = self.cleaned_data.get("EN_level"),
-#                     JP_level = self.cleaned_data.get("JP_level"),
-#                     status = self.cleaned_data.get("status"),
-#                 )
-
-#         except Exception as e:
-#             self.add_error(None, f"Error al insertar datos en BDD: {e}")
-
-#         return sensei
-    
-
-#     def update(self, commit=True):
-
-#         # try:
-#         #     with transaction.atomic():
-                
-#         #         personal_data = Persona.objects.create(
-#         #             nacionalidad = self.cleaned_data.get("nacionalidad"),
-#         #             cedula = self.cleaned_data.get("cedula"),
-#         #             first_name = self.cleaned_data.get("first_name"),
-#         #             middle_name = self.cleaned_data.get("middle_name"),
-#         #             last_name_1 = self.cleaned_data.get("last_name_1"),
-#         #             last_name_2 = self.cleaned_data.get("last_name_2"),
-#         #             personal_email = self.cleaned_data.get("personal_email"),
-#         #             telefono = self.cleaned_data.get("telefono"),
-#         #         )
-
-#         #         sensei = Sensei.objects.create(
-#         #             personal_data = personal_data,
-#         #             institucional_email = self.cleaned_data.get("institucional_email"),
-#         #             EN_level = self.cleaned_data.get("EN_level"),
-#         #             JP_level = self.cleaned_data.get("JP_level"),
-#         #             status = self.cleaned_data.get("status"),
-#         #         )
-
-#         # except Exception as e:
-#         #     self.add_error(None, f"Error al insertar datos en BDD: {e}")
-
-#         print("updateado")
-
-#         return "yes"
 
 class SenseiForm(BasePersona, forms.ModelForm):
 
@@ -245,10 +161,6 @@ class SenseiForm(BasePersona, forms.ModelForm):
             return None
 
         return sensei
-    
-
-    
-
 
 
 

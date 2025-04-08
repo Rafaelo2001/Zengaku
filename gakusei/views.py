@@ -1,9 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import dateformat
-from django.utils.timezone import now
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse, reverse_lazy
-from django.db import transaction, IntegrityError
+from django.db import transaction
 from json import loads
 
 from django import forms
@@ -667,12 +666,6 @@ def AsistenciaCreateRezagados(request):
 
         return JsonResponse({"error_form":form.as_div()}, status=400)
 
-    # if "clase" in request.GET:
-    #     # Acomodar esto despues para cada clase
-    #     print("GET", request.GET)
-    #     clase_form = SeleccionAsistenciaForm()
-    #     clase_form.fields["clase"].widget = forms.TextInput()
-    #     clase_form.fields["clase"].initial = "2"
 
     else:
         clase_form = SeleccionAsistenciaForm()

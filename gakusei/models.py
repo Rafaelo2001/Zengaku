@@ -675,12 +675,6 @@ class Asistencias(models.Model):
         ordering = ["dia_clase"]
         verbose_name_plural = "Asistencias"
 
-        constraints = [
-            # models.UniqueConstraint(
-            #     fields=["dia_clase", "estudiante"],
-            #     name="unique_asistencia_estudiante",
-            # )
-        ]
     
     def clean(self):
         # Estudiante no Inscripto en la Clase
