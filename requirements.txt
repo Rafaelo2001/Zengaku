@@ -3,3 +3,4 @@ Django==5.1.1
 fontawesomefree==6.6.0
 crispy-bootstrap5==2024.10
 django-filter==25.1
+django-crispy-forms==2.3

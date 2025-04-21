@@ -195,9 +195,6 @@ class Estudiante(models.Model):
             return False
 
 
-
-        
-
     def __str__(self):
         return self.personal_data.__str__()
 
